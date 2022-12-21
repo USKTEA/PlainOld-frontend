@@ -1,13 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import App from './App';
 
-test('App', () => {
+import ProductsPage from './ProductsPage';
+
+test('ProductsPage', () => {
   render(
     <MemoryRouter>
-      <App />
+      <ProductsPage />
     </MemoryRouter>,
   );
 
-  screen.getByText('Plain-O');
+  screen.getByText('상품이 존재하지 않습니다');
 });
