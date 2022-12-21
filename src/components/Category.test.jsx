@@ -1,16 +1,36 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+
+import { categoryStore } from '../stores/CategoryStore';
+
 import Category from './Category';
 
+const context = describe;
+
 describe('Category', () => {
-  it('상품 카테고리를 보여준다', () => {
-    render(
+  const renderCategory = () => {
+    render((
       <MemoryRouter>
         <Category />
-      </MemoryRouter>,
-    );
+      </MemoryRouter>));
+  };
 
-    screen.getByRole('link', { name: 'All' });
-    screen.getByRole('link', { name: 'T-shirt' });
+  context('카테고리가 없을 경우', () => {
+    it('카테고리로 All만 보이게 된다', () => {
+      renderCategory();
+
+      screen.getByRole('link', { name: 'All' });
+    });
+  });
+
+  context('카테고리가 있을 경우', () => {
+    it('카테고리로 All만 보이게 된다', async () => {
+      await categoryStore.fetchCategories();
+
+      renderCategory();
+
+      screen.getByRole('link', { name: 'All' });
+      screen.getByRole('link', { name: 'T-shirts' });
+    });
   });
 });
