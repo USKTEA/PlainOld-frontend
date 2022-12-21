@@ -1,14 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import ProductsPage from './ProductsPage';
 
-test('ProductsPage', () => {
+test('ProductsPage', async () => {
   render(
     <MemoryRouter>
       <ProductsPage />
     </MemoryRouter>,
   );
 
-  screen.getByText('상품이 존재하지 않습니다');
+  await waitFor(() => {
+    screen.getByText('All');
+    screen.getByText('T-shirts');
+  });
 });
