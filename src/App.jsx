@@ -11,6 +11,7 @@ import Header from './components/Header';
 
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 import BrandPage from './pages/BrandPage';
 import AccountPage from './pages/AccountPage';
 import CartPage from './pages/CartPage';
@@ -37,6 +38,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/brand" element={<BrandPage />} />
           <Route path="/mypage" element={<AccountPage />} />
           <Route path="/cart" element={<CartPage />} />

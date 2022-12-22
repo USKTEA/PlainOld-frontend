@@ -9,6 +9,8 @@ import defaultTheme from '../styles/defaultTheme';
 const Navigation = styled.nav`
   font-size: 25px;
   font-weight: 300;
+
+  margin-bottom: 2em;
 `;
 
 const StyledLink = styled(Link)`
