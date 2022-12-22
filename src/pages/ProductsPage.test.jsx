@@ -13,5 +13,7 @@ test('ProductsPage', async () => {
   await waitFor(() => {
     screen.getByText('All');
     screen.getByText('T-shirts');
+    screen.getByText('T-shirt');
+    screen.getByText('10,000원');
   });
 });
