@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -9,8 +8,6 @@ import defaultTheme from '../styles/defaultTheme';
 const Navigation = styled.nav`
   font-size: 25px;
   font-weight: 300;
-
-  margin-bottom: 2em;
 `;
 
 const StyledLink = styled(Link)`
@@ -31,7 +28,7 @@ export default function Category() {
         {categories.map((category) => (
           <li key={category.id}>
             <StyledLink
-              to={`/products?category=${category.name}`}
+              to={`/products?category=${category.id}`}
             >
               {category.name}
             </StyledLink>

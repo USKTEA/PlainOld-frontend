@@ -7,8 +7,8 @@ describe('ProductStore', () => {
     productStore = new ProductStore();
   });
 
-  it('상품을 로드한다', async () => {
-    await productStore.fetchProducts();
+  it('상품을 불러온다', async () => {
+    await productStore.fetchProducts({ category: 1, pageNumber: 1 });
 
     expect(productStore.products.length).toBe(1);
   });

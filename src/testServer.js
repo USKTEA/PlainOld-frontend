@@ -18,6 +18,10 @@ const server = setupServer(
   }))),
 
   rest.get(`${baseUrl}/products`, async (req, res, ctx) => res(ctx.json({
+    page: {
+      current: 1,
+      total: 1,
+    },
     products: [
       {
         id: 1,
