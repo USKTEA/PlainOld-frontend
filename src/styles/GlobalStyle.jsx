@@ -9,6 +9,10 @@ const GlobalStyle = createGlobalStyle`
     color: #000;
     text-decoration: none;
   }
+
+  li {
+    list-style: none;
+  }
 `;
 
 export default GlobalStyle;
