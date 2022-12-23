@@ -24,7 +24,7 @@ describe('Category', () => {
   });
 
   context('카테고리가 있을 경우', () => {
-    it('카테고리로 All만 보이게 된다', async () => {
+    it('카테고리 목록이 보인다', async () => {
       await categoryStore.fetchCategories();
 
       renderCategory();
