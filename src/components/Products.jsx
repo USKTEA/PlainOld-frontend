@@ -9,6 +9,8 @@ import useProductStore from '../hooks/useProductStore';
 import numberFormat from '../utils/numberFormat';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
   top: 3em;
   padding-block: 3em;
@@ -17,7 +19,7 @@ const Container = styled.div`
 const List = styled.ul`
   display: grid;
   grid-template: repeat(2, 1fr) / repeat(4, 1fr);
-  gap: 2em;
+  gap: 5em;
   margin-bottom: 3em;
 `;
 

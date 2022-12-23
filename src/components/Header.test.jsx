@@ -35,3 +35,4 @@ describe('Header', () => {
     screen.getByRole('link', { name: 'Login' });
   });
 });
+// 로그인 시 헤더 변경
