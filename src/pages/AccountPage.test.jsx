@@ -5,7 +5,7 @@ import AccountPage from './AccountPage';
 
 test('AccountPage', () => {
   render((
-    <MemoryRouter>
+    <MemoryRouter initialEntries={['/account']}>
       <AccountPage />
     </MemoryRouter>
   ));

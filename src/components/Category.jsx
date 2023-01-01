@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import useCategoryStore from '../hooks/useCategoryStore';
+
 import defaultTheme from '../styles/defaultTheme';
 
 const Navigation = styled.nav`

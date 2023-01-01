@@ -7,18 +7,18 @@ export default class ProductStore extends Store {
     super();
 
     this.products = [];
-    this.page = {};
+    this.page = null;
 
-    this.product = {};
+    this.product = null;
 
-    this.loaded = false;
+    this.loading = false;
 
     this.errors = {
-      notFound: '',
+      loading: '',
     };
 
     this.errorMessages = {
-      notFound: '해당 상품은 존재하지 않습니다',
+      loading: { notFound: '해당 상품은 존재하지 않습니다' },
     };
   }
 
@@ -34,22 +34,40 @@ export default class ProductStore extends Store {
   }
 
   async fetchProduct({ id }) {
-    try {
-      this.product = await apiService.fetchProduct({ id });
+    this.startLoad();
 
-      this.loaded = true;
+    try {
+      const product = await apiService.fetchProduct({ id });
+
+      this.completeLoad(product);
     } catch (e) {
-      this.errors.notFound = this.errorMessages.notFound;
-    } finally {
-      this.publish();
+      this.failLoad();
     }
   }
 
-  clearError() {
-    this.errors = {
-      notFound: '',
-    };
+  startLoad() {
+    this.loading = true;
+    this.product = null;
+    this.publish();
+  }
 
+  completeLoad(product) {
+    this.loading = false;
+    this.product = product;
+    this.publish();
+  }
+
+  failLoad() {
+    this.loading = false;
+    this.product = null;
+    this.errors.loading = this.errorMessages.loading.notFound;
+    this.publish();
+  }
+
+  clear() {
+    this.loading = false;
+    this.product = null;
+    this.errors = { loading: '' };
     this.publish();
   }
 }

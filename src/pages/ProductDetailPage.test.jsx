@@ -20,7 +20,6 @@ describe('ProductDetailPage', () => {
         screen.getByText('T-shirt');
         screen.getByText('배송 방법');
         screen.getByText('배송비');
-        screen.getByText('수량');
         screen.getByText('구매하기');
       });
     });
@@ -39,7 +38,6 @@ describe('ProductDetailPage', () => {
         screen.getByText('Pants');
         screen.getByText('배송 방법');
         screen.getByText('배송비');
-        screen.getByText('수량');
         screen.getByText('구매하기');
       });
     });

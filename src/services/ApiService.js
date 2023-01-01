@@ -28,6 +28,12 @@ export default class ApiService {
 
     return data;
   }
+
+  async createOrder(orderSpecification) {
+    const { data } = await this.instance.post('/orders', orderSpecification);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

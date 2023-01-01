@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 import { Link, useSearchParams } from 'react-router-dom';
 
-import defaultTheme from '../styles/defaultTheme';
-
 import useProductStore from '../hooks/useProductStore';
+
+import defaultTheme from '../styles/defaultTheme';
 
 import numberFormat from '../utils/numberFormat';
 

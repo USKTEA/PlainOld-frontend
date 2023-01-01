@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
@@ -76,7 +75,34 @@ const server = setupServer(
     },
   ))),
   rest.get(`${baseUrl}/products/9999999`, async (req, res, ctx) => (
-    res(ctx.status(400)))),
+    res(ctx.status(400))
+  )),
+  rest.post(`${baseUrl}/orders`, async (req, res, ctx) => {
+    // 로그인하면 header에 accessToken 넣어야지
+    const orderSpecification = await req.json();
+
+    const { orderItems } = orderSpecification;
+
+    if (orderItems[0].productId === 9_999_999) {
+      return rest(ctx.status(400));
+    }
+
+    return res(
+      ctx.json({
+        orderNumber: 'tjrxo1234-2022122993760',
+        cost: 50_000,
+        receiver: {
+          name: '김뚜루',
+          phoneNumber: '010-1111-1111',
+        },
+        shippingAddress: {
+          zipCode: '111111',
+          address1: '서울시 성동구 상원12길 34',
+          address2: '에이원지식산업센터',
+        },
+      }),
+    );
+  }),
 );
 
 export default server;

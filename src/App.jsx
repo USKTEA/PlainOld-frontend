@@ -12,15 +12,20 @@ import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import OrderPage from './pages/OrderPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import OrderFailurePage from './pages/OrderFailurePage';
 import BrandPage from './pages/BrandPage';
 import AccountPage from './pages/AccountPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
+import ErrorPage from './pages/ErrorPage';
 
 const Main = styled.main`
   display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1600x;
   min-width: 1024px;
   height: calc(100vh - 4em);
   min-height: 500px;
@@ -39,10 +44,14 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/order-success" element={<OrderSuccessPage />} />
+          <Route path="/order-failure" element={<OrderFailurePage />} />
           <Route path="/brand" element={<BrandPage />} />
           <Route path="/mypage" element={<AccountPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/error" element={<ErrorPage />} />
         </Routes>
       </Main>
     </ThemeProvider>
