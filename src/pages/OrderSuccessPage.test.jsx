@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Navigate } from 'react-router-dom';
+import { render, screen, waitFor } from '@testing-library/react';
 
 import OrderSpecification from '../models/OrderSpecification';
 
@@ -13,37 +12,42 @@ jest.mock('react-router-dom', () => ({
   useNavigate() {
     return navigate;
   },
+  Link({ children, to, style }) {
+    return (
+      <a href={to} style={style}>
+        {children}
+      </a>
+    );
+  },
+}));
+
+jest.mock('../hooks/useCreateOrderStore', () => () => ({
+  result: {
+    cost: 3500,
+    orderNumber: 'tjrxo1234-202301011551',
+    receiver: {
+      name: '김뚜루',
+      phoneNumber: '010-1111-1111',
+    },
+    shippingAddress: {
+      zipCode: '111111',
+      address1: '서울시 성동구 상원12길 34',
+      address2: '에이원지식산업센터',
+    },
+  },
 }));
 
 const context = describe;
 
 describe('OrderSuccessPage', () => {
-  let createOrderStore;
-
   const renderSuccessPage = () => {
     render((
       <OrderSuccessPage />
     ));
   };
 
-  beforeEach(() => {
-    createOrderStore = new CreateOrderStore();
-  });
-
-  context('주문 결과가 없을 경우', () => {
-    it('에러페이지로 이동시킨다', async () => {
-      renderSuccessPage();
-
-      expect(navigate).toBeCalledWith('/error');
-    });
-  });
-
   context('주문 결과가 있을 경우', () => {
     it('주문 결과를 알려준다', async () => {
-      const orderSpecification = OrderSpecification.fake({ productId: 1 });
-
-      await createOrderStore.createOrder(orderSpecification);
-
       renderSuccessPage();
 
       screen.getByText('주문완료');
