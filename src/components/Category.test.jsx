@@ -10,7 +10,7 @@ const context = describe;
 describe('Category', () => {
   const renderCategory = () => {
     render((
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/products']}>
         <Category />
       </MemoryRouter>));
   };

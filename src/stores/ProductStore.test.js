@@ -9,18 +9,14 @@ describe('ProductStore', () => {
     productStore = new ProductStore();
   });
 
-  context('상품을 불러오는 경우', () => {
-    it('상품을 불러오면 loaded는 false에서 true로 변한다', async () => {
-      expect(productStore.loaded).toBeFalsy();
-
-      await productStore.fetchProduct({ id: 1 });
-
-      expect(productStore.loaded).toBeTruthy();
-    });
-  });
-
   context('존재하지 않는 상품을 불러오려는 경우', () => {
+    it('errorMessages에서 해당 오류의 에러를 꺼내서 errors에 저장한다', async () => {
+      expect(productStore.errors.loading).toBeFalsy();
 
+      await productStore.fetchProduct({ id: 9_999_999 });
+
+      expect(productStore.errors.loading).toBeTruthy();
+    });
   });
 
   context('상품 목록을 불러올 경우', () => {
