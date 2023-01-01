@@ -10,6 +10,8 @@ export default class CreateOrderStore extends Store {
 
     this.result = null;
 
+    this.processing = false;
+
     this.errors = {
       createOrder: '',
     };
@@ -26,13 +28,33 @@ export default class CreateOrderStore extends Store {
       orderItems, orderer, shippingInformation, payment,
     });
 
+    this.startProcessing();
+
     try {
-      this.result = await apiService.createOrder(orderSpecification);
+      const result = await apiService.createOrder(orderSpecification);
+      this.completeProcess(result);
     } catch (e) {
-      this.errors.createOrder = this.errorMessage.createOrderFailed;
-    } finally {
-      this.publish();
+      this.orderFailed();
     }
+  }
+
+  startProcessing() {
+    this.processing = true;
+    this.result = null;
+    this.publish();
+  }
+
+  completeProcess(result) {
+    this.processing = false;
+    this.result = result;
+    this.publish();
+  }
+
+  orderFailed() {
+    this.processing = false;
+    this.product = null;
+    this.errors.createOrder = this.errorMessage.createOrderFailed;
+    this.publish();
   }
 
   clear() {

@@ -12,7 +12,7 @@ import numberFormat from '../../utils/numberFormat';
 import defaultTheme from '../../styles/defaultTheme';
 
 const OrderItemList = styled.ul`
-  max-height: 15em;
+  max-height: 20em;
   overflow: scroll;
   border: 1px solid ${defaultTheme.colors.fourth};
   li {
