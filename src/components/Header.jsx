@@ -37,7 +37,7 @@ const List = styled.ul`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${(props) => (props.selected ? '#22DAAB' : '#2E2C6F')}};
+  color: ${(props) => (props.selected ? '#22DAAB' : '#2E2C6F')};
 `;
 
 const Title = styled.h2`

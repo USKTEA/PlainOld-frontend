@@ -2,9 +2,11 @@ import {
   render, screen, fireEvent, waitFor,
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import OrderItem from '../models/OrderItem';
+
 import { orderItemStore } from '../stores/OrderItemStore';
 import { productStore } from '../stores/ProductStore';
+
+import Item from '../models/Item';
 
 import ProductDetail from './ProductDetail';
 
@@ -23,57 +25,75 @@ describe('ProductDetail', () => {
     orderItemStore.reset();
   });
 
-  context('구매하기 버튼을 누를 경우', () => {
-    it('해당 상품의 주문 정보가 보이는 결제화면으로 이동한다', async () => {
-      const id = 1;
+  describe('Buttons', () => {
+    context('구매하기 버튼을 누를 경우', () => {
+      it('해당 상품의 주문 정보가 보이는 결제화면으로 이동한다', async () => {
+        const id = 1;
 
-      await productStore.fetchProduct({ id });
+        await productStore.fetchProduct({ id });
 
-      renderProductDetail(id);
+        renderProductDetail(id);
 
-      expect(screen.getByText('구매하기').closest('a'))
-        .toHaveAttribute('href', '/order');
+        expect(screen.getByText('구매하기').closest('a'))
+          .toHaveAttribute('href', '/order');
+      });
     });
-  });
 
-  context('상품 id가 1인 상품을 선택한 경우', () => {
-    it('상품 id가 1인 상품의 정보를 불러온다', async () => {
-      const id = 1;
+    context('장바구니 버튼을 클릭했을 경우', () => {
+      it('선택한 상품이 장바구니에 담겼다는 모달을 볼 수 있다', async () => {
+        const id = 1;
 
-      await productStore.fetchProduct({ id });
+        await productStore.fetchProduct({ id });
 
-      renderProductDetail(id);
+        renderProductDetail(id);
 
-      await waitFor(() => {
-        screen.getByText('T-shirt');
+        fireEvent.click(screen.getByRole('button', { name: '장바구니' }));
+
+        expect(screen.getByText('선택하신 상품을 장바구니에 담았습니다.'));
       });
     });
   });
 
-  context('상품 id가 2인 상품을 선택한 경우', () => {
-    it('상품 id가 1인 상품의 정보를 불러온다', async () => {
-      const id = 2;
+  describe('Items', () => {
+    context('상품 id가 1인 상품을 선택한 경우', () => {
+      it('상품 id가 1인 상품의 정보를 불러온다', async () => {
+        const id = 1;
 
-      await productStore.fetchProduct({ id });
+        await productStore.fetchProduct({ id });
 
-      renderProductDetail(id);
+        renderProductDetail(id);
 
-      await waitFor(() => {
-        screen.getByText('Pants');
+        await waitFor(() => {
+          screen.getByText('T-shirt');
+        });
       });
     });
-  });
 
-  context('상품이 존재하지 않는 경우', () => {
-    it('해당 상품은 존재하지 않습니다 메시지가 보인다', async () => {
-      const id = 9_999_999;
+    context('상품 id가 2인 상품을 선택한 경우', () => {
+      it('상품 id가 1인 상품의 정보를 불러온다', async () => {
+        const id = 2;
 
-      await productStore.fetchProduct({ id });
+        await productStore.fetchProduct({ id });
 
-      renderProductDetail(id);
+        renderProductDetail(id);
 
-      await waitFor(() => {
-        screen.getByText('해당 상품은 존재하지 않습니다');
+        await waitFor(() => {
+          screen.getByText('Pants');
+        });
+      });
+    });
+
+    context('상품이 존재하지 않는 경우', () => {
+      it('해당 상품은 존재하지 않습니다 메시지가 보인다', async () => {
+        const id = 9_999_999;
+
+        await productStore.fetchProduct({ id });
+
+        renderProductDetail(id);
+
+        await waitFor(() => {
+          screen.getByText('해당 상품은 존재하지 않습니다');
+        });
       });
     });
   });
@@ -91,7 +111,7 @@ describe('ProductDetail', () => {
           name, price, image, shipping,
         } = product;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 1,
           productId: product.id,
           price,
@@ -101,7 +121,7 @@ describe('ProductDetail', () => {
           freeShippingAmount: shipping.freeShippingAmount,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         renderProductDetail(id);
 
@@ -127,7 +147,7 @@ describe('ProductDetail', () => {
           name, price, image, shipping,
         } = product;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 1,
           productId: product.id,
           price,
@@ -137,7 +157,7 @@ describe('ProductDetail', () => {
           freeShippingAmount: shipping.freeShippingAmount,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         renderProductDetail(id);
 
@@ -167,7 +187,7 @@ describe('ProductDetail', () => {
           name, price, image, shipping,
         } = product;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 1,
           productId: product.id,
           price,
@@ -177,7 +197,7 @@ describe('ProductDetail', () => {
           freeShippingAmount: shipping.freeShippingAmount,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         renderProductDetail(id);
 
@@ -211,7 +231,7 @@ describe('ProductDetail', () => {
           name, price, image, shipping,
         } = product;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 1,
           productId: product.id,
           price,
@@ -221,7 +241,7 @@ describe('ProductDetail', () => {
           freeShippingAmount: shipping.freeShippingAmount,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         renderProductDetail(id);
 

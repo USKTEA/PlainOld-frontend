@@ -1,5 +1,5 @@
 import OrderItemStore from './OrderItemStore';
-import OrderItem from '../models/OrderItem';
+import Item from '../models/Item';
 
 const context = describe;
 
@@ -14,7 +14,7 @@ describe('OrderItemStore', () => {
     it('전달받은 상품 정보를 이용해 orderItems 생성한다', () => {
       expect(orderItemStore.numberOfOrderItems()).toBe(0);
 
-      const orderItem = new OrderItem({
+      const item = new Item({
         id: 1,
         price: 10_000,
         name: 'T-Shirt',
@@ -23,7 +23,7 @@ describe('OrderItemStore', () => {
         freeShippingAmount: 50_000,
       });
 
-      orderItemStore.addOrderItem(orderItem);
+      orderItemStore.addOrderItem(item);
 
       expect(orderItemStore.numberOfOrderItems()).toBe(1);
     });
@@ -33,7 +33,7 @@ describe('OrderItemStore', () => {
     it('index 값을 통해 orderItems에서 product를 찾아 id를 반환한다', () => {
       const index = 0;
 
-      const orderItem = new OrderItem({
+      const item = new Item({
         id: 1,
         productId: 2,
         price: 10_000,
@@ -43,7 +43,7 @@ describe('OrderItemStore', () => {
         freeShippingAmount: 50_000,
       });
 
-      orderItemStore.addOrderItem(orderItem);
+      orderItemStore.addOrderItem(item);
 
       expect(orderItemStore.numberOfOrderItems()).toBe(1);
       expect(orderItemStore.productId(index)).toBe(2);
@@ -54,7 +54,7 @@ describe('OrderItemStore', () => {
     it('index 값을 통해 orderItems에서 product을 찾아 quantity를 반환한다', () => {
       const index = 0;
 
-      const orderItem = new OrderItem({
+      const item = new Item({
         id: 2,
         price: 10_000,
         name: 'T-Shirt',
@@ -63,7 +63,7 @@ describe('OrderItemStore', () => {
         freeShippingAmount: 50_000,
       });
 
-      orderItemStore.addOrderItem(orderItem);
+      orderItemStore.addOrderItem(item);
 
       expect(orderItemStore.quantityOfOrderItem(index)).toBe(1);
     });
@@ -73,7 +73,7 @@ describe('OrderItemStore', () => {
     it('index 값을 통해 orderItems에서 product을 찾아 totalPrice를 반환한다', () => {
       const index = 0;
 
-      const orderItem = new OrderItem({
+      const item = new Item({
         id: 2,
         price: 10_000,
         name: 'T-Shirt',
@@ -83,7 +83,7 @@ describe('OrderItemStore', () => {
         quantity: 2,
       });
 
-      orderItemStore.addOrderItem(orderItem);
+      orderItemStore.addOrderItem(item);
 
       expect(orderItemStore.orderItemPrice(index)).toBe(20_000);
     });
@@ -95,7 +95,7 @@ describe('OrderItemStore', () => {
       () => {
         expect(orderItemStore.totalQuantity()).toBe(0);
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 2,
           price: 10_000,
           name: 'T-Shirt',
@@ -105,7 +105,7 @@ describe('OrderItemStore', () => {
           quantity: 1,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         expect(orderItemStore.totalQuantity()).toBe(1);
       },
@@ -116,7 +116,7 @@ describe('OrderItemStore', () => {
     it('OrderItems에 있는 모든 orderItem의 totalPrice합을 반환한다', () => {
       expect(orderItemStore.totalCost()).toBe(0);
 
-      const orderItem = new OrderItem({
+      const item = new Item({
         id: 2,
         price: 10_000,
         name: 'T-Shirt',
@@ -126,18 +126,18 @@ describe('OrderItemStore', () => {
         quantity: 1,
       });
 
-      orderItemStore.addOrderItem(orderItem);
+      orderItemStore.addOrderItem(item);
 
       expect(orderItemStore.totalCost()).toBe(10_000);
     });
   });
 
-  describe('OrderItem 수량 변경', () => {
-    context('OrderItem 수량을 증가시키는 경우', () => {
+  describe('Item 수량 변경', () => {
+    context('Item 수량을 증가시키는 경우', () => {
       it('totalQuantity와 totalCost가 증가한다', () => {
         const index = 0;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 2,
           price: 10_000,
           name: 'T-Shirt',
@@ -147,7 +147,7 @@ describe('OrderItemStore', () => {
           quantity: 1,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         expect(orderItemStore.numberOfOrderItems()).toBe(1);
         expect(orderItemStore.totalQuantity()).toBe(1);
@@ -160,11 +160,11 @@ describe('OrderItemStore', () => {
       });
     });
 
-    context('OrderItem 수량을 감소시키는 경우', () => {
+    context('Item 수량을 감소시키는 경우', () => {
       it('totalQuantity와 totalCost가 감소한다', () => {
         const index = 0;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 2,
           price: 10_000,
           name: 'T-Shirt',
@@ -174,7 +174,7 @@ describe('OrderItemStore', () => {
           quantity: 1,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         orderItemStore.increaseQuantity({ index, amount: 1 });
 
@@ -188,11 +188,11 @@ describe('OrderItemStore', () => {
       });
     });
 
-    context('OrderItem 수량을 1개 이하로 감소시키는 경우', () => {
-      it('OrderItem 수량은 1개 미만으로 감소되지 않는다', () => {
+    context('Item 수량을 1개 이하로 감소시키는 경우', () => {
+      it('Item 수량은 1개 미만으로 감소되지 않는다', () => {
         const index = 0;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 2,
           price: 10_000,
           name: 'T-Shirt',
@@ -202,7 +202,7 @@ describe('OrderItemStore', () => {
           quantity: 1,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         orderItemStore.increaseQuantity({ index, amount: 1 });
 
@@ -225,7 +225,7 @@ describe('OrderItemStore', () => {
       it('상품 수량은 입력 값으로 변경된다', () => {
         const index = 0;
 
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 2,
           price: 10_000,
           name: 'T-Shirt',
@@ -235,7 +235,7 @@ describe('OrderItemStore', () => {
           quantity: 1,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         expect(orderItemStore.totalQuantity()).toBe(1);
         expect(orderItemStore.totalCost()).toBe(10_000);

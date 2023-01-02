@@ -44,7 +44,7 @@ const Table = styled.table`
 
 const ShippingFee = styled.strong`
   font-weight: 700;
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 export default function OrderSummary() {

@@ -1,4 +1,4 @@
-import OrderItem from './OrderItem';
+import Item from './Item';
 import OrderItems from './OrderItems';
 
 export default class OrderSpecification {
@@ -22,7 +22,7 @@ export default class OrderSpecification {
       (orderItem) => orderItem.freeShippingAmount,
     ));
 
-    if (this.cost >= highestFreeShippingAmount) {
+    if (this.cost() >= highestFreeShippingAmount) {
       return 0;
     }
 
@@ -34,7 +34,7 @@ export default class OrderSpecification {
   }
 
   static fake({ productId }) {
-    const orderItem = new OrderItem({
+    const item = new Item({
       id: 1,
       productId,
       price: 10_000,
@@ -68,7 +68,7 @@ export default class OrderSpecification {
       payer: '김뚜루',
     };
 
-    const { orderItems } = new OrderItems().addOrderItem(orderItem);
+    const { orderItems } = new OrderItems().addOrderItem(item);
 
     return new OrderSpecification({
       orderItems, orderer, shippingInformation, payment,

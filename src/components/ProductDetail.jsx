@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import useOrderItemStore from '../hooks/useOrderItemStore';
 import useProductStore from '../hooks/useProductStore';
 
-import OrderItem from '../models/OrderItem';
+import Item from '../models/Item';
 
 import defaultTheme from '../styles/defaultTheme';
 
 import numberFormat from '../utils/numberFormat';
+import Modal from './modal/Modal';
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ const Container = styled.div`
   padding-block: 5em;
   width: 50%;
 
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 const Wrapper = styled.div`
@@ -62,22 +63,27 @@ const Table = styled.table`
   width: 100%;
   margin-top: 1.5em;
   margin-bottom: 1.5em;
+
   th, td {
     text-align: left;
     vertical-align: middle;
     font-size: 0.7em;
   }
+
   th {
     font-weight: 700;
   }
+
   td {
     font-weight: 1.25em;
   }
+
   tr {
     height: 1em;
     th:first-child, td:first-child {
       width: 6em;
     }
+
     th:nth-child(2), td:nth-child(2) {
       width: calc(100% - 6em);
     }
@@ -90,7 +96,7 @@ const Message = styled.p`
   margin-top: 5em;
   text-align: center;
 
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 const Price = styled.strong`
@@ -158,7 +164,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const OrderButton = styled(Link)`
- font-size: 0.8em;
+  font-size: 0.8em;
   width: 33%;
   height: 3em;
   border: none;
@@ -169,7 +175,7 @@ const OrderButton = styled(Link)`
   color: white;
   cursor: pointer;
   :hover {
-    background-color: ${defaultTheme.colors.primaryText}
+    background-color: ${defaultTheme.colors.primary}
   }
 `;
 
@@ -178,21 +184,25 @@ const Button = styled.button`
   width: 33%;
   height: 3em;
   border: 1px solid ${defaultTheme.colors.fourth};
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
   background: white;
   cursor: pointer;
+
   :hover {
     color: ${defaultTheme.colors.third}
   }
 `;
 
 export default function ProductDetail() {
+  const [modalOpen, setModalOpen] = useState(false);
   const [, setOrderItems] = useLocalStorage('orderItems', '');
+  const [, setCartItems] = useLocalStorage('cartItems', '');
 
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
 
   const { product, loading, errors } = productStore;
+  const { orderItems } = orderItemStore;
 
   useEffect(() => {
     setOrderItems(orderItemStore.orderItems);
@@ -206,13 +216,19 @@ export default function ProductDetail() {
     return <Message>{errors.loading}</Message>;
   }
 
+  const handleAddCart = () => {
+    // productId와 옵션이 같아야 같은 item으로 취급
+
+    setModalOpen(true);
+  };
+
   const {
     name, price, description, image, shipping,
   } = product;
 
   // TODO 옵션이 있으며 옵션 추가 버튼이 보이게 그리고 선택한 옵션상품이 보이도록
   const handleAddOption = () => {
-    const orderItem = new OrderItem({
+    const item = new Item({
       id: orderItemStore.generateId(),
       productId: product.id,
       price,
@@ -222,7 +238,7 @@ export default function ProductDetail() {
       freeShippingAmount: shipping.freeShippingAmount,
     });
 
-    orderItemStore.addOrderItem(orderItem);
+    orderItemStore.addOrderItem(item);
   };
 
   const handleChangeQuantity = ({ index, amount }) => {
@@ -230,104 +246,123 @@ export default function ProductDetail() {
   };
 
   return (
-    <Container>
-      <Image
-        src={`/assets/images/${image.productImageUrls[0]}.png`}
-        alt={name}
-        height={450}
-        width={450}
-      />
-      <Wrapper>
-        <NameAndPrice>
-          <Title>{name}</Title>
-          <Price>{`${numberFormat(price)}원`}</Price>
-        </NameAndPrice>
-        <p>
-          {description.productSummary}
-        </p>
-        <button type="button" onClick={() => handleAddOption()}>
-          다른 옵션의 상품 추가하는 버튼
-        </button>
-        <div />
-        <Table>
-          <tbody>
-            <tr>
-              <th>
-                배송 방법
-              </th>
-              <td>
-                {shipping.shippingMethod}
-              </td>
-            </tr>
-            <tr>
-              <th>
-                배송비
-              </th>
-              <td>
-                {shipping.shippingPee}
-                {' '}
-                {`${numberFormat(shipping.freeShippingAmount)}원 이상 무료배송`}
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-        <ul>
-          {Array.from(
-            { length: orderItemStore.numberOfOrderItems() },
-            (_, index) => index,
-          )
-            .map((index) => (
-              <li key={orderItemStore.orderItemId(index)}>
-                <div>
-                  <label htmlFor="quantity">수량</label>
-                  <ButtonAndPrice>
-                    <ButtonContainer>
-                      <ReduceButton
-                        type="button"
-                        onClick={() => (
-                          orderItemStore.decreaseQuantity({ index, amount: -1 })
-                        )}
-                      >
-                        -
-                      </ReduceButton>
-                      <Quantity
-                        id="quantity"
-                        name="quantity"
-                        type="number"
-                        value={orderItemStore.quantityOfOrderItem(index)}
-                        onChange={(event) => handleChangeQuantity(
-                          { index, amount: event.target.value },
-                        )}
-                      />
-                      <AddButton
-                        type="button"
-                        onClick={() => (
-                          orderItemStore.increaseQuantity({ index, amount: 1 })
-                        )}
-                      >
-                        +
-                      </AddButton>
-                    </ButtonContainer>
-                    <span className="total-price">
-                      {`${numberFormat(orderItemStore.orderItemPrice(index))}원`}
-                    </span>
-                  </ButtonAndPrice>
-                </div>
-              </li>
-            ))}
-        </ul>
-        <TotalPrice>
-          <span>{`총 상품금액(${orderItemStore.totalQuantity()}개)`}</span>
-          <strong className="total-cost">
-            {`${numberFormat(orderItemStore.totalCost())}원`}
-          </strong>
-        </TotalPrice>
-        <ButtonWrapper>
-          <OrderButton to="/order">구매하기</OrderButton>
-          <Button>장바구니</Button>
-          <Button>♡</Button>
-        </ButtonWrapper>
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Image
+          src={`/assets/images/${image.productImageUrls[0]}.png`}
+          alt={name}
+          height={450}
+          width={450}
+        />
+        <Wrapper>
+          <NameAndPrice>
+            <Title>{name}</Title>
+            <Price>{`${numberFormat(price)}원`}</Price>
+          </NameAndPrice>
+          <p>
+            {description.productSummary}
+          </p>
+          <button type="button" onClick={() => handleAddOption()}>
+            다른 옵션의 상품 추가하는 버튼
+          </button>
+          <div />
+          <Table>
+            <tbody>
+              <tr>
+                <th>
+                  배송 방법
+                </th>
+                <td>
+                  {shipping.shippingMethod}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  배송비
+                </th>
+                <td>
+                  {shipping.shippingPee}
+                  {' '}
+                  {`${numberFormat(shipping.freeShippingAmount)}원 이상 무료배송`}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+          <ul>
+            {Array.from(
+              { length: orderItemStore.numberOfOrderItems() },
+              (_, index) => index,
+            )
+              .map((index) => (
+                <li key={orderItemStore.orderItemId(index)}>
+                  <div>
+                    <label htmlFor="quantity">수량</label>
+                    <ButtonAndPrice>
+                      <ButtonContainer>
+                        <ReduceButton
+                          type="button"
+                          onClick={() => (
+                            orderItemStore.decreaseQuantity({ index, amount: -1 })
+                          )}
+                        >
+                          -
+                        </ReduceButton>
+                        <Quantity
+                          id="quantity"
+                          name="quantity"
+                          type="number"
+                          value={orderItemStore.quantityOfOrderItem(index)}
+                          onChange={(event) => handleChangeQuantity(
+                            { index, amount: event.target.value },
+                          )}
+                        />
+                        <AddButton
+                          type="button"
+                          onClick={() => (
+                            orderItemStore.increaseQuantity({ index, amount: 1 })
+                          )}
+                        >
+                          +
+                        </AddButton>
+                      </ButtonContainer>
+                      <span className="total-price">
+                        {`${numberFormat(orderItemStore.orderItemPrice(index))}원`}
+                      </span>
+                    </ButtonAndPrice>
+                  </div>
+                </li>
+              ))}
+          </ul>
+          <TotalPrice>
+            <span>{`총 상품금액(${orderItemStore.totalQuantity()}개)`}</span>
+            <strong className="total-cost">
+              {`${numberFormat(orderItemStore.totalCost())}원`}
+            </strong>
+          </TotalPrice>
+          <ButtonWrapper>
+            <OrderButton
+              to="/order"
+            >
+              구매하기
+            </OrderButton>
+            <Button
+              onClick={() => handleAddCart()}
+            >
+              장바구니
+            </Button>
+            <Button>♡</Button>
+          </ButtonWrapper>
+        </Wrapper>
+      </Container>
+      {modalOpen && (
+        <Modal
+          setModalOpen={setModalOpen}
+          message="선택하신 상품을 장바구니에 담았습니다."
+          to="/cart"
+          firstButton="계속 쇼핑"
+          secondButton="장바구니"
+        />
+      )}
+    </>
   );
 }

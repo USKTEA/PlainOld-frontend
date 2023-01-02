@@ -12,8 +12,8 @@ import numberFormat from '../../utils/numberFormat';
 import defaultTheme from '../../styles/defaultTheme';
 
 const OrderItemList = styled.ul`
-  max-height: 20em;
-  overflow: scroll;
+  max-height: 15em;
+  overflow: auto;
   border: 1px solid ${defaultTheme.colors.fourth};
   li {
     border-bottom: 1px solid ${defaultTheme.colors.fourth};
@@ -49,7 +49,7 @@ const Quantity = styled.span`
 
 const OrderItemPrice = styled.strong`
   font-weight: 600;
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 const ShippingFeeInformation = styled.div`
@@ -82,21 +82,21 @@ export default function OrderItemInformation() {
     <SubSection>
       <SubTitle>주문 상품 정보</SubTitle>
       <OrderItemList>
-        {orderItemStore.items().map((orderItem) => (
-          <li key={orderItem.id}>
-            <Link to={`/products/${orderItem.productId}`}>
+        {orderItemStore.items().map((item) => (
+          <li key={item.id}>
+            <Link to={`/products/${item.productId}`}>
               <OrderItem>
                 <Image
-                  src={`/assets/images/${orderItem.thumbnailUrl}.png`}
-                  alt={orderItem.name}
+                  src={`/assets/images/${item.thumbnailUrl}.png`}
+                  alt={item.name}
                   height={70}
                   width={70}
                 />
                 <ItemInformation>
-                  <span>{orderItem.name}</span>
-                  <Quantity>{`${orderItem.quantity}개`}</Quantity>
+                  <span>{item.name}</span>
+                  <Quantity>{`${item.quantity}개`}</Quantity>
                   <OrderItemPrice>
-                    {`${numberFormat(orderItem.totalPrice)}원`}
+                    {`${numberFormat(item.totalPrice)}원`}
                   </OrderItemPrice>
                 </ItemInformation>
               </OrderItem>

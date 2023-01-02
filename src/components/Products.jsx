@@ -36,8 +36,7 @@ const Name = styled.p`
   font-size: 1em;
   font-weight: 900;
   margin-block: 0.5em;
-
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -47,7 +46,7 @@ const Name = styled.p`
 
 const Price = styled.strong`
   font-size: 0.8em;
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 const Message = styled.p`
@@ -55,8 +54,7 @@ const Message = styled.p`
   font-weight: 500;
   margin-top: 5em;
   text-align: center;
-
-  color: ${defaultTheme.colors.primaryText};
+  color: ${defaultTheme.colors.primary};
 `;
 
 const Pagination = styled.nav`

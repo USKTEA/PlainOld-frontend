@@ -1,44 +1,44 @@
-import OrderItem from './OrderItem';
+import Item from './Item';
 
 export default class OrderItems {
   constructor(orderItems = []) {
     this.orderItems = orderItems;
   }
 
-  addOrderItem(orderItem) {
-    return new OrderItems([...this.orderItems, orderItem]);
+  addOrderItem(item) {
+    return new OrderItems([...this.orderItems, item]);
   }
 
   increaseQuantity({ index, amount }) {
-    const orderItem = this.orderItems.at(index);
+    const item = this.orderItems.at(index);
 
     return new OrderItems([
       ...this.orderItems.slice(0, index),
-      new OrderItem({
-        ...orderItem,
-        quantity: orderItem.quantity + amount,
+      new Item({
+        ...item,
+        quantity: item.quantity + amount,
       }),
       ...this.orderItems.slice(index + 1)]);
   }
 
   decreaseQuantity({ index, amount }) {
-    const orderItem = this.orderItems.at(index);
+    const item = this.orderItems.at(index);
 
-    if (orderItem.quantity + amount < 0) {
+    if (item.quantity + amount < 0) {
       return this;
     }
 
     return new OrderItems([
       ...this.orderItems.slice(0, index),
-      new OrderItem({
-        ...orderItem,
-        quantity: orderItem.quantity + amount,
+      new Item({
+        ...item,
+        quantity: item.quantity + amount,
       }),
       ...this.orderItems.slice(index + 1)]);
   }
 
   updateQuantity({ index, amount }) {
-    const orderItem = this.orderItems.at(index);
+    const item = this.orderItems.at(index);
 
     if (amount < 1) {
       return this;
@@ -46,8 +46,8 @@ export default class OrderItems {
 
     return new OrderItems([
       ...this.orderItems.slice(0, index),
-      new OrderItem({
-        ...orderItem,
+      new Item({
+        ...item,
         quantity: amount,
       }),
       ...this.orderItems.slice(index + 1)]);
@@ -55,7 +55,7 @@ export default class OrderItems {
 
   calculateShippingFee() {
     const highestFreeShippingAmount = Math.max(...this.orderItems.map(
-      (orderItem) => orderItem.freeShippingAmount,
+      (item) => item.freeShippingAmount,
     ));
 
     if (this.totalCost() >= highestFreeShippingAmount) {
@@ -63,7 +63,7 @@ export default class OrderItems {
     }
 
     const highestShippingFee = Math.max(...this.orderItems.map(
-      (orderItem) => orderItem.shippingFee,
+      (item) => item.shippingFee,
     ));
 
     return highestShippingFee;

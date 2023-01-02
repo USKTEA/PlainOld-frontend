@@ -1,4 +1,4 @@
-export default class OrderItem {
+export default class Item {
   constructor({
     id, productId, price, name, thumbnailUrl,
     shippingFee, freeShippingAmount, quantity,

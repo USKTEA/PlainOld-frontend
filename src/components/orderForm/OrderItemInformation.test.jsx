@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import OrderItem from '../../models/OrderItem';
+import Item from '../../models/Item';
 
 import { orderItemStore } from '../../stores/OrderItemStore';
 
@@ -23,8 +23,8 @@ describe('OrderItemInformation', () => {
   });
 
   context('OrderItem이 있을 경우', () => {
-    it('OrderItem 목록을 보여준다', () => {
-      const orderItem1 = new OrderItem({
+    it('Item 목록을 보여준다', () => {
+      const item1 = new Item({
         id: 1,
         productId: 1,
         price: 10_000,
@@ -34,7 +34,7 @@ describe('OrderItemInformation', () => {
         freeShippingAmount: 50_000,
       });
 
-      const orderItem2 = new OrderItem({
+      const item2 = new Item({
         id: 2,
         productId: 2,
         price: 10_000,
@@ -44,8 +44,8 @@ describe('OrderItemInformation', () => {
         freeShippingAmount: 50_000,
       });
 
-      orderItemStore.addOrderItem(orderItem1);
-      orderItemStore.addOrderItem(orderItem2);
+      orderItemStore.addOrderItem(item1);
+      orderItemStore.addOrderItem(item2);
 
       renderOrderItemInformation();
 
