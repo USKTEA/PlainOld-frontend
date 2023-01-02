@@ -26,7 +26,7 @@ const Checkbox = styled.div`
 `;
 
 const OrderButton = styled.button`
- font-size: 0.8em;
+  font-size: 0.8em;
   width: 100%;
   height: 3em;
   border: none;
@@ -43,7 +43,7 @@ const OrderButton = styled.button`
   }
 
   :hover {
-    background-color: ${defaultTheme.colors.primaryText}
+    background-color: ${defaultTheme.colors.primary}
   }
 `;
 

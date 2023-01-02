@@ -7,7 +7,7 @@ import { orderItemStore } from '../../stores/OrderItemStore';
 
 import OrderForm from './OrderForm';
 
-import OrderItem from '../../models/OrderItem';
+import Item from '../../models/Item';
 
 import defaultTheme from '../../styles/defaultTheme';
 
@@ -43,7 +43,7 @@ describe('OrderForm', () => {
   it(
     '사용자는 OrderItems을 OrderForm에서 확인할 수 있다',
     () => {
-      const orderItems1 = new OrderItem({
+      const item1 = new Item({
         id: 1,
         productId: 1,
         price: 10_000,
@@ -53,7 +53,7 @@ describe('OrderForm', () => {
         freeShippingAmount: 50_000,
       });
 
-      const orderItem2 = new OrderItem({
+      const item2 = new Item({
         id: 2,
         productId: 2,
         price: 10_000,
@@ -63,8 +63,8 @@ describe('OrderForm', () => {
         freeShippingAmount: 50_000,
       });
 
-      orderItemStore.addOrderItem(orderItems1);
-      orderItemStore.addOrderItem(orderItem2);
+      orderItemStore.addOrderItem(item1);
+      orderItemStore.addOrderItem(item2);
 
       renderOrderForm();
 

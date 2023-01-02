@@ -1,7 +1,7 @@
 import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
-import OrderItem from '../../models/OrderItem';
+import Item from '../../models/Item';
 
 import { orderFormStore } from '../../stores/OrderFormStore';
 import { orderItemStore } from '../../stores/OrderItemStore';
@@ -93,7 +93,7 @@ describe('Agreements', () => {
   describe('결제하기', () => {
     context('모든 form이 정확한 내용으로 채워졌을 경우', () => {
       it('결제하기를 클릭하면 주문완료 결과가 보인다', async () => {
-        const orderItem = new OrderItem({
+        const item = new Item({
           id: 1,
           productId: 1,
           price: 10_000,
@@ -103,7 +103,7 @@ describe('Agreements', () => {
           freeShippingAmount: 50_000,
         });
 
-        orderItemStore.addOrderItem(orderItem);
+        orderItemStore.addOrderItem(item);
 
         orderFormStore.changeField({ ordererName: '김뚜루' });
         orderFormStore.changeField({ ordererPhoneNumber: '010-5237-2189' });

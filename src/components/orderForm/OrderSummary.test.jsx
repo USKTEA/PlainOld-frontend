@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
-import OrderItem from '../../models/OrderItem';
-
 import { orderItemStore } from '../../stores/OrderItemStore';
+
+import Item from '../../models/Item';
 
 import OrderSummary from './OrderSummary';
 
@@ -16,7 +16,7 @@ describe('OrderSummary', () => {
   });
 
   it('주문 금액 요약을 보여준다', () => {
-    const orderItem = new OrderItem({
+    const item = new Item({
       id: 1,
       productId: 1,
       price: 10_000,
@@ -26,7 +26,7 @@ describe('OrderSummary', () => {
       freeShippingAmount: 50_000,
     });
 
-    orderItemStore.addOrderItem(orderItem);
+    orderItemStore.addOrderItem(item);
 
     renderOrderSummary();
 

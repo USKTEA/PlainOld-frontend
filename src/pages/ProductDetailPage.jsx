@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { productStore } from '../stores/ProductStore';
 
 import ProductDetail from '../components/ProductDetail';
-import OrderItem from '../models/OrderItem';
+import Item from '../models/Item';
 import { orderItemStore } from '../stores/OrderItemStore';
 
 export default function ProductDetailPage() {
@@ -19,7 +19,7 @@ export default function ProductDetailPage() {
       name, price, image, shipping,
     } = product;
 
-    const orderItem = new OrderItem({
+    const item = new Item({
       id: orderItemStore.generateId(),
       productId: product.id,
       price,
@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
       freeShippingAmount: shipping.freeShippingAmount,
     });
 
-    orderItemStore.addOrderItem(orderItem);
+    orderItemStore.addOrderItem(item);
   };
 
   useEffect(() => {

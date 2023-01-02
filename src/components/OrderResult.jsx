@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
+
 import useCreateOrderStore from '../hooks/useCreateOrderStore';
+
 import defaultTheme from '../styles/defaultTheme';
+
 import numberFormat from '../utils/numberFormat';
 
 const Container = styled.div`
@@ -57,19 +61,23 @@ const Table = styled.table`
     text-align: left;
     padding: 1.2em 0 1em 1.2em;
   }
+
   th{
     color: ${defaultTheme.colors.third};
   }
+
   tr {
     height: 2em;
     border-bottom: 1px solid ${defaultTheme.colors.fourth};
   }
+
   tr:last-child {
     border-bottom: none;
   }
+
   strong {
     font-weight: 700;
-    color: ${defaultTheme.colors.primaryText};
+    color: ${defaultTheme.colors.primary};
     }
 `;
 

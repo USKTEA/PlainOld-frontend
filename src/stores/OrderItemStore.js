@@ -1,7 +1,7 @@
 import Store from './Store';
 
 import OrderItems from '../models/OrderItems';
-import OrderItem from '../models/OrderItem';
+import Item from '../models/Item';
 
 export default class OrderItemStore extends Store {
   constructor() {
@@ -11,26 +11,26 @@ export default class OrderItemStore extends Store {
   }
 
   loadItems({ orderItems }) {
-    const items = orderItems.map((orderItem) => (
-      new OrderItem({
-        id: orderItem.id,
-        productId: orderItem.productId,
-        price: orderItem.price,
-        name: orderItem.name,
-        thumbnailUrl: orderItem.thumbnailUrl,
-        shippingFee: orderItem.shippingFee,
-        freeShippingAmount: orderItem.freeShippingAmount,
-        quantity: orderItem.quantity,
+    const items = orderItems.map((item) => (
+      new Item({
+        id: item.id,
+        productId: item.productId,
+        price: item.price,
+        name: item.name,
+        thumbnailUrl: item.thumbnailUrl,
+        shippingFee: item.shippingFee,
+        freeShippingAmount: item.freeShippingAmount,
+        quantity: item.quantity,
       })));
 
     this.orderItems = items.reduce(
-      (acc, orderItem) => acc.addOrderItem(orderItem),
+      (acc, item) => acc.addOrderItem(item),
       new OrderItems(),
     );
   }
 
-  addOrderItem(orderItem) {
-    this.orderItems = this.orderItems.addOrderItem(orderItem);
+  addOrderItem(item) {
+    this.orderItems = this.orderItems.addOrderItem(item);
 
     this.publish();
   }
