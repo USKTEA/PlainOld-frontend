@@ -55,13 +55,14 @@ export default function Agreements() {
   const createOrderStore = useCreateOrderStore();
 
   const { agreements } = orderFormStore;
+  const { orderItems } = orderItemStore;
 
   const handleClickOrder = async () => {
     if (orderFormStore.isComplete()) {
       const { orderer, shippingInformation, payment } = orderFormStore.form();
 
       await createOrderStore.createOrder({
-        orderItems: orderItemStore.items(),
+        orderItems: orderItems.getItems(),
         orderer,
         shippingInformation,
         payment,

@@ -12,7 +12,8 @@ describe('ShippingMessage', () => {
     it('기본 값을 렌더링한다', () => {
       render((<ShippingMessage handleChange={handleChangeMessage} />));
 
-      expect(screen.getByRole('option', { name: '배송메모를 선택해 주세요.' }).selected).toBe(true);
+      expect(screen.getByRole('option', { name: '배송메모를 선택해 주세요.' }).selected)
+        .toBe(true);
     });
   });
 
@@ -24,7 +25,8 @@ describe('ShippingMessage', () => {
 
       await user.selectOptions(screen.getByRole('combobox'), '배송 전에 미리 연락 바랍니다.');
 
-      expect(screen.getByRole('option', { name: '배송 전에 미리 연락 바랍니다.' }).selected).toBe(true);
+      expect(screen.getByRole('option', { name: '배송 전에 미리 연락 바랍니다.' }).selected)
+        .toBe(true);
       expect(handleChangeMessage).toBeCalledWith('배송 전에 미리 연락 바랍니다.');
     });
   });

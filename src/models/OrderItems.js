@@ -1,60 +1,118 @@
 import Item from './Item';
 
 export default class OrderItems {
-  constructor(orderItems = []) {
-    this.orderItems = orderItems;
+  constructor(items = []) {
+    this.items = items;
   }
 
   addOrderItem(item) {
-    return new OrderItems([...this.orderItems, item]);
+    const index = this.findIndex(item);
+
+    return index < 0
+      ? this.insertItem(item)
+      : this.updateItem(index);
   }
 
-  increaseQuantity({ index, amount }) {
-    const item = this.orderItems.at(index);
+  insertItem(item) {
+    return new OrderItems([...this.items, item]);
+  }
+
+  updateItem(index) {
+    const found = this.items[index];
+
+    return new OrderItems(
+      [...this.items.slice(0, index),
+        new Item({
+          ...found,
+          quantity: found.quantity + 1,
+        }),
+        ...this.items.slice(index + 1),
+      ],
+    );
+  }
+
+  findIndex(item) {
+    if (!item.option) {
+      return this.items.findIndex((i) => i.productId === item.productId);
+    }
+
+    const foundIndex = this.items.reduce((acc, i, index) => {
+      if (item.option.size === i.option.size) {
+        if (item.option.color.name === i.option.color.name) {
+          return [...acc, index];
+        }
+      }
+
+      return acc;
+    }, []);
+
+    return foundIndex.length ? foundIndex[0] : -1;
+  }
+
+  increaseQuantity({ id, amount }) {
+    const [found, foundIndex] = this.items.reduce((acc, item, index) => {
+      if (item.id === id) {
+        return [item, index];
+      }
+
+      return acc;
+    }, []);
 
     return new OrderItems([
-      ...this.orderItems.slice(0, index),
+      ...this.items.slice(0, foundIndex),
       new Item({
-        ...item,
-        quantity: item.quantity + amount,
+        ...found,
+        quantity: found.quantity + amount,
       }),
-      ...this.orderItems.slice(index + 1)]);
+      ...this.items.slice(foundIndex + 1)]);
   }
 
-  decreaseQuantity({ index, amount }) {
-    const item = this.orderItems.at(index);
+  decreaseQuantity({ id, amount }) {
+    const [found, foundIndex] = this.items.reduce((acc, item, index) => {
+      if (item.id === id) {
+        return [item, index];
+      }
 
-    if (item.quantity + amount < 0) {
+      return acc;
+    }, []);
+
+    if (found.quantity + amount < 0) {
       return this;
     }
 
     return new OrderItems([
-      ...this.orderItems.slice(0, index),
+      ...this.items.slice(0, foundIndex),
       new Item({
-        ...item,
-        quantity: item.quantity + amount,
+        ...found,
+        quantity: found.quantity + amount,
       }),
-      ...this.orderItems.slice(index + 1)]);
+      ...this.items.slice(foundIndex + 1)]);
   }
 
-  updateQuantity({ index, amount }) {
-    const item = this.orderItems.at(index);
+  updateQuantity({ id, amount }) {
+    const [found, foundIndex] = this.items.reduce((acc, item, index) => {
+      if (item.id === id) {
+        return [item, index];
+      }
+
+      return acc;
+    }, []);
 
     if (amount < 1) {
       return this;
     }
 
     return new OrderItems([
-      ...this.orderItems.slice(0, index),
+      ...this.items.slice(0, foundIndex),
       new Item({
-        ...item,
+        ...found,
         quantity: amount,
       }),
-      ...this.orderItems.slice(index + 1)]);
+      ...this.items.slice(foundIndex + 1)]);
   }
 
   calculateShippingFee() {
-    const highestFreeShippingAmount = Math.max(...this.orderItems.map(
+    const highestFreeShippingAmount = Math.max(...this.items.map(
       (item) => item.freeShippingAmount,
     ));
 
@@ -62,7 +120,7 @@ export default class OrderItems {
       return 0;
     }
 
-    const highestShippingFee = Math.max(...this.orderItems.map(
+    const highestShippingFee = Math.max(...this.items.map(
       (item) => item.shippingFee,
     ));
 
@@ -70,48 +128,41 @@ export default class OrderItems {
   }
 
   generateId() {
-    const id = Math.max(0, ...this.orderItems.map((orderItem) => orderItem.id)) + 1;
+    const id = Math.max(0, ...this.items.map((orderItem) => orderItem.id)) + 1;
 
     return id;
   }
 
   totalQuantity() {
-    if (this.orderItems.length === 0) {
+    if (this.items.length === 0) {
       return 0;
     }
 
-    return this.orderItems.reduce((acc, item) => (acc + item.quantity), 0);
+    return this.items.reduce((acc, item) => (acc + item.quantity), 0);
   }
 
   totalCost() {
-    if (this.orderItems.length === 0) {
+    if (this.items.length === 0) {
       return 0;
     }
 
-    return this.orderItems.reduce((acc, item) => (acc + item.totalPrice), 0);
+    return this.items.reduce((acc, item) => (acc + item.totalPrice), 0);
   }
 
-  items() {
-    return this.orderItems.reduce((acc, item) => [...acc, { ...item }], []);
+  delete({ id }) {
+    const index = this.items.findIndex((item) => item.id === id);
+
+    return new OrderItems(
+      [...this.items.slice(0, index),
+        ...this.items.slice(index + 1)],
+    );
   }
 
-  countItems() {
-    return this.orderItems.length;
+  hasItem() {
+    return this.items.length > 0;
   }
 
-  orderItemId(index) {
-    return this.orderItems.at(index).id;
-  }
-
-  productId(index) {
-    return this.orderItems.at(index).productId;
-  }
-
-  orderItemQuantity(index) {
-    return this.orderItems.at(index).quantity;
-  }
-
-  orderItemTotalPrice(index) {
-    return this.orderItems.at(index).totalPrice;
+  getItems() {
+    return this.items.reduce((acc, item) => [...acc, { ...item }], []);
   }
 }

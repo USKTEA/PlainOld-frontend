@@ -7,8 +7,6 @@ import { orderItemStore } from '../../stores/OrderItemStore';
 
 import OrderForm from './OrderForm';
 
-import Item from '../../models/Item';
-
 import defaultTheme from '../../styles/defaultTheme';
 
 const context = describe;
@@ -43,28 +41,46 @@ describe('OrderForm', () => {
   it(
     '사용자는 OrderItems을 OrderForm에서 확인할 수 있다',
     () => {
-      const item1 = new Item({
+      const product1 = {
         id: 1,
-        productId: 1,
-        price: 10_000,
         name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
+        price: 10000,
+        description: {
+          productDetail: 'Very Good', productSummary: 'Good',
+        },
+        image: {
+          thumbnailUrl: 'http://url.com',
+          productImageUrls: ['http://url.com'],
+        },
+        shipping: {
+          shippingMethod: '택배',
+          shippingFee: 2500,
+          freeShippingAmount: 50000,
+        },
+        status: 'ON_SALE',
+        categoryId: 1,
+      };
 
-      const item2 = new Item({
+      const product2 = {
         id: 2,
-        productId: 2,
-        price: 10_000,
         name: 'Pants',
-        thumbnailUrl: '2',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
+        price: 10000,
+        description: { productDetail: 'Very Good', productSummary: 'Good' },
+        image: {
+          thumbnailUrl: 'http://url.com',
+          productImageUrls: ['http://url.com'],
+        },
+        shipping: {
+          shippingMethod: '택배',
+          shippingFee: 2500,
+          freeShippingAmount: 50000,
+        },
+        status: 'ON_SALE',
+        categoryId: 2,
+      };
 
-      orderItemStore.addOrderItem(item1);
-      orderItemStore.addOrderItem(item2);
+      orderItemStore.addOrderItem({ product: product1 });
+      orderItemStore.addOrderItem({ product: product2 });
 
       renderOrderForm();
 

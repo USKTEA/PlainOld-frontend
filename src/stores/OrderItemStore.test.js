@@ -1,249 +1,217 @@
 import OrderItemStore from './OrderItemStore';
-import Item from '../models/Item';
 
 const context = describe;
 
 describe('OrderItemStore', () => {
   let orderItemStore;
 
+  const setProductToChoiceOption = () => {
+    const product = {
+      id: 1,
+      name: 'T-Shirt',
+      price: 10000,
+      description: {
+        productDetail: 'Very Good', productSummary: 'Good',
+      },
+      image: {
+        thumbnailUrl: 'http://url.com',
+        productImageUrls: ['http://url.com'],
+      },
+      shipping: {
+        shippingMethod: '택배',
+        shippingFee: 2500,
+        freeShippingAmount: 50000,
+      },
+      status: 'ON_SALE',
+      categoryId: 1,
+      optionData: {
+        colors: [
+          {
+            name: 'Gray', red: 120, green: 120, blue: 120,
+          },
+          {
+            name: 'Black', red: 0, green: 0, blue: 0,
+          },
+          {
+            name: 'White', red: 255, green: 255, blue: 255,
+          },
+        ],
+        sizes: ['XL', 'L', 'M'],
+      },
+    };
+
+    orderItemStore.setProductToChoiceOption({ product });
+  };
+
   beforeEach(() => {
     orderItemStore = new OrderItemStore();
   });
 
-  context('OrderItems 생성하는 경우', () => {
-    it('전달받은 상품 정보를 이용해 orderItems 생성한다', () => {
-      expect(orderItemStore.numberOfOrderItems()).toBe(0);
+  describe('OrderItems', () => {
+    context('Product에 OptionData가 없을 경우', () => {
+      it('전달받은 상품 정보를 이용해 orderItems에 Item을 추가한다', () => {
+        expect(orderItemStore.orderItems.items.length).toBe(0);
 
-      const item = new Item({
-        id: 1,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
-
-      orderItemStore.addOrderItem(item);
-
-      expect(orderItemStore.numberOfOrderItems()).toBe(1);
-    });
-  });
-
-  context('OrderItems에 있는 product의 id를 확인하는 경우', () => {
-    it('index 값을 통해 orderItems에서 product를 찾아 id를 반환한다', () => {
-      const index = 0;
-
-      const item = new Item({
-        id: 1,
-        productId: 2,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
-
-      orderItemStore.addOrderItem(item);
-
-      expect(orderItemStore.numberOfOrderItems()).toBe(1);
-      expect(orderItemStore.productId(index)).toBe(2);
-    });
-  });
-
-  context('OrderItems에 있는 orderItem의 quantity를 확인하는 경우', () => {
-    it('index 값을 통해 orderItems에서 product을 찾아 quantity를 반환한다', () => {
-      const index = 0;
-
-      const item = new Item({
-        id: 2,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
-
-      orderItemStore.addOrderItem(item);
-
-      expect(orderItemStore.quantityOfOrderItem(index)).toBe(1);
-    });
-  });
-
-  context('OrderItems에 있는 orderItem의 totalPrice를 확인하는 경우', () => {
-    it('index 값을 통해 orderItems에서 product을 찾아 totalPrice를 반환한다', () => {
-      const index = 0;
-
-      const item = new Item({
-        id: 2,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-        quantity: 2,
-      });
-
-      orderItemStore.addOrderItem(item);
-
-      expect(orderItemStore.orderItemPrice(index)).toBe(20_000);
-    });
-  });
-
-  context('TotalQuantity가 호출된 경우', () => {
-    it(
-      'orderItems에 있는 모든 orderItem의 quantity합을 반환한다',
-      () => {
-        expect(orderItemStore.totalQuantity()).toBe(0);
-
-        const item = new Item({
-          id: 2,
-          price: 10_000,
+        const product = {
+          id: 1,
           name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
+          price: 10000,
+          description: {
+            productDetail: 'Very Good', productSummary: 'Good',
+          },
+          image: {
+            thumbnailUrl: 'http://url.com',
+            productImageUrls: ['http://url.com'],
+          },
+          shipping: {
+            shippingMethod: '택배',
+            shippingFee: 2500,
+            freeShippingAmount: 50000,
+          },
+          status: 'ON_SALE',
+          categoryId: 1,
+        };
+
+        orderItemStore.addOrderItem({ product });
+
+        expect(orderItemStore.orderItems.items.length).toBe(1);
+      });
+    });
+
+    context('Product에 OptionData가 있을 경우', () => {
+      it('OrderItems에 item을 바로 추가하지 않는다', () => {
+        expect(orderItemStore.orderItems.items.length).toBe(0);
+
+        setProductToChoiceOption();
+
+        expect(orderItemStore.orderItems.items.length).toBe(0);
+      });
+
+      it('현재 옵션 선택해야 하는 상품의 정보를 저장한다', () => {
+        expect(orderItemStore.product).toBeFalsy();
+
+        setProductToChoiceOption();
+
+        expect(orderItemStore.product).toBeTruthy();
+      });
+
+      it('선택할 수 있는 Option값이 생성된다', () => {
+        expect(orderItemStore.colors).toBeFalsy();
+        expect(orderItemStore.sizes).toBeFalsy();
+
+        setProductToChoiceOption();
+
+        expect(orderItemStore.colors).toHaveLength(3);
+        expect(orderItemStore.sizes).toHaveLength(3);
+      });
+
+      it('SetOption이 호출되면 선택된 Option의 값이 설정된다', () => {
+        expect(orderItemStore.option.size).toBeFalsy();
+        expect(orderItemStore.option.color).toBeFalsy();
+
+        setProductToChoiceOption();
+
+        orderItemStore.setOption({ option: 'size', value: 'M' });
+
+        expect(orderItemStore.option.size).toBe('M');
+      });
+
+      context('동일한 옵션의 상품을 다시 선택했을 경우', () => {
+        it('해당 옵션의 상품의 수량을 1만큼 증가시킨다', () => {
+          setProductToChoiceOption();
+
+          orderItemStore.setOption({ option: 'size', value: 'M' });
+          orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+
+          expect(orderItemStore.orderItems.items.length).toBe(1);
+
+          orderItemStore.setOption({ option: 'size', value: 'M' });
+          orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+
+          expect(orderItemStore.orderItems.items[0].quantity).toBe(2);
         });
+      });
+    });
 
-        orderItemStore.addOrderItem(item);
+    context('Option을 모두 선택했을 경우', () => {
+      it('선택한 옵션 내용이 포함된 item을 orderItems에 추가한다', () => {
+        setProductToChoiceOption();
 
-        expect(orderItemStore.totalQuantity()).toBe(1);
-      },
-    );
+        orderItemStore.setOption({ option: 'size', value: 'M' });
+        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+
+        const { orderItems } = orderItemStore;
+
+        expect(orderItems.items.length).toBe(1);
+      });
+
+      it('선택했던 Option은 초기화된다', () => {
+        setProductToChoiceOption();
+
+        orderItemStore.setOption({ option: 'size', value: 'M' });
+
+        expect(orderItemStore.option.size).toBe('M');
+
+        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+
+        expect(orderItemStore.option.size).toBe('');
+        expect(orderItemStore.option.color).toBe('');
+      });
+    });
   });
 
-  context('TotalCost가 호출된 경우', () => {
-    it('OrderItems에 있는 모든 orderItem의 totalPrice합을 반환한다', () => {
-      expect(orderItemStore.totalCost()).toBe(0);
+  describe('IsItemSelected', () => {
+    context('OrderItems에 Item이 있을 경우', () => {
+      it('True를 반환한다', () => {
+        setProductToChoiceOption();
 
-      const item = new Item({
-        id: 2,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-        quantity: 1,
-      });
+        orderItemStore.setOption({ option: 'size', value: 'M' });
+        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
 
-      orderItemStore.addOrderItem(item);
+        const { orderItems } = orderItemStore;
 
-      expect(orderItemStore.totalCost()).toBe(10_000);
-    });
-  });
+        expect(orderItems.items.length).toBe(1);
 
-  describe('Item 수량 변경', () => {
-    context('Item 수량을 증가시키는 경우', () => {
-      it('totalQuantity와 totalCost가 증가한다', () => {
-        const index = 0;
-
-        const item = new Item({
-          id: 2,
-          price: 10_000,
-          name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
-        });
-
-        orderItemStore.addOrderItem(item);
-
-        expect(orderItemStore.numberOfOrderItems()).toBe(1);
-        expect(orderItemStore.totalQuantity()).toBe(1);
-        expect(orderItemStore.totalCost()).toBe(10_000);
-
-        orderItemStore.increaseQuantity({ index, amount: 1 });
-
-        expect(orderItemStore.totalQuantity()).toBe(2);
-        expect(orderItemStore.totalCost()).toBe(20_000);
+        expect(orderItemStore.isItemSelected()).toBeTruthy();
       });
     });
 
-    context('Item 수량을 감소시키는 경우', () => {
-      it('totalQuantity와 totalCost가 감소한다', () => {
-        const index = 0;
+    context('OrderItems에 Item을 추가할 경우', () => {
+      it('notSelected error를 초기화한다', () => {
+        setProductToChoiceOption();
 
-        const item = new Item({
-          id: 2,
-          price: 10_000,
-          name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
-        });
+        expect(orderItemStore.errors.notSelected).toBeFalsy();
 
-        orderItemStore.addOrderItem(item);
+        orderItemStore.isItemSelected();
 
-        orderItemStore.increaseQuantity({ index, amount: 1 });
+        expect(orderItemStore.errors.notSelected).toBeTruthy();
 
-        expect(orderItemStore.totalQuantity()).toBe(2);
-        expect(orderItemStore.totalCost()).toBe(20_000);
+        orderItemStore.setOption({ option: 'size', value: 'M' });
+        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
 
-        orderItemStore.decreaseQuantity({ index, amount: -1 });
-
-        expect(orderItemStore.totalQuantity()).toBe(1);
-        expect(orderItemStore.totalCost()).toBe(10_000);
+        expect(orderItemStore.errors.notSelected).toBeFalsy();
       });
     });
 
-    context('Item 수량을 1개 이하로 감소시키는 경우', () => {
-      it('Item 수량은 1개 미만으로 감소되지 않는다', () => {
-        const index = 0;
+    context('OrderItems에 Item이 없을 경우', () => {
+      it('False를 반환한다', () => {
+        setProductToChoiceOption();
 
-        const item = new Item({
-          id: 2,
-          price: 10_000,
-          name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
-        });
+        const { orderItems } = orderItemStore;
 
-        orderItemStore.addOrderItem(item);
+        expect(orderItems.items.length).toBe(0);
 
-        orderItemStore.increaseQuantity({ index, amount: 1 });
-
-        expect(orderItemStore.totalQuantity()).toBe(2);
-        expect(orderItemStore.totalCost()).toBe(20_000);
-
-        orderItemStore.decreaseQuantity({ index, amount: -1 });
-
-        expect(orderItemStore.totalQuantity()).toBe(1);
-        expect(orderItemStore.totalCost()).toBe(10_000);
-
-        orderItemStore.decreaseQuantity({ index, amount: -1 });
-
-        expect(orderItemStore.totalQuantity()).toBe(1);
-        expect(orderItemStore.totalCost()).toBe(10_000);
+        expect(orderItemStore.isItemSelected()).toBeFalsy();
       });
-    });
 
-    context('직접 상품 수량을 변경 시키는 경우', () => {
-      it('상품 수량은 입력 값으로 변경된다', () => {
-        const index = 0;
+      it('Errors에 notSelected에러를 세팅한다', () => {
+        setProductToChoiceOption();
 
-        const item = new Item({
-          id: 2,
-          price: 10_000,
-          name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
-        });
+        expect(orderItemStore.errors.notSelected).toBeFalsy();
 
-        orderItemStore.addOrderItem(item);
+        orderItemStore.isItemSelected();
 
-        expect(orderItemStore.totalQuantity()).toBe(1);
-        expect(orderItemStore.totalCost()).toBe(10_000);
-
-        orderItemStore.updateQuantity({ index, amount: 10 });
-
-        expect(orderItemStore.totalQuantity()).toBe(10);
-        expect(orderItemStore.totalCost()).toBe(100_000);
+        expect(orderItemStore.errors.notSelected).toBeTruthy();
       });
     });
   });

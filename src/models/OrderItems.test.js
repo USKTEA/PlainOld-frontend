@@ -18,6 +18,7 @@ describe('OrderItems', () => {
 
       const item = new Item({
         id: firstId,
+        productId: 1,
         price: 10_000,
         name: 'T-Shirt',
         thumbnailUrl: '1',
@@ -33,104 +34,55 @@ describe('OrderItems', () => {
     });
   });
 
-  context('Item을 추가할 경우', () => {
-    it('OrderItems에 item이 저장된다', () => {
-      expect(orderItems.orderItems).toHaveLength(0);
+  describe('AddOrderItem', () => {
+    context('Item을 추가할 경우', () => {
+      it('OrderItems에 item이 저장된다', () => {
+        expect(orderItems.items).toHaveLength(0);
 
-      const item = new Item({
-        id: 1,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
+        const item = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name: 'T-Shirt',
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+        });
+
+        orderItems = orderItems.addOrderItem(item);
+
+        expect(orderItems.items).toHaveLength(1);
       });
-
-      orderItems = orderItems.addOrderItem(item);
-
-      expect(orderItems.orderItems).toHaveLength(1);
     });
-  });
 
-  context('CountItems가 호출된 경우', () => {
-    it('OrderItems의 길이를 반환한다', () => {
-      expect(orderItems.countItems()).toBe(0);
+    context('동일한 옵션의 Item을 추가할 경우', () => {
+      it('해당 옵션의 Item의 수량을 1만큼 증가시킨다', () => {
+        expect(orderItems.items).toHaveLength(0);
 
-      const item = new Item({
-        id: 1,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
+        const item = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name: 'T-Shirt',
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: { name: 'Black' },
+          },
+        });
+
+        orderItems = orderItems.addOrderItem(item);
+
+        expect(orderItems.items).toHaveLength(1);
+        expect(orderItems.items[0].quantity).toBe(1);
+
+        orderItems = orderItems.addOrderItem(item);
+
+        expect(orderItems.items).toHaveLength(1);
+        expect(orderItems.items[0].quantity).toBe(2);
       });
-
-      orderItems = orderItems.addOrderItem(item);
-
-      expect(orderItems.countItems()).toBe(1);
-    });
-  });
-
-  context('GetProductId가 호출된 경우', () => {
-    it('index값에 해당하는 OrderItem의 id를 반환한다', () => {
-      const id = 2;
-      const index = 0;
-
-      const item = new Item({
-        id,
-        productId: id,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-      });
-
-      orderItems = orderItems.addOrderItem(item);
-
-      expect(orderItems.countItems()).toBe(1);
-
-      expect(orderItems.productId(index)).toBe(id);
-    });
-  });
-
-  context('GetOrderItemQuantity가 호출된 경우', () => {
-    it('index값에 해당하는 OrderItem의 quantity를 반환한다', () => {
-      const index = 0;
-
-      const item = new Item({
-        id: 1,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-        quantity: 10,
-      });
-
-      orderItems = orderItems.addOrderItem(item);
-
-      expect(orderItems.orderItemQuantity(index)).toBe(10);
-    });
-  });
-
-  context('GetTotalPrice가 호출된 경우', () => {
-    it('index값에 해당하는 OrderItem의 totalPrice를 반환한다', () => {
-      const index = 0;
-
-      const item = new Item({
-        id: 1,
-        price: 10_000,
-        name: 'T-Shirt',
-        thumbnailUrl: '1',
-        shippingFee: 2_500,
-        freeShippingAmount: 50_000,
-        quantity: 10,
-      });
-
-      orderItems = orderItems.addOrderItem(item);
-
-      expect(orderItems.orderItemTotalPrice(index)).toBe(100_000);
     });
   });
 
@@ -147,22 +99,23 @@ describe('OrderItems', () => {
 
         const item1 = new Item({
           id: 1,
+          productId: 1,
+          price: 10_000,
+          name: 'T-Shirt',
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+        });
+
+        const item2 = new Item({
+          id: 1,
+          productId: 2,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
           quantity: 10,
-        });
-
-        const item2 = new Item({
-          id: 2,
-          price: 10_000,
-          name: 'T-Shirt',
-          thumbnailUrl: '1',
-          shippingFee: 2_500,
-          freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         const items = [item1, item2];
@@ -199,13 +152,13 @@ describe('OrderItems', () => {
         });
 
         const item2 = new Item({
-          id: 2,
+          id: 1,
+          productId: 2,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         const items = [item1, item2];
@@ -223,119 +176,119 @@ describe('OrderItems', () => {
   describe('Item 수량 조작', () => {
     context('OrderItem의 수량을 증가시키는 경우', () => {
       it('index값에 해당하는 OrderItem의 quantity를 증가시킨다', () => {
-        const index = 0;
+        const id = 1;
 
         const item = new Item({
           id: 1,
+          productId: 1,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         orderItems = orderItems.addOrderItem(item);
 
-        expect(orderItems.orderItemQuantity(index)).toBe(1);
+        expect(orderItems.items[0].quantity).toBe(1);
 
         orderItems = orderItems.increaseQuantity(
-          { index, amount: 1 },
+          { id, amount: 1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(2);
+        expect(orderItems.items[0].quantity).toBe(2);
       });
     });
 
     context('OrderItem의 수량을 감소시키는 경우', () => {
       it('index값에 해당하는 OrderItem의 quantity를 감소시킨다', () => {
-        const index = 0;
+        const id = 1;
 
         const item = new Item({
           id: 1,
+          productId: 1,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         orderItems = orderItems.addOrderItem(item);
 
         orderItems = orderItems.increaseQuantity(
-          { index, amount: 1 },
+          { id, amount: 1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(2);
+        expect(orderItems.items[0].quantity).toBe(2);
 
         orderItems = orderItems.decreaseQuantity(
-          { index, amount: -1 },
+          { id, amount: -1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(1);
+        expect(orderItems.items[0].quantity).toBe(1);
       });
     });
 
     context('OrderItem의 수량을 1개 미만으로 감소시키는 경우', () => {
       it('OrderItem의 수량은 1개 미만으로 감소하지 않는다', () => {
-        const index = 0;
+        const id = 1;
 
         const item = new Item({
           id: 1,
+          productId: 1,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         orderItems = orderItems.addOrderItem(item);
 
         orderItems = orderItems.increaseQuantity(
-          { index, amount: 1 },
+          { id, amount: 1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(2);
+        expect(orderItems.items[0].quantity).toBe(2);
 
         orderItems = orderItems.decreaseQuantity(
-          { index, amount: -1 },
+          { id, amount: -1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(1);
+        expect(orderItems.items[0].quantity).toBe(1);
 
         orderItems = orderItems.decreaseQuantity(
-          { index, amount: -1 },
+          { id, amount: -1 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(1);
+        expect(orderItems.items[0].quantity).toBe(1);
       });
     });
 
     context('Item 수량을 직접 변경시키는 경우', () => {
       it('OrderItem의 수량은 입력값으로 변경된다', () => {
-        const index = 0;
+        const id = 1;
 
         const item = new Item({
           id: 1,
+          productId: 1,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         orderItems = orderItems.addOrderItem(item);
 
-        expect(orderItems.orderItemQuantity(index)).toBe(1);
+        expect(orderItems.items.length).toBe(1);
 
         orderItems = orderItems.updateQuantity(
-          { index, amount: 10 },
+          { id, amount: 10 },
         );
 
-        expect(orderItems.orderItemQuantity(index)).toBe(10);
+        expect(orderItems.items[0].quantity).toBe(10);
       });
     });
   });
@@ -345,12 +298,12 @@ describe('OrderItems', () => {
       it('배송비는 Item 중 가장 큰 shippingFee가 된다', () => {
         const item = new Item({
           id: 1,
+          productId: 1,
           price: 10_000,
           name: 'T-Shirt',
           thumbnailUrl: '1',
           shippingFee: 2_500,
           freeShippingAmount: 50_000,
-          quantity: 1,
         });
 
         orderItems = orderItems.addOrderItem(item);
@@ -365,12 +318,12 @@ describe('OrderItems', () => {
         it('배송비는 0원이 된다', () => {
           const item = new Item({
             id: 1,
-            price: 50_000,
+            productId: 1,
+            price: 100_000,
             name: 'T-Shirt',
             thumbnailUrl: '1',
             shippingFee: 2_500,
             freeShippingAmount: 50_000,
-            quantity: 1,
           });
 
           orderItems = orderItems.addOrderItem(item);
