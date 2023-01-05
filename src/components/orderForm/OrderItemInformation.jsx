@@ -37,14 +37,24 @@ const ItemInformation = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+
   span {
     margin-bottom: .5em;
   }
 `;
 
-const Quantity = styled.span`
+const OptionQuantityContainer = styled.div`
   font-size: .8em;
-  color:${defaultTheme.colors.fourth};
+  color:${defaultTheme.colors.fifth};
+  margin-bottom: .2em;
+
+  span {
+    margin-right: .5em;
+  }
+
+  strong {
+    margin-left: .5em;
+  }
 `;
 
 const OrderItemPrice = styled.strong`
@@ -61,6 +71,7 @@ const ShippingFeeInformation = styled.div`
   justify-content: center;
   align-items: center;
   background: ${defaultTheme.colors.background};
+
   span {
     font-size: 0.9em;
     color: #888;
@@ -77,12 +88,13 @@ export default function OrderItemInformation() {
   const orderItemStore = useOrderItemStore();
 
   const { orderItems } = orderItemStore;
+  const { items } = orderItems;
 
   return (
     <SubSection>
       <SubTitle>주문 상품 정보</SubTitle>
       <OrderItemList>
-        {orderItemStore.items().map((item) => (
+        {items.map((item) => (
           <li key={item.id}>
             <Link to={`/products/${item.productId}`}>
               <OrderItem>
@@ -94,7 +106,17 @@ export default function OrderItemInformation() {
                 />
                 <ItemInformation>
                   <span>{item.name}</span>
-                  <Quantity>{`${item.quantity}개`}</Quantity>
+                  <OptionQuantityContainer>
+                    {item.option ? (
+                      <div>
+                        <span>
+                          {`${item.option.size} / ${item.option.color.name}`}
+                        </span>
+                        -
+                        <strong>{`${item.quantity}개`}</strong>
+                      </div>
+                    ) : <strong>{`${item.quantity}개`}</strong>}
+                  </OptionQuantityContainer>
                   <OrderItemPrice>
                     {`${numberFormat(item.totalPrice)}원`}
                   </OrderItemPrice>

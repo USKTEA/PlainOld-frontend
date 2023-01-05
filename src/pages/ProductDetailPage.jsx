@@ -2,10 +2,9 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { productStore } from '../stores/ProductStore';
-
-import ProductDetail from '../components/ProductDetail';
-import Item from '../models/Item';
 import { orderItemStore } from '../stores/OrderItemStore';
+
+import ProductDetail from '../components/productDetail/ProductDetail';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -15,21 +14,13 @@ export default function ProductDetailPage() {
 
     const { product } = productStore;
 
-    const {
-      name, price, image, shipping,
-    } = product;
+    if (!product.optionData) {
+      orderItemStore.addOrderItem({ product });
+    }
 
-    const item = new Item({
-      id: orderItemStore.generateId(),
-      productId: product.id,
-      price,
-      name,
-      thumbnailUrl: image.thumbnailUrl,
-      shippingFee: shipping.shippingFee,
-      freeShippingAmount: shipping.freeShippingAmount,
-    });
-
-    orderItemStore.addOrderItem(item);
+    if (product.optionData) {
+      orderItemStore.setProductToChoiceOption({ product });
+    }
   };
 
   useEffect(() => {

@@ -1,17 +1,36 @@
+/* eslint-disable class-methods-use-this */
 import Store from './Store';
 
 import OrderItems from '../models/OrderItems';
 import Item from '../models/Item';
+import rgbToHex from '../utils/rgbToHex';
 
 export default class OrderItemStore extends Store {
   constructor() {
     super();
 
     this.orderItems = new OrderItems();
+
+    this.product = null;
+    this.colors = null;
+    this.sizes = null;
+
+    this.option = {
+      size: '',
+      color: '',
+    };
+
+    this.errors = {
+      notSelected: '',
+    };
+
+    this.errorMessages = {
+      notSelected: '주문하실 상품을 선택해주세요',
+    };
   }
 
-  loadItems({ orderItems }) {
-    const items = orderItems.map((item) => (
+  loadItems({ items }) {
+    const orderItems = items.map((item) => (
       new Item({
         id: item.id,
         productId: item.productId,
@@ -21,78 +40,151 @@ export default class OrderItemStore extends Store {
         shippingFee: item.shippingFee,
         freeShippingAmount: item.freeShippingAmount,
         quantity: item.quantity,
+        option: item.option,
       })));
 
-    this.orderItems = items.reduce(
+    this.orderItems = orderItems.reduce(
       (acc, item) => acc.addOrderItem(item),
       new OrderItems(),
     );
   }
 
-  addOrderItem(item) {
-    this.orderItems = this.orderItems.addOrderItem(item);
+  addOrderItem({ product, option }) {
+    const {
+      id, name, price, image, shipping,
+    } = product;
+
+    if (!option) {
+      const item = new Item({
+        id: this.generateId(),
+        productId: id,
+        price,
+        name,
+        thumbnailUrl: image.thumbnailUrl,
+        shippingFee: shipping.shippingFee,
+        freeShippingAmount: shipping.freeShippingAmount,
+      });
+
+      this.orderItems = this.orderItems.addOrderItem(item);
+    }
+
+    if (option) {
+      const item = new Item({
+        id: this.generateId(),
+        productId: id,
+        price,
+        name,
+        thumbnailUrl: image.thumbnailUrl,
+        shippingFee: shipping.shippingFee,
+        freeShippingAmount: shipping.freeShippingAmount,
+        option,
+      });
+
+      this.orderItems = this.orderItems.addOrderItem(item);
+    }
 
     this.publish();
   }
 
-  increaseQuantity({ index, amount }) {
+  setProductToChoiceOption({ product }) {
+    const { optionData } = product;
+
+    this.product = product;
+    this.sizes = optionData.sizes;
+    this.colors = this.sort([...optionData.colors]);
+
+    this.publish();
+  }
+
+  setOption({ option, value }) {
+    this.option = { ...this.option, [option]: value };
+
+    if (this.isOptionComplete()) {
+      this.addOrderItem({
+        product: this.product,
+        option: this.option,
+      });
+
+      this.option = {
+        size: '',
+        color: '',
+      };
+
+      this.errors.notSelected = '';
+    }
+
+    this.publish();
+  }
+
+  isOptionComplete() {
+    if (this.option.color && this.option.size) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isItemSelected() {
+    if (this.orderItems.hasItem()) {
+      return true;
+    }
+
+    this.errors.notSelected = this.errorMessages.notSelected;
+
+    this.publish();
+
+    return false;
+  }
+
+  sort(colors) {
+    return colors.sort((a, b) => {
+      const hex1 = rgbToHex({ r: a.red, g: a.green, b: a.blue });
+      const hex2 = rgbToHex({ r: b.red, g: b.green, b: b.blue });
+
+      if (hex1 < hex2) {
+        return -1;
+      }
+
+      if (hex1 > hex2) {
+        return 1;
+      }
+
+      return 0;
+    });
+  }
+
+  increaseQuantity({ id, amount }) {
     this.orderItems = this.orderItems.increaseQuantity(
-      { index, amount },
+      { id, amount },
     );
 
     this.publish();
   }
 
-  decreaseQuantity({ index, amount }) {
+  decreaseQuantity({ id, amount }) {
     this.orderItems = this.orderItems.increaseQuantity(
-      { index, amount },
+      { id, amount },
     );
 
     this.publish();
   }
 
-  updateQuantity({ index, amount }) {
+  updateQuantity({ id, amount }) {
     this.orderItems = this.orderItems.updateQuantity(
-      { index, amount },
+      { id, amount },
     );
 
     this.publish();
   }
 
-  items() {
-    return this.orderItems.items();
+  deleteItem({ id }) {
+    this.orderItems = this.orderItems.delete({ id });
+
+    this.publish();
   }
 
   generateId() {
     return this.orderItems.generateId();
-  }
-
-  numberOfOrderItems() {
-    return this.orderItems.countItems();
-  }
-
-  productId(index) {
-    return this.orderItems.productId(index);
-  }
-
-  orderItemId(index) {
-    return this.orderItems.orderItemId(index);
-  }
-
-  quantityOfOrderItem(index) {
-    return this.orderItems.orderItemQuantity(index);
-  }
-
-  orderItemPrice(index) {
-    return this.orderItems.orderItemTotalPrice(index);
-  }
-
-  totalQuantity() {
-    return this.orderItems.totalQuantity();
-  }
-
-  totalCost() {
-    return this.orderItems.totalCost();
   }
 
   setOrderItems(orderItems) {
@@ -103,7 +195,16 @@ export default class OrderItemStore extends Store {
 
   reset() {
     this.orderItems = new OrderItems();
-
+    this.product = null;
+    this.option = {
+      size: '',
+      color: '',
+    };
+    this.sizes = null;
+    this.colors = null;
+    this.errors = {
+      notSelected: '',
+    };
     this.publish();
   }
 }

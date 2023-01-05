@@ -68,10 +68,10 @@ export default class OrderSpecification {
       payer: '김뚜루',
     };
 
-    const { orderItems } = new OrderItems().addOrderItem(item);
+    const { items } = new OrderItems().addOrderItem(item);
 
     return new OrderSpecification({
-      orderItems, orderer, shippingInformation, payment,
+      orderItems: items, orderer, shippingInformation, payment,
     });
   }
 }

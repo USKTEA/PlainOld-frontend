@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Cart from './Cart';
@@ -32,13 +32,13 @@ describe('Cart', () => {
   //   });
   // });
 
-  // describe('CartSummary', () => {
-  //   context('Cart에 등록된 상품이 없을 경우', () => {
-  //     it('CartSummary가 보이지 않는다', () => {
-  //       renderCart();
+  describe('CartSummary', () => {
+    context('Cart에 등록된 상품이 없을 경우', () => {
+      it('CartSummary가 보이지 않는다', () => {
+        // renderCart();
 
-  //       expect(screen.queryByText(/총 주문 상품/)).toBeFalsy();
-  //     });
-  //   });
-  // });
+        // expect(screen.queryByText(/총 주문 상품/)).toBeFalsy();
+      });
+    });
+  });
 });

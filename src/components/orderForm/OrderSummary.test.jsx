@@ -2,8 +2,6 @@ import { render, screen } from '@testing-library/react';
 
 import { orderItemStore } from '../../stores/OrderItemStore';
 
-import Item from '../../models/Item';
-
 import OrderSummary from './OrderSummary';
 
 describe('OrderSummary', () => {
@@ -16,17 +14,27 @@ describe('OrderSummary', () => {
   });
 
   it('주문 금액 요약을 보여준다', () => {
-    const item = new Item({
+    const product = {
       id: 1,
-      productId: 1,
-      price: 10_000,
-      name: 'Pants',
-      thumbnailUrl: '2',
-      shippingFee: 2_500,
-      freeShippingAmount: 50_000,
-    });
+      name: 'T-Shirt',
+      price: 10000,
+      description: {
+        productDetail: 'Very Good', productSummary: 'Good',
+      },
+      image: {
+        thumbnailUrl: 'http://url.com',
+        productImageUrls: ['http://url.com'],
+      },
+      shipping: {
+        shippingMethod: '택배',
+        shippingFee: 2500,
+        freeShippingAmount: 50000,
+      },
+      status: 'ON_SALE',
+      categoryId: 1,
+    };
 
-    orderItemStore.addOrderItem(item);
+    orderItemStore.addOrderItem({ product });
 
     renderOrderSummary();
 
