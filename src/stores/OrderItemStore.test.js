@@ -121,12 +121,12 @@ describe('OrderItemStore', () => {
           setProductToChoiceOption();
 
           orderItemStore.setOption({ option: 'size', value: 'M' });
-          orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+          orderItemStore.setOption({ option: 'color', value: 'red' });
 
           expect(orderItemStore.orderItems.items.length).toBe(1);
 
           orderItemStore.setOption({ option: 'size', value: 'M' });
-          orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+          orderItemStore.setOption({ option: 'color', value: 'red' });
 
           expect(orderItemStore.orderItems.items[0].quantity).toBe(2);
         });
@@ -138,7 +138,7 @@ describe('OrderItemStore', () => {
         setProductToChoiceOption();
 
         orderItemStore.setOption({ option: 'size', value: 'M' });
-        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+        orderItemStore.setOption({ option: 'color', value: 'red' });
 
         const { orderItems } = orderItemStore;
 
@@ -152,7 +152,7 @@ describe('OrderItemStore', () => {
 
         expect(orderItemStore.option.size).toBe('M');
 
-        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+        orderItemStore.setOption({ option: 'color', value: 'red' });
 
         expect(orderItemStore.option.size).toBe('');
         expect(orderItemStore.option.color).toBe('');
@@ -166,7 +166,7 @@ describe('OrderItemStore', () => {
         setProductToChoiceOption();
 
         orderItemStore.setOption({ option: 'size', value: 'M' });
-        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+        orderItemStore.setOption({ option: 'color', value: 'red' });
 
         const { orderItems } = orderItemStore;
 
@@ -187,7 +187,7 @@ describe('OrderItemStore', () => {
         expect(orderItemStore.errors.notSelected).toBeTruthy();
 
         orderItemStore.setOption({ option: 'size', value: 'M' });
-        orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+        orderItemStore.setOption({ option: 'color', value: 'red' });
 
         expect(orderItemStore.errors.notSelected).toBeFalsy();
       });

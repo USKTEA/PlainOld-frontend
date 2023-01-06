@@ -43,6 +43,7 @@ export default function ColorSelection() {
   const { colors, option } = orderItemStore;
 
   const handleChangeOption = (value) => {
+    console.log(value);
     orderItemStore.setOption({ option: 'color', value });
   };
 
@@ -61,7 +62,7 @@ export default function ColorSelection() {
                   color={
                     rgbToHex({ r: color.red, g: color.green, b: color.blue })
                   }
-                  onClick={() => handleChangeOption(color)}
+                  onClick={() => handleChangeOption(color.name)}
                 >
                   <span>{color.name}</span>
                 </Color>

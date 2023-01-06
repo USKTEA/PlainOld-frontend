@@ -71,7 +71,7 @@ describe('ColorSelection', () => {
       expect(orderItemStore.orderItems.items.length).toBe(0);
 
       orderItemStore.setOption({ option: 'size', value: 'M' });
-      orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+      orderItemStore.setOption({ option: 'color', value: 'red' });
 
       const { container } = render(<ColorSelection />);
 

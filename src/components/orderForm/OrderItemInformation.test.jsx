@@ -109,7 +109,7 @@ describe('OrderItemInformation', () => {
       orderItemStore.setProductToChoiceOption({ product });
 
       orderItemStore.setOption({ option: 'size', value: 'M' });
-      orderItemStore.setOption({ option: 'color', value: { name: 'red' } });
+      orderItemStore.setOption({ option: 'color', value: 'red' });
 
       renderOrderItemInformation();
 

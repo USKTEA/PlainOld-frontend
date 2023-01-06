@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+
 import useOrderItemStore from '../../hooks/useOrderItemStore';
+
 import defaultTheme from '../../styles/defaultTheme';
 
 import numberFormat from '../../utils/numberFormat';
@@ -107,7 +109,7 @@ export default function Items() {
               ? (
                 <Option>
                   <label htmlFor="quantity">
-                    {`${item.option.size} / ${item.option.color.name}`}
+                    {`${item.option.size} / ${item.option.color}`}
                   </label>
                   <button
                     type="button"

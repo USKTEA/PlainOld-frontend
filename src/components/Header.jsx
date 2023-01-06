@@ -1,5 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { Link, useLocation } from 'react-router-dom';
 
 const Container = styled.header`
   font-weight: 800;

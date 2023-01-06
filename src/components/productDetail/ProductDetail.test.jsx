@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { orderItemStore } from '../../stores/OrderItemStore';
 import { productStore } from '../../stores/ProductStore';
+import { cartStore } from '../../stores/CartStore';
 
 import ProductDetail from './ProductDetail';
 
@@ -41,7 +42,7 @@ describe('ProductDetail', () => {
     orderItemStore.reset();
   });
 
-  describe('Buttons', () => {
+  describe('구매하기', () => {
     context('선택한 상품이 있고 구매하기 버튼을 누를 경우', () => {
       it('해당 상품의 주문 정보가 보이는 결제화면으로 이동한다', async () => {
         const id = 1;
@@ -73,10 +74,29 @@ describe('ProductDetail', () => {
         screen.getByText('주문하실 상품을 선택해주세요');
       });
     });
+  });
 
-    context('장바구니 버튼을 클릭했을 경우', () => {
-      it('선택한 상품이 장바구니에 담겼다는 모달을 볼 수 있다', async () => {
+  describe('장바구니', () => {
+    context('선택한 상품이 있고 장바구니 버튼을 누를 경우', () => {
+      it('선택한 상품이 장바구니에 담긴 것을 볼 수 있다', async () => {
         const id = 1;
+
+        await productStore.fetchProduct({ id });
+
+        renderProductDetail();
+
+        expect(cartStore.cart.items.length).toHaveLength(0);
+
+        fireEvent.click(screen.getByRole('button', { name: '장바구니' }));
+
+        expect(screen.getByText('선택하신 상품을 장바구니에 담았습니다.'));
+        expect(cartStore.cart.items.length).toHaveLength(1);
+      });
+    });
+
+    context('선택한 상품이 없을 때 장바구니 버튼을 누를 경우', () => {
+      it('장바구니에 넣을 상품을 선택해주세요 메세지를 볼 수 있다', async () => {
+        const id = 3;
 
         await productStore.fetchProduct({ id });
 
@@ -84,7 +104,8 @@ describe('ProductDetail', () => {
 
         fireEvent.click(screen.getByRole('button', { name: '장바구니' }));
 
-        expect(screen.getByText('선택하신 상품을 장바구니에 담았습니다.'));
+        screen.getByText('장바구니에 넣을 상품을 선택해주세요');
+        expect(cartStore.cart.items.length).toHaveLength(0);
       });
     });
   });
