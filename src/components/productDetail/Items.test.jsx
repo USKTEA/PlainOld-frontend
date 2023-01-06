@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+
 import { orderItemStore } from '../../stores/OrderItemStore';
+
 import Items from './Items';
 
 const context = describe;
@@ -75,7 +77,7 @@ describe('Items', () => {
     it('선택한 Option을 볼 수 있다', () => {
       setItemHasOption();
       orderItemStore.setOption({ option: 'size', value: 'XL' });
-      orderItemStore.setOption({ option: 'color', value: { name: 'Black' } });
+      orderItemStore.setOption({ option: 'color', value: 'Black' });
 
       render(<Items />);
 
@@ -86,7 +88,7 @@ describe('Items', () => {
     it('선택한 옵션을 취소할 수 있다', () => {
       setItemHasOption();
       orderItemStore.setOption({ option: 'size', value: 'XL' });
-      orderItemStore.setOption({ option: 'color', value: { name: 'Black' } });
+      orderItemStore.setOption({ option: 'color', value: 'Black' });
 
       render(<Items />);
 
@@ -96,7 +98,7 @@ describe('Items', () => {
       fireEvent.click(screen.getByRole('button', { name: 'X' }));
 
       expect(screen.queryByText(/Black/)).toBeFalsy();
-      expect(screen.queryByText(/XLs/)).toBeFalsy();
+      expect(screen.queryByText(/XL/)).toBeFalsy();
     });
   });
 

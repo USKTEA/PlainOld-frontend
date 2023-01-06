@@ -110,7 +110,7 @@ export default function OrderItemInformation() {
                     {item.option ? (
                       <div>
                         <span>
-                          {`${item.option.size} / ${item.option.color.name}`}
+                          {`${item.option.size} / ${item.option.color}`}
                         </span>
                         -
                         <strong>{`${item.quantity}개`}</strong>

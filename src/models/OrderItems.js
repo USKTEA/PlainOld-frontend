@@ -38,7 +38,7 @@ export default class OrderItems {
 
     const foundIndex = this.items.reduce((acc, i, index) => {
       if (item.option.size === i.option.size) {
-        if (item.option.color.name === i.option.color.name) {
+        if (item.option.color === i.option.color) {
           return [...acc, index];
         }
       }

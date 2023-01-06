@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
-import useOrderItemStore from '../../hooks/useOrderItemStore';
 import useProductStore from '../../hooks/useProductStore';
+import useOrderItemStore from '../../hooks/useOrderItemStore';
+import useCartStore from '../../hooks/useCartStore';
 
 import defaultTheme from '../../styles/defaultTheme';
 
@@ -117,6 +118,7 @@ export default function ProductDetail() {
 
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
+  const cartStore = useCartStore();
 
   const { product, loading, errors } = productStore;
   const { orderItems, sizes, colors } = orderItemStore;
