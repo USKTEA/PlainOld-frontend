@@ -10,6 +10,7 @@ import defaultTheme from '../../styles/defaultTheme';
 
 import InputLabel from '../ui/InputLabel';
 import SubSection from '../ui/Subsection';
+import useCartStore from '../../hooks/useCartStore';
 
 const Checkbox = styled.div`
   li {
@@ -53,6 +54,7 @@ export default function Agreements() {
   const orderFormStore = useOrderFromStore();
   const orderItemStore = useOrderItemStore();
   const createOrderStore = useCreateOrderStore();
+  const cartStore = useCartStore();
 
   const { agreements } = orderFormStore;
   const { orderItems } = orderItemStore;
@@ -76,6 +78,7 @@ export default function Agreements() {
         return;
       }
 
+      cartStore.completePurchase();
       navigate('/order-success');
     }
   };

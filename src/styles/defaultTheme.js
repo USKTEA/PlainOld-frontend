@@ -10,6 +10,7 @@ const defaultTheme = {
     primaryText: '#2E2C6F',
     secondaryText: '#22DAAB',
     thirdText: '#212121',
+    fourthText: '#BCBBD1',
     red: '#ff424d',
   },
 };

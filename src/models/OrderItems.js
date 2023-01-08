@@ -36,17 +36,14 @@ export default class OrderItems {
       return this.items.findIndex((i) => i.productId === item.productId);
     }
 
-    const foundIndex = this.items.reduce((acc, i, index) => {
-      if (item.option.size === i.option.size) {
-        if (item.option.color === i.option.color) {
-          return [...acc, index];
-        }
-      }
+    const index = this.items.findIndex((i) => {
+      const option1 = i.option;
+      const option2 = item.option;
 
-      return acc;
-    }, []);
+      return option1.size === option2.size && option1.color === option2.color;
+    });
 
-    return foundIndex.length ? foundIndex[0] : -1;
+    return index;
   }
 
   increaseQuantity({ id, amount }) {

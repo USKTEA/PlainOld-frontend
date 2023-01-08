@@ -62,7 +62,9 @@ export default function CartSummary() {
   return (
     <CartSum>
       <thead>
-        <tr>총 주문 상품 2개</tr>
+        <tr>
+          <th>총 주문 상품 2개</th>
+        </tr>
       </thead>
       <tbody>
         <tr>
