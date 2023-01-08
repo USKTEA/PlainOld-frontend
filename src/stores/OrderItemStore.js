@@ -25,7 +25,7 @@ export default class OrderItemStore extends Store {
     };
 
     this.errorMessages = {
-      notSelected: '주문하실 상품을 선택해주세요',
+      notSelected: '상품 옵션을 선택해주세요',
     };
   }
 
@@ -189,6 +189,14 @@ export default class OrderItemStore extends Store {
 
   setOrderItems(orderItems) {
     this.orderItems = orderItems;
+
+    this.publish();
+  }
+
+  clearError() {
+    this.errors = {
+      notSelected: '',
+    };
 
     this.publish();
   }

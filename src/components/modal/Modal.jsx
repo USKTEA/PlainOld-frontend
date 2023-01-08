@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 100%;
   height: 120%;
   display: flex;
+  top: -1em;
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.2);

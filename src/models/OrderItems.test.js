@@ -69,7 +69,7 @@ describe('OrderItems', () => {
           freeShippingAmount: 50_000,
           option: {
             size: 'L',
-            color: { name: 'Black' },
+            color: 'Black',
           },
         });
 
@@ -175,7 +175,7 @@ describe('OrderItems', () => {
 
   describe('Item 수량 조작', () => {
     context('OrderItem의 수량을 증가시키는 경우', () => {
-      it('index값에 해당하는 OrderItem의 quantity를 증가시킨다', () => {
+      it('id에 해당하는 OrderItem의 quantity를 증가시킨다', () => {
         const id = 1;
 
         const item = new Item({
@@ -201,7 +201,7 @@ describe('OrderItems', () => {
     });
 
     context('OrderItem의 수량을 감소시키는 경우', () => {
-      it('index값에 해당하는 OrderItem의 quantity를 감소시킨다', () => {
+      it('id에 해당하는 OrderItem의 quantity를 감소시킨다', () => {
         const id = 1;
 
         const item = new Item({

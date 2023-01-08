@@ -1,8 +1,16 @@
-import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
+
+import useCartStore from '../../hooks/useCartStore';
+import useOrderItemStore from '../../hooks/useOrderItemStore';
+
+import ChangeQuantityModal from './ChangeQuantityModal';
+
 import defaultTheme from '../../styles/defaultTheme';
+import numberFormat from '../../utils/numberFormat';
 
 const Table = styled.table`
   border-top: 1px solid ${defaultTheme.colors.fourth};
@@ -43,9 +51,9 @@ const Table = styled.table`
   td {
     border-right: 1px solid ${defaultTheme.colors.fourth};
     height: 8em;
+
     div {
       display: flex;
-      align-items: center;
     }
   }
 
@@ -61,64 +69,100 @@ const Table = styled.table`
   }
 `;
 
+const HiddenLabel = styled.label`
+  display: none;
+`;
+
 const Item = styled(Link)`
-  width: 90%;
+  width: 20%;
   display: flex;
+  align-items: center;
   color: ${defaultTheme.colors.primary};
 `;
 
 const ImageContainer = styled.div`
   width: 6em;
+  height: 6em;
   padding: .5em;
   margin-right: 1em;
+  display: flex;
+  align-items: center;
   border: 1px solid ${defaultTheme.colors.fourth};
 `;
 
-const ButtonContainer = styled.div`
+const ItemSummary = styled.div`
+  padding: 1em;
+  width: 90%;
   display: flex;
+  flex-direction: column;
+  color: ${defaultTheme.colors.primaryText};
+
+  span {
+    font-size: 1.3em;
+    margin-bottom: .2em;
+  }
+`;
+
+const OptionList = styled.ul`
+  margin-right: 2em;
+`;
+
+const Option = styled.li`
+  width: 100%;
+  height: 2em;
+  margin-bottom: .5em;
+  padding: .5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: ${defaultTheme.colors.primary};
+  background-color: #F9F8FB;
+
+  button {
+    border: none;
+    background-color: ${defaultTheme.colors.fourth};
+    color: ${defaultTheme.colors.fourthText};
+    cursor: pointer;
+  }
+`;
+
+const QuantityHandler = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  font-size: 1.3em;
-`;
+  height: 5em;
 
-const ReduceButton = styled.button`
-  width: 1.5em;
-  height: 1.5em;
-  border: none;
-  background: url(/assets/images/minus-black.png) no-repeat 100% 100%;
-  background-size: contain;
-  text-indent: -10em;
-  overflow: hidden;
-  cursor: pointer;
-`;
+  span {
+    font-size: 1.2em;
+    color: ${defaultTheme.colors.third};
+  }
 
-const AddButton = styled.button`
-  width: 1.5em;
-  height: 1.5em;
-  border: none;
-  background: url(/assets/images/plus-black.png) no-repeat 100% 100%;
-  background-size: contain;
-  text-indent: -10em;
-  overflow: hidden;
-  cursor: pointer;
-`;
+  button {
+    font-size: .9em;
+    height: 2.5em;
+    border: 1px solid ${defaultTheme.colors.fourth};
+    margin-top: .5em;
+    padding: .2em .6em;
+    color: ${defaultTheme.colors.fifth};
+    background-color: white;
+    cursor: pointer;
 
-const Quantity = styled.input`
-  height: 2em;
-  width: 3em;
-  font-size: 0.7em;
-  border: 1px solid ${defaultTheme.colors.fourth};
+    :hover {
+      border: 1px solid ${defaultTheme.colors.fifth};
+    }
+  }
 `;
 
 const DirectPurchase = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const PurchaseButton = styled.button`
-  display: block;
   font-size: 0.8em;
   width: 50%;
   height: 3em;
@@ -131,14 +175,20 @@ const PurchaseButton = styled.button`
   }
 `;
 
+const CancelButtonContainer = styled.div`
+  width: 8%;
+  padding: 1em;
+  display: flex;
+  align-items: flex-start;
+`;
+
 const CancelButton = styled.button`
   font-weight: 100;
-  width: 5%;
-  height: 2em;
   border: none;
+  flex-direction: column;
   background: white;
+  color: ${defaultTheme.colors.fourthText};
   cursor: pointer;
-
   :hover {
     background-color: ${defaultTheme.colors.secondary};
     color: white;
@@ -160,137 +210,170 @@ const DeleteButton = styled.button`
   background-color: white;
   cursor: pointer;
   :hover {
-    border: 1px solid ${defaultTheme.colors.red}
+    border: 1px solid ${defaultTheme.colors.fifth}
   }
 `;
 
 export default function CartItems() {
+  const navigate = useNavigate();
+  const [, setOrderItems] = useLocalStorage('orderItems', '');
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const cartStore = useCartStore();
+  const orderItemStore = useOrderItemStore();
+
+  const { cart, errors } = cartStore;
+  const { items } = cart;
+
+  const handleOpenModal = ({ name }) => {
+    cartStore.selectChangeQuantityItem({ name });
+
+    setModalOpen(true);
+  };
+
+  const handleDeleteItem = ({ name }) => {
+    cartStore.deleteItem({ name });
+  };
+
+  const handleDeleteOption = ({ id, name }) => {
+    cartStore.deleteOption({ id, name });
+  };
+
+  const handlePurchaseSingleItem = ({ name }) => {
+    cartStore.selectItemToPurchase({ name });
+    orderItemStore.loadItems({ items: items.get(name) });
+    setOrderItems(orderItemStore.orderItems);
+
+    navigate('/order');
+  };
+
   return (
-    <div>
-      <Table>
-        <thead>
-          <tr>
-            <th>
-              <label className="control control--checkbox">
-                <input type="checkbox" className="js-check-all" />
-                <div className="control__indicator" />
-              </label>
-            </th>
-            <th>상품 정보</th>
-            <th>수량</th>
-            <th>주문금액</th>
-            <th>배송 정보</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>
-              <label className="control control--checkbox">
+    <>
+      <div>
+        <Table>
+          <thead>
+            <tr>
+              <th>
                 <input
-                  id="agree-all-agreements"
+                  className="select"
+                  id="select-all"
                   type="checkbox"
-                  name="agree-all-agreements"
+                  name="select-all"
                   readOnly
                 />
-              </label>
-            </th>
-            <td>
-              <div>
-                <Item to="/products/1">
-                  <ImageContainer>
-                    <img
-                      src="/assets/images/1.png"
-                      alt="상품이미지"
-                      height={60}
-                      width={60}
-                    />
-                  </ImageContainer>
+                <HiddenLabel htmlFor="select-all">전체선택</HiddenLabel>
+              </th>
+              <th>상품 정보</th>
+              <th>수량</th>
+              <th>주문금액</th>
+              <th>배송 정보</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...items.keys()].map((name) => (
+              <tr key={name}>
+                <th>
+                  <input
+                    id={name}
+                    type="checkbox"
+                    name={`select-${name}`}
+                    readOnly
+                  />
+                  <HiddenLabel htmlFor={name}>
+                    {name}
+                  </HiddenLabel>
+                </th>
+                <td>
                   <div>
-                    <span>T-Shirt</span>
+                    <Item to={`/products/${items.get(name)[0].productId}`}>
+                      <ImageContainer>
+                        <img
+                          src={`/assets/images/${items.get(name)[0].thumbnailUrl}.png`}
+                          alt={name}
+                          height={60}
+                          width={60}
+                        />
+                      </ImageContainer>
+                    </Item>
+                    <ItemSummary>
+                      <span>{name}</span>
+                      {cart.checkHasOption({ name })
+                        ? (
+                          <OptionList>
+                            {items.get(name).map((item) => (
+                              <Option key={item.id}>
+                                <label htmlFor="quantity">
+                                  {`${item.option.size} / ${item.option.color}`}
+                                  {` - ${item.quantity}개`}
+                                </label>
+                                <button
+                                  type="button"
+                                  className="option-delete-button"
+                                  onClick={() => handleDeleteOption(
+                                    { id: item.id, name },
+                                  )}
+                                >
+                                  X
+                                </button>
+                              </Option>
+                            ))}
+                          </OptionList>
+                        )
+                        : null}
+                    </ItemSummary>
+                    <CancelButtonContainer>
+                      <CancelButton
+                        type="button"
+                        className="item-delete-button"
+                        onClick={() => handleDeleteItem({ name })}
+                      >
+                        X
+                      </CancelButton>
+                    </CancelButtonContainer>
                   </div>
-                </Item>
-                <CancelButton>X</CancelButton>
-              </div>
-            </td>
-            <td>
-              <ButtonContainer>
-                <ReduceButton
-                  type="button"
-                />
-                <Quantity
-                  value={1}
-                  type="number"
-                />
-                <AddButton
-                  type="button"
-                />
-              </ButtonContainer>
-            </td>
-            <td>
-              <DirectPurchase>
-                <strong>60,000원</strong>
-                <PurchaseButton>바로구매</PurchaseButton>
-              </DirectPurchase>
-            </td>
-            <td>무료</td>
-          </tr>
-          <tr>
-            <th>
-              <label className="control control--checkbox">
-                <input
-                  id="agree-all-agreements"
-                  type="checkbox"
-                  name="agree-all-agreements"
-                  readOnly
-                />
-              </label>
-            </th>
-            <td>
-              <div>
-                <Item to="/products/1">
-                  <ImageContainer>
-                    <img
-                      src="/assets/images/1.png"
-                      alt="상품이미지"
-                      height={60}
-                      width={60}
-                    />
-                  </ImageContainer>
-                  <div>
-                    <span>T-Shirt</span>
-                  </div>
-                </Item>
-                <CancelButton>X</CancelButton>
-              </div>
-            </td>
-            <td>
-              <ButtonContainer>
-                <ReduceButton
-                  type="button"
-                />
-                <Quantity
-                  value={1}
-                />
-                <AddButton
-                  type="button"
-                />
-              </ButtonContainer>
-            </td>
-            <td>
-              <DirectPurchase>
-                <strong>60,000원</strong>
-                <PurchaseButton>바로구매</PurchaseButton>
-              </DirectPurchase>
-            </td>
-            <td>무료</td>
-          </tr>
-        </tbody>
-      </Table>
-      <DeleteButton
-        type=" button"
-      >
-        선택상품 삭제
-      </DeleteButton>
-    </div>
+                </td>
+                <td>
+                  <QuantityHandler>
+                    <span>{cart.itemQuantity({ name })}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenModal({ name })}
+                    >
+                      수량 변경
+                    </button>
+                  </QuantityHandler>
+                </td>
+                <td>
+                  <DirectPurchase>
+                    <strong>
+                      {`${numberFormat(cart.itemPrice({ name }))}원`}
+                    </strong>
+                    <PurchaseButton
+                      type="button"
+                      onClick={() => handlePurchaseSingleItem({ name })}
+                    >
+                      바로구매
+                    </PurchaseButton>
+                  </DirectPurchase>
+                </td>
+                {cart.shippingFee({ name })
+                  ? <td>{`${numberFormat(cart.shippingFee({ name }))}원`}</td>
+                  : <td>무료</td>}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <DeleteButton
+          type=" button"
+        >
+          선택상품 삭제
+        </DeleteButton>
+      </div>
+      {modalOpen && (
+        <ChangeQuantityModal
+          setModalOpen={setModalOpen}
+        />
+      )}
+    </>
   );
 }

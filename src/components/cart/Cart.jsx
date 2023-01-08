@@ -6,6 +6,8 @@ import CartItems from './CartItems';
 import CartSummary from './CartSummary';
 
 import defaultTheme from '../../styles/defaultTheme';
+import useCartStore from '../../hooks/useCartStore';
+import EmptyCart from './EmptyCart';
 
 const Container = styled.div`
   padding: 1em;
@@ -21,6 +23,7 @@ const Title = styled.h2`
   height: 2em;
   display: flex;
   align-items: center;
+  color: ${defaultTheme.colors.primaryText};
 `;
 
 const PurchaseButton = styled.button`
@@ -62,15 +65,32 @@ const Command = styled.div`
 `;
 
 export default function Cart() {
+  const cartStore = useCartStore();
+
+  const { items } = cartStore.cart;
+
   return (
     <Container>
       <Title>장바구니</Title>
-      <CartItems />
-      <CartSummary />
-      <Command>
-        <PurchaseButton>주문하기</PurchaseButton>
-        <Link to="/products">계속 쇼핑하기</Link>
-      </Command>
+      {items.size
+        ? (
+          <>
+            <CartItems />
+            <CartSummary />
+            <Command>
+              <PurchaseButton>주문하기</PurchaseButton>
+              <Link to="/products">계속 쇼핑하기</Link>
+            </Command>
+          </>
+        )
+        : (
+          <>
+            <EmptyCart />
+            <Command>
+              <Link to="/products">계속 쇼핑하기</Link>
+            </Command>
+          </>
+        )}
     </Container>
   );
 }

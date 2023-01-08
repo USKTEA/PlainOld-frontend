@@ -5,6 +5,7 @@ import { productStore } from '../stores/ProductStore';
 import { orderItemStore } from '../stores/OrderItemStore';
 
 import ProductDetail from '../components/productDetail/ProductDetail';
+import { cartStore } from '../stores/CartStore';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -29,6 +30,7 @@ export default function ProductDetailPage() {
     return () => {
       productStore.clear();
       orderItemStore.reset();
+      cartStore.clearError();
     };
   }, []);
 

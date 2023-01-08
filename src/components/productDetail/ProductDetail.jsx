@@ -19,18 +19,15 @@ import ErrorMessage from '../ui/ErrorMessage';
 import ProductDescription from './ProductDescription';
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-
+  height: 100%;
+  width: 50%;
+  min-height: 50em;
+  min-width: 1024px;
+  padding-block: 5em;
   padding-left: 10em;
   gap: 2em;
-  min-width: 1024px;
-  height: 100%;
-  min-height: 50em;
-
-  padding-block: 5em;
-  width: 50%;
-
+  display: flex;
+  justify-content: center;
   color: ${defaultTheme.colors.primary};
 `;
 
@@ -99,7 +96,6 @@ const Button = styled.button`
   color: ${defaultTheme.colors.primary};
   background: white;
   cursor: pointer;
-
   :hover {
     color: ${defaultTheme.colors.third}
   }
@@ -140,15 +136,21 @@ export default function ProductDetail() {
   const { name, image } = product;
 
   const handleAddCart = () => {
-    // productId와 옵션이 같아야 같은 item으로 취급
+    cartStore.addItem(items);
 
-    setModalOpen(true);
+    orderItemStore.clearError();
+
+    if (!cartStore.errors.addItemFailed) {
+      setModalOpen(true);
+    }
   };
 
   const handleOrderItems = () => {
     if (orderItemStore.isItemSelected()) {
       navigate('/order');
     }
+
+    cartStore.clearError();
   };
 
   return (
@@ -195,6 +197,9 @@ export default function ProductDetail() {
           <MessageWrapper>
             {orderItemStore.errors.notSelected
               ? <ErrorMessage>{orderItemStore.errors.notSelected}</ErrorMessage>
+              : null}
+            {cartStore.errors.addItemFailed
+              ? <ErrorMessage>{cartStore.errors.addItemFailed}</ErrorMessage>
               : null}
           </MessageWrapper>
         </Wrapper>

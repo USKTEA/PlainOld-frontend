@@ -40,6 +40,7 @@ describe('ProductDetail', () => {
   beforeEach(() => {
     productStore.clear();
     orderItemStore.reset();
+    cartStore.reset();
   });
 
   describe('구매하기', () => {
@@ -71,7 +72,7 @@ describe('ProductDetail', () => {
 
         fireEvent.click(screen.getByRole('button', { name: '구매하기' }));
 
-        screen.getByText('주문하실 상품을 선택해주세요');
+        screen.getByText('상품 옵션을 선택해주세요');
       });
     });
   });
@@ -83,14 +84,19 @@ describe('ProductDetail', () => {
 
         await productStore.fetchProduct({ id });
 
+        const { product } = productStore;
+
+        orderItemStore.addOrderItem({ product });
+
         renderProductDetail();
 
-        expect(cartStore.cart.items.length).toHaveLength(0);
+        expect(cartStore.cart.items.size).toBe(0);
 
         fireEvent.click(screen.getByRole('button', { name: '장바구니' }));
 
         expect(screen.getByText('선택하신 상품을 장바구니에 담았습니다.'));
-        expect(cartStore.cart.items.length).toHaveLength(1);
+
+        expect(cartStore.cart.items.size).toBe(1);
       });
     });
 
@@ -105,7 +111,8 @@ describe('ProductDetail', () => {
         fireEvent.click(screen.getByRole('button', { name: '장바구니' }));
 
         screen.getByText('장바구니에 넣을 상품을 선택해주세요');
-        expect(cartStore.cart.items.length).toHaveLength(0);
+
+        expect(cartStore.cart.items.size).toBe(0);
       });
     });
   });

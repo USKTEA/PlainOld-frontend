@@ -43,7 +43,6 @@ export default function ColorSelection() {
   const { colors, option } = orderItemStore;
 
   const handleChangeOption = (value) => {
-    console.log(value);
     orderItemStore.setOption({ option: 'color', value });
   };
 
