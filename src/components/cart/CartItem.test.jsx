@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Item from '../../models/Item';
+
 import { cartStore } from '../../stores/CartStore';
+
+import Item from '../../models/Item';
 
 import CartItems from './CartItems';
 
@@ -333,6 +335,208 @@ describe('CartItem', () => {
 
           screen.getByText('2,500원');
         });
+      });
+    });
+
+    describe('체크박스', () => {
+      context('전체 선택을 체크했을 경우', () => {
+        it('모든 아이템의 체크박스가 선택된 것을 볼 수 있다', () => {
+          const name = 'T-Shirt';
+
+          const shirts = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([shirts]);
+
+          render(<CartItems />);
+
+          fireEvent.click(screen.getByLabelText('전체선택'));
+
+          expect(screen.getByLabelText('전체선택')).toBeChecked();
+          expect(screen.getByLabelText(name)).toBeChecked();
+        });
+      });
+
+      context('아이템의 체크박스를 체크했을 경우', () => {
+        it('해당 아이템의 체크박스체 체크된 것을 볼 수 있다', () => {
+          const name = 'T-Shirt';
+
+          const shirts = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([shirts]);
+
+          render(<CartItems />);
+
+          fireEvent.click(screen.getByLabelText(name));
+
+          expect(screen.getByLabelText(name)).toBeChecked();
+        });
+      });
+
+      context('카트에 있는 모든 아이템을 체크했을 경우', () => {
+        it('전체선택 체크박스가 체크되어 있는 것을 볼 수 있다', () => {
+          const shirts = 'T-Shirt';
+
+          const item1 = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name: shirts,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          const pants = 'Pants';
+
+          const item2 = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name: pants,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([item1, item2]);
+
+          render(<CartItems />);
+
+          expect(screen.getByLabelText('전체선택')).not.toBeChecked();
+
+          fireEvent.click(screen.getByLabelText(shirts));
+          fireEvent.click(screen.getByLabelText(pants));
+
+          expect(screen.getByLabelText('전체선택')).toBeChecked();
+        });
+      });
+
+      context('카트에 있는 모든 아이템 중 하나라도 체크가 되지 않았을 경우', () => {
+        it('전체선택 체크박스가 체크해제 되어 있는 것을 볼 수 있다', () => {
+          const shirts = 'T-Shirt';
+
+          const item1 = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name: shirts,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          const pants = 'T-Shirt';
+
+          const item2 = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name: pants,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([item1, item2]);
+
+          render(<CartItems />);
+
+          fireEvent.click(screen.getByLabelText('전체선택'));
+
+          expect(screen.getByLabelText('전체선택')).toBeChecked();
+
+          fireEvent.click(screen.getByLabelText(shirts));
+
+          expect(screen.getByLabelText('전체선택')).not.toBeChecked();
+        });
+      });
+    });
+
+    describe('선택상품 삭제', () => {
+      it('선택되어 있는 상품을 장바구니에서 삭제한다', () => {
+        const shirts = 'T-Shirt';
+
+        const item1 = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name: shirts,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        const pants = 'T-Shirt';
+
+        const item2 = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name: pants,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        cartStore.addItem([item1, item2]);
+
+        render(<CartItems />);
+
+        fireEvent.click(screen.getByLabelText(pants));
+
+        expect(screen.getByLabelText(pants)).toBeChecked();
+
+        fireEvent.click(screen.getByRole('button', { name: '선택상품 삭제' }));
+
+        expect(screen.queryByText(pants)).toBeFalsy();
       });
     });
   });

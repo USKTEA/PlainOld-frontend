@@ -387,7 +387,7 @@ describe('Cart', () => {
 
       expect(cart.items.size).toBe(1);
 
-      cart = cart.deleteByItemName({ name });
+      cart = cart.deleteItem({ name });
 
       expect(cart.items.size).toBe(0);
     });

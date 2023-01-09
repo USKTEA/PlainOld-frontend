@@ -54,6 +54,7 @@ describe('Cart', () => {
 
   beforeEach(() => {
     cartStore.reset();
+    jest.clearAllMocks();
   });
 
   describe('CartItems', () => {
@@ -288,6 +289,76 @@ describe('Cart', () => {
     });
   });
 
+  describe('체크박스', () => {
+    context('전체 선택을 체크했을 경우', () => {
+      it('모든 아이템의 체크박스가 선택된 것을 볼 수 있다', () => {
+        const name = 'T-Shirt';
+
+        cartStore.addItem([shirts]);
+
+        render(<Cart />);
+
+        fireEvent.click(screen.getByLabelText('전체선택'));
+
+        expect(screen.getByLabelText('전체선택')).toBeChecked();
+        expect(screen.getByLabelText(name)).toBeChecked();
+
+        screen.getByText('총 주문 상품 1개');
+      });
+    });
+
+    context('아이템의 체크박스를 체크했을 경우', () => {
+      it('해당 아이템의 체크박스에 체크된 것을 볼 수 있다', () => {
+        const name = 'T-Shirt';
+
+        cartStore.addItem([shirts]);
+
+        render(<Cart />);
+
+        fireEvent.click(screen.getByLabelText(name));
+
+        expect(screen.getByLabelText(name)).toBeChecked();
+
+        screen.getByText('총 주문 상품 1개');
+      });
+    });
+
+    context('카트에 있는 모든 아이템을 체크했을 경우', () => {
+      it('전체선택 체크박스가 체크되어 있는 것을 볼 수 있다', () => {
+        cartStore.addItem([shirts, pants]);
+
+        render(<Cart />);
+
+        expect(screen.getByLabelText('전체선택')).not.toBeChecked();
+
+        fireEvent.click(screen.getByLabelText('T-Shirt'));
+        fireEvent.click(screen.getByLabelText('Pants'));
+
+        expect(screen.getByLabelText('전체선택')).toBeChecked();
+
+        screen.getByText('총 주문 상품 2개');
+      });
+    });
+
+    context('카트에 있는 모든 아이템 중 하나라도 체크가 되지 않았을 경우', () => {
+      it('전체선택 체크박스가 체크해제 되어 있는 것을 볼 수 있다', () => {
+        cartStore.addItem([shirts, pants]);
+
+        render(<Cart />);
+
+        fireEvent.click(screen.getByLabelText('전체선택'));
+
+        expect(screen.getByLabelText('전체선택')).toBeChecked();
+
+        fireEvent.click(screen.getByLabelText('T-Shirt'));
+
+        expect(screen.getByLabelText('전체선택')).not.toBeChecked();
+
+        screen.getByText('총 주문 상품 1개');
+      });
+    });
+  });
+
   describe('바로구매', () => {
     context('바로구매를 클릭했을 경우', () => {
       it('주문 페이지로 이동한다', () => {
@@ -303,11 +374,13 @@ describe('Cart', () => {
   });
 
   describe('주문하기', () => {
-    context('주문하기를 클릭했을 경우', () => {
+    context('장바구니에서 선택한 상품이 있을 경우', () => {
       it('주문 페이지로 이동한다', () => {
         cartStore.addItem([shirts]);
 
         render(<Cart />);
+
+        fireEvent.click(screen.getByLabelText('전체선택'));
 
         fireEvent.click(screen.getByRole('button', { name: '주문하기' }));
 
@@ -316,21 +389,35 @@ describe('Cart', () => {
     });
 
     context('장바구니에서 선택한 상품이 없을 경우', () => {
-      it('주문하실 상품을 선택해주세요 메시지를 볼 수 있다', () => {
+      it('주문페이지로 이동하지 않는다', () => {
         cartStore.addItem([shirts]);
 
         render(<Cart />);
-
-        expect(screen.getByLabelText('전체선택')).toBeChecked();
-
-        fireEvent.click(screen.getByLabelText('전체선택'));
 
         expect(screen.getByLabelText('전체선택')).not.toBeChecked();
 
         fireEvent.click(screen.getByRole('button', { name: '주문하기' }));
 
-        expect(screen.getByText('주문하실 상품을 선택해주세요'));
+        expect(navigate).not.toBeCalled();
       });
+    });
+  });
+
+  describe('선택상품 삭제', () => {
+    it('선택되어 있는 상품을 장바구니에서 삭제한다', () => {
+      const name2 = 'Pants';
+
+      cartStore.addItem([shirts, pants]);
+
+      render(<Cart />);
+
+      fireEvent.click(screen.getByLabelText(name2));
+
+      expect(screen.getByLabelText(name2)).toBeChecked();
+
+      fireEvent.click(screen.getByRole('button', { name: '선택상품 삭제' }));
+
+      expect(screen.queryByText(name2)).toBeFalsy();
     });
   });
 });

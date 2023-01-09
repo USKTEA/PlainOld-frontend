@@ -117,6 +117,132 @@ describe('CartStore', () => {
     });
   });
 
+  describe('SelectAll', () => {
+    it('Cart에 있는 모든 상품의 이름을 selected에 저장한다', () => {
+      expect(cartStore.selected).toHaveLength(0);
+
+      cartStore.addItem([item]);
+
+      cartStore.selectAll();
+
+      expect(cartStore.selected).toHaveLength(1);
+    });
+  });
+
+  describe('ToggleSelected', () => {
+    context('selected에 해당 상품이 없을 경우', () => {
+      it('selected에 해당 상품을 추가한다', () => {
+        const name = 'T-Shirt';
+
+        const shirts = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        cartStore.addItem([shirts]);
+
+        expect(cartStore.selected).toHaveLength(0);
+
+        cartStore.toggleSelected({ name });
+
+        expect(cartStore.selected).toHaveLength(1);
+      });
+    });
+
+    context('selected에 해당 상품이 있을 경우', () => {
+      it('selected에 해당 상품을 삭제한다', () => {
+        const name = 'T-Shirt';
+
+        const shirts = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        cartStore.addItem([shirts]);
+
+        expect(cartStore.selected).toHaveLength(0);
+
+        cartStore.toggleSelected({ name });
+
+        expect(cartStore.selected).toHaveLength(1);
+
+        cartStore.toggleSelected({ name });
+
+        expect(cartStore.selected).toHaveLength(0);
+      });
+    });
+  });
+
+  describe('CheckHasSelected', () => {
+    context('Selected에 해당 item이 있을 경우', () => {
+      it('true를 반환한다', () => {
+        const name = 'T-Shirt';
+
+        const shirts = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        cartStore.addItem([shirts]);
+
+        cartStore.toggleSelected({ name });
+
+        expect(cartStore.checkIsSelected({ name })).toBeTruthy();
+      });
+    });
+
+    context('Selected에 해당 item이 없을 경우', () => {
+      it('false를 반환한다', () => {
+        const name = 'T-Shirt';
+
+        const shirts = new Item({
+          id: 1,
+          productId: 1,
+          price: 10_000,
+          name,
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          option: {
+            size: 'L',
+            color: 'Black',
+          },
+        });
+
+        cartStore.addItem([shirts]);
+
+        expect(cartStore.checkIsSelected({ name })).toBeFalsy();
+      });
+    });
+  });
+
   describe('SelectChangeQuantityItem', () => {
     context('SelectChangeQuantityItem이 호출 되었을 경우', () => {
       it('파라미터로 받은 name과 일치하는 item을 itemsInChangeQuantity에 할당한다', () => {
@@ -476,6 +602,44 @@ describe('CartStore', () => {
     });
   });
 
+  describe('deleteCartItemBySelected', () => {
+    it('selected에 있는 name을 통해 cart에 있는 item을 삭제한다', () => {
+      const name = 'T-Shirt';
+
+      const shirts = new Item({
+        id: 1,
+        productId: 1,
+        price: 10_000,
+        name,
+        thumbnailUrl: '1',
+        shippingFee: 2_500,
+        freeShippingAmount: 50_000,
+        option: {
+          size: 'L',
+          color: 'Black',
+        },
+      });
+
+      cartStore.addItem([shirts]);
+
+      let { cart } = cartStore;
+
+      expect(cart.items.size).toBe(1);
+
+      expect(cartStore.selected).toHaveLength(0);
+
+      cartStore.toggleSelected({ name });
+
+      expect(cartStore.selected[0]).toBe(name);
+
+      cartStore.deleteCartItemBySelected();
+
+      cart = cartStore.cart;
+
+      expect(cart.items.size).toBe(0);
+    });
+  });
+
   describe('SelectItemToPurchase', () => {
     it('구매하려는 상품의 name을 등록한다', () => {
       const name = 'T-Shirt';
@@ -546,6 +710,97 @@ describe('CartStore', () => {
 
         expect(cart.items.size).toBe(0);
         expect(itemInPurchase).toHaveLength(0);
+      },
+    );
+  });
+
+  describe('SelectedTotalPrice', () => {
+    it('selected에 해당하는 item의 총 금액을 반환한다', () => {
+      const name = 'T-Shirt';
+
+      const shirts = new Item({
+        id: 1,
+        productId: 1,
+        price: 10_000,
+        name,
+        thumbnailUrl: '1',
+        shippingFee: 2_500,
+        freeShippingAmount: 50_000,
+        quantity: 1,
+        option: {
+          size: 'L',
+          color: 'Black',
+        },
+      });
+
+      cartStore.addItem([shirts]);
+
+      expect(cartStore.selectedTotalPrice()).toBe(0);
+
+      cartStore.addSelected({ name });
+
+      expect(cartStore.selectedTotalPrice()).toBe(10_000);
+    });
+  });
+
+  describe('SelectedShippingFee', () => {
+    context(
+      'selected에 해당하는 모든 item의 총 금액이 무료 배송 금액과 같거나 높을 경우',
+      () => {
+        it(' 0을 반환한다', () => {
+          const name = 'T-Shirt';
+
+          const shirts = new Item({
+            id: 1,
+            productId: 1,
+            price: 50_000,
+            name,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            quantity: 1,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([shirts]);
+
+          cartStore.addSelected({ name });
+
+          expect(cartStore.selectedShippingFee()).toBe(0);
+        });
+      },
+    );
+
+    context(
+      'selected에 해당하는 item의 총 금액이 하나라도 무료 배송 금액보다 낮을 경우',
+      () => {
+        it(' item 중 가장 높은 shippingFee를 반환한다', () => {
+          const name = 'T-Shirt';
+
+          const shirts = new Item({
+            id: 1,
+            productId: 1,
+            price: 10_000,
+            name,
+            thumbnailUrl: '1',
+            shippingFee: 2_500,
+            freeShippingAmount: 50_000,
+            quantity: 1,
+            option: {
+              size: 'L',
+              color: 'Black',
+            },
+          });
+
+          cartStore.addItem([shirts]);
+
+          cartStore.addSelected({ name });
+
+          expect(cartStore.selectedShippingFee()).toBe(2_500);
+        });
       },
     );
   });
