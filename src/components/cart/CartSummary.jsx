@@ -1,5 +1,10 @@
 import styled from 'styled-components';
+
+import useCartStore from '../../hooks/useCartStore';
+
 import defaultTheme from '../../styles/defaultTheme';
+
+import numberFormat from '../../utils/numberFormat';
 
 const CartSum = styled.table`
 margin-top: 2em;
@@ -59,11 +64,15 @@ font-weight: 300;
 `;
 
 export default function CartSummary() {
+  const cartStore = useCartStore();
+
+  const { selected } = cartStore;
+
   return (
     <CartSum>
       <thead>
         <tr>
-          <th>총 주문 상품 2개</th>
+          <th>{`총 주문 상품 ${selected.length}개`}</th>
         </tr>
       </thead>
       <tbody>
@@ -71,20 +80,27 @@ export default function CartSummary() {
           <td>
             <Sum>
               <div>
-                <Price>60,000원</Price>
+                <Price>
+                  {`${numberFormat(cartStore.selectedTotalPrice())}원`}
+                </Price>
                 <Description>상품금액</Description>
               </div>
               <>
                 <div>+</div>
                 <div>
-                  <Price>60,000원</Price>
+                  <Price>
+                    {`${numberFormat(cartStore.selectedShippingFee())}원`}
+                  </Price>
                   <Description>배송비</Description>
                 </div>
               </>
               <>
                 <div>=</div>
                 <div>
-                  <Price>60,000원</Price>
+                  <Price>
+                    {`${numberFormat(cartStore.selectedTotalPrice()
+                    + cartStore.selectedShippingFee())}원`}
+                  </Price>
                   <Description>총 주문금액</Description>
                 </div>
               </>

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import { useLocalStorage } from 'usehooks-ts';
 import useOrderFromStore from '../../hooks/useOrderFomStore';
 import useOrderItemStore from '../../hooks/useOrderItemStore';
 import useCreateOrderStore from '../../hooks/useCreateOrderStore';
@@ -50,6 +51,7 @@ const OrderButton = styled.button`
 
 export default function Agreements() {
   const navigate = useNavigate();
+  const [, setCartItems] = useLocalStorage('cartItems', '');
 
   const orderFormStore = useOrderFromStore();
   const orderItemStore = useOrderItemStore();
@@ -79,6 +81,11 @@ export default function Agreements() {
       }
 
       cartStore.completePurchase();
+
+      const { items } = cartStore.cart;
+
+      setCartItems([...items.values()]);
+
       navigate('/order-success');
     }
   };

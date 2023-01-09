@@ -222,13 +222,21 @@ export default function CartItems() {
   const cartStore = useCartStore();
   const orderItemStore = useOrderItemStore();
 
-  const { cart, errors } = cartStore;
+  const { cart, selected } = cartStore;
   const { items } = cart;
 
   const handleOpenModal = ({ name }) => {
     cartStore.selectChangeQuantityItem({ name });
 
     setModalOpen(true);
+  };
+
+  const handleSelectAll = () => {
+    cartStore.selectAll();
+  };
+
+  const handleToggleItem = ({ name }) => {
+    cartStore.toggleSelected({ name });
   };
 
   const handleDeleteItem = ({ name }) => {
@@ -239,9 +247,14 @@ export default function CartItems() {
     cartStore.deleteOption({ id, name });
   };
 
+  const handleDeleteCartItemBySelected = () => {
+    cartStore.deleteCartItemBySelected();
+  };
+
   const handlePurchaseSingleItem = ({ name }) => {
     cartStore.selectItemToPurchase({ name });
     orderItemStore.loadItems({ items: items.get(name) });
+
     setOrderItems(orderItemStore.orderItems);
 
     navigate('/order');
@@ -258,7 +271,9 @@ export default function CartItems() {
                   className="select"
                   id="select-all"
                   type="checkbox"
-                  name="select-all"
+                  name="전체선택"
+                  checked={selected.length !== 0 && selected.length === items.size}
+                  onClick={handleSelectAll}
                   readOnly
                 />
                 <HiddenLabel htmlFor="select-all">전체선택</HiddenLabel>
@@ -277,6 +292,8 @@ export default function CartItems() {
                     id={name}
                     type="checkbox"
                     name={`select-${name}`}
+                    checked={cartStore.checkIsSelected({ name })}
+                    onClick={() => handleToggleItem({ name })}
                     readOnly
                   />
                   <HiddenLabel htmlFor={name}>
@@ -365,6 +382,7 @@ export default function CartItems() {
         </Table>
         <DeleteButton
           type=" button"
+          onClick={handleDeleteCartItemBySelected}
         >
           선택상품 삭제
         </DeleteButton>

@@ -140,9 +140,14 @@ export default function ProductDetail() {
 
     orderItemStore.clearError();
 
-    if (!cartStore.errors.addItemFailed) {
-      setModalOpen(true);
+    if (cartStore.errors.addItemFailed) {
+      return;
     }
+
+    const cartItems = [...cartStore.cart.items.values()];
+
+    setCartItems(cartItems);
+    setModalOpen(true);
   };
 
   const handleOrderItems = () => {

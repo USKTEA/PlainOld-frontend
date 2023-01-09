@@ -45,6 +45,10 @@ describe('CartPage', () => {
   });
 
   context('장바구니에 상품이 없을 경우', () => {
+    beforeEach(() => {
+      localStorage.setItem('cartItems', '');
+    });
+
     it('장바구니가 비어있습니다 메시지를 볼 수 있다', () => {
       render((
         <MemoryRouter>

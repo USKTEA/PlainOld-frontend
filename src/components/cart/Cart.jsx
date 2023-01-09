@@ -1,13 +1,17 @@
-import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
+
+import { Link, useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
+
+import { useEffect } from 'react';
+import useOrderItemStore from '../../hooks/useOrderItemStore';
+import useCartStore from '../../hooks/useCartStore';
 
 import CartItems from './CartItems';
 import CartSummary from './CartSummary';
+import EmptyCart from './EmptyCart';
 
 import defaultTheme from '../../styles/defaultTheme';
-import useCartStore from '../../hooks/useCartStore';
-import EmptyCart from './EmptyCart';
 
 const Container = styled.div`
   padding: 1em;
@@ -65,9 +69,29 @@ const Command = styled.div`
 `;
 
 export default function Cart() {
+  const [, setOrderItems] = useLocalStorage('orderItems', '');
+  const [, setCartItems] = useLocalStorage('cartItems', '');
+
+  const navigate = useNavigate();
   const cartStore = useCartStore();
+  const orderItemStore = useOrderItemStore();
 
   const { items } = cartStore.cart;
+
+  const handlePurchaseSelected = () => {
+    if (cartStore.isSelectedNotEmpty()) {
+      cartStore.selectedToItemInPurchase();
+
+      orderItemStore.loadItems({ items: cartStore.getSelectedItems() });
+      setOrderItems(orderItemStore.orderItems);
+
+      navigate('/order');
+    }
+  };
+
+  useEffect(() => {
+    setCartItems([...items.values()]);
+  }, [items]);
 
   return (
     <Container>
@@ -78,7 +102,12 @@ export default function Cart() {
             <CartItems />
             <CartSummary />
             <Command>
-              <PurchaseButton>주문하기</PurchaseButton>
+              <PurchaseButton
+                type="button"
+                onClick={handlePurchaseSelected}
+              >
+                주문하기
+              </PurchaseButton>
               <Link to="/products">계속 쇼핑하기</Link>
             </Command>
           </>

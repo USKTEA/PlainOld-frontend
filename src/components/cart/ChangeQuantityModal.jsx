@@ -213,7 +213,6 @@ const Save = styled.button`
 export default function ChangeQuantityModal({ setModalOpen }) {
   const cartStore = useCartStore();
   const { itemsInChangeQuantity } = cartStore;
-  const { name, items } = itemsInChangeQuantity;
 
   const modalRef = useRef(null);
 
@@ -242,6 +241,12 @@ export default function ChangeQuantityModal({ setModalOpen }) {
 
     closeModal();
   };
+
+  if (!itemsInChangeQuantity) {
+    return <p>now closing....</p>;
+  }
+
+  const { name, items } = itemsInChangeQuantity;
 
   return (
     <Container>

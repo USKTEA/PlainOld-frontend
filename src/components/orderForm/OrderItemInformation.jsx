@@ -15,6 +15,7 @@ const OrderItemList = styled.ul`
   max-height: 15em;
   overflow: auto;
   border: 1px solid ${defaultTheme.colors.fourth};
+
   li {
     border-bottom: 1px solid ${defaultTheme.colors.fourth};
   }
@@ -52,8 +53,10 @@ const OptionQuantityContainer = styled.div`
     margin-right: .5em;
   }
 
-  strong {
-    margin-left: .5em;
+  div {
+    strong {
+      margin-left: .5em;
+    }
   }
 `;
 

@@ -5,6 +5,18 @@ export default class Cart {
     this.items = items;
   }
 
+  generateId() {
+    const items = [...this.items.keys()]
+      .reduce(
+        (acc, name) => [...acc, ...this.items.get(name)],
+        [],
+      );
+
+    const id = Math.max(0, ...items.map((item) => item.id)) + 1;
+
+    return id;
+  }
+
   addItem(item) {
     const { name } = item;
     const { quantity } = item;
@@ -102,7 +114,7 @@ export default class Cart {
     );
   }
 
-  deleteByItemName({ name }) {
+  deleteItem({ name }) {
     return new Cart(
       [...this.items.keys()].reduce((acc, i) => {
         if (i === name) {
@@ -125,7 +137,10 @@ export default class Cart {
 
     const deleted = [...this.items.keys()].reduce((acc, i) => {
       if (i === name) {
-        return acc.set(i, [...items.slice(0, index), ...items.slice(index + 1)]);
+        return acc.set(
+          i,
+          [...items.slice(0, index), ...items.slice(index + 1)],
+        );
       }
 
       return acc.set(i, [...this.items.get(i)]);
@@ -155,95 +170,6 @@ export default class Cart {
 
     return founds.reduce((acc, i) => acc + i.quantity, 0);
   }
-  // increaseQuantity({ id, amount }) {
-  //   const [found, foundIndex] = this.items.reduce((acc, item, index) => {
-  //     if (item.id === id) {
-  //       return [item, index];
-  //     }
-
-  //     return acc;
-  //   }, []);
-
-  //   return new Cart([
-  //     ...this.items.slice(0, foundIndex),
-  //     new Item({
-  //       ...found,
-  //       quantity: found.quantity + amount,
-  //     }),
-  //     ...this.items.slice(foundIndex + 1)]);
-  // }
-
-  // decreaseQuantity({ id, amount }) {
-  //   const [found, foundIndex] = this.items.reduce((acc, item, index) => {
-  //     if (item.id === id) {
-  //       return [item, index];
-  //     }
-
-  //     return acc;
-  //   }, []);
-
-  //   if (found.quantity + amount < 0) {
-  //     return this;
-  //   }
-
-  //   return new Cart([
-  //     ...this.items.slice(0, foundIndex),
-  //     new Item({
-  //       ...found,
-  //       quantity: found.quantity + amount,
-  //     }),
-  //     ...this.items.slice(foundIndex + 1)]);
-  // }
-
-  // updateQuantity({ id, amount }) {
-  //   const [found, foundIndex] = this.items.reduce((acc, item, index) => {
-  //     if (item.id === id) {
-  //       return [item, index];
-  //     }
-
-  //     return acc;
-  //   }, []);
-
-  //   if (amount < 1) {
-  //     return this;
-  //   }
-
-  //   return new Cart([
-  //     ...this.items.slice(0, foundIndex),
-  //     new Item({
-  //       ...found,
-  //       quantity: amount,
-  //     }),
-  //     ...this.items.slice(foundIndex + 1)]);
-  // }
-
-  // calculateShippingFee() {
-  //   const highestFreeShippingAmount = Math.max(...this.items.map(
-  //     (item) => item.freeShippingAmount,
-  //   ));
-
-  //   if (this.totalCost() >= highestFreeShippingAmount) {
-  //     return 0;
-  //   }
-
-  //   const highestShippingFee = Math.max(...this.items.map(
-  //     (item) => item.shippingFee,
-  //   ));
-
-  //   return highestShippingFee;
-  // }
-
-  generateId() {
-    const items = [...this.items.keys()]
-      .reduce(
-        (acc, name) => [...acc, this.items.get(name)],
-        [],
-      );
-
-    const id = Math.max(0, ...items.flat().map((item) => item.id)) + 1;
-
-    return id;
-  }
 
   totalQuantity() {
     return this.items.size;
@@ -256,11 +182,11 @@ export default class Cart {
 
     const items = [...this.items.keys()]
       .reduce(
-        (acc, name) => [...acc, this.items.get(name)],
+        (acc, name) => [...acc, ...this.items.get(name)],
         [],
       );
 
-    return items.flat().reduce((acc, item) => acc + item.totalPrice, 0);
+    return items.reduce((acc, item) => acc + item.totalPrice, 0);
   }
 
   itemPrice({ name }) {
@@ -268,12 +194,4 @@ export default class Cart {
 
     return founds.reduce((acc, i) => acc + i.totalPrice, 0);
   }
-  // delete({ id }) {
-  //   const index = this.items.findIndex((item) => item.id === id);
-
-  //   return new Cart(
-  //     [...this.items.slice(0, index),
-  //       ...this.items.slice(index + 1)],
-  //   );
-  // }
 }
