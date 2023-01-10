@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import ProductsPage from './ProductsPage';
+import CatalogPage from './CatalogPage';
 
 test('ProductsPage', async () => {
   render(
     <MemoryRouter>
-      <ProductsPage />
+      <CatalogPage />
     </MemoryRouter>,
   );
 

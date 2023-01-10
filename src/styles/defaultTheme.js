@@ -6,6 +6,7 @@ const defaultTheme = {
     fourth: '#ddd',
     fifth: '#757575',
     sixth: '#273979',
+    seventh: '#7C869C',
     background: '#eee',
     primaryText: '#2E2C6F',
     secondaryText: '#22DAAB',

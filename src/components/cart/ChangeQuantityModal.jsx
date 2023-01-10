@@ -243,7 +243,7 @@ export default function ChangeQuantityModal({ setModalOpen }) {
   };
 
   if (!itemsInChangeQuantity) {
-    return <p>now closing....</p>;
+    return <p>now closing</p>;
   }
 
   const { name, items } = itemsInChangeQuantity;

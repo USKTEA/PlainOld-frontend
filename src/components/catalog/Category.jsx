@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import useCategoryStore from '../hooks/useCategoryStore';
+import useCategoryStore from '../../hooks/useCategoryStore';
 
-import defaultTheme from '../styles/defaultTheme';
+import defaultTheme from '../../styles/defaultTheme';
 
 const Navigation = styled.nav`
   font-size: 25px;

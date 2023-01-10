@@ -10,7 +10,7 @@ import defaultTheme from './styles/defaultTheme';
 import Header from './components/Header';
 
 import HomePage from './pages/HomePage';
-import ProductsPage from './pages/ProductsPage';
+import CatalogPage from './pages/CatalogPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import OrderPage from './pages/OrderPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
@@ -42,7 +42,7 @@ export default function App() {
       <Main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products" element={<CatalogPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />

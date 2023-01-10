@@ -6,9 +6,22 @@ const baseUrl = config.apiBaseUrl;
 
 export default class ApiService {
   constructor() {
+    this.accessToken = null;
+
     this.instance = axios.create({
       baseURL: baseUrl,
     });
+  }
+
+  setAccessToken(accessToken) {
+    this.accessToken = accessToken;
+
+    if (accessToken) {
+      this.instance = axios.create({
+        baseURL: baseUrl,
+        headers: { Authorization: `Bearer ${this.accessToken}` },
+      });
+    }
   }
 
   async fetchCategories() {
@@ -31,6 +44,14 @@ export default class ApiService {
 
   async createOrder(orderSpecification) {
     const { data } = await this.instance.post('/orders', orderSpecification);
+
+    return data;
+  }
+
+  async postSession({ username, password }) {
+    const { data } = await this.instance.post('/session', {
+      username, password,
+    });
 
     return data;
   }
