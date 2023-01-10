@@ -1,5 +1,5 @@
+import LoginForm from '../components/loginForm/LoginForm';
+
 export default function LoginPage() {
-  return (
-    <p>로그인</p>
-  );
+  return (<LoginForm />);
 }

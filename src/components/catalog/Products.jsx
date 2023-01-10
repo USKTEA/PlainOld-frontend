@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 import { Link, useSearchParams } from 'react-router-dom';
 
-import useProductStore from '../hooks/useProductStore';
+import useProductStore from '../../hooks/useProductStore';
 
-import defaultTheme from '../styles/defaultTheme';
+import defaultTheme from '../../styles/defaultTheme';
 
-import numberFormat from '../utils/numberFormat';
+import numberFormat from '../../utils/numberFormat';
 
 const Container = styled.div`
   display: flex;

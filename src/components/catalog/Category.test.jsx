@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { categoryStore } from '../stores/CategoryStore';
+import { categoryStore } from '../../stores/CategoryStore';
 
 import Category from './Category';
 

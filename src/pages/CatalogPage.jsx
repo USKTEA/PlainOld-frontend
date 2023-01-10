@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-
 import { useSearchParams } from 'react-router-dom';
+
 import useCategoryStore from '../hooks/useCategoryStore';
 import useProductStore from '../hooks/useProductStore';
 
-import Products from '../components/Products';
-import Category from '../components/Category';
+import Products from '../components/catalog/Products';
+import Category from '../components/catalog/Category';
 
 export default function ProductsPage() {
   const [searchParams] = useSearchParams();

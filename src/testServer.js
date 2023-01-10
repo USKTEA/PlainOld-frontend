@@ -7,6 +7,25 @@ import config from './config';
 const baseUrl = config.apiBaseUrl;
 
 const server = setupServer(
+  rest.post(`${baseUrl}/session`, async (req, res, ctx) => {
+    const { username, password } = await req.json();
+
+    if (username === 'tjrxo1234@gmail.com' && password === 'Password1234!') {
+      return res(
+        ctx.json({
+          accessToken: 'ACCESSTOKEN',
+        }),
+      );
+    }
+
+    return res(
+      ctx.status(400),
+      ctx.json({
+        message: '아이디 혹은 비밀번호가 맞지 않습니다',
+      }),
+    );
+  }),
+
   rest.get(`${baseUrl}/categories`, async (req, res, ctx) => res(ctx.json({
     categories: [
       {
