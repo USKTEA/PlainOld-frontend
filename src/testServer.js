@@ -2,7 +2,7 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-import config from './config';
+import config from './configuration';
 
 const baseUrl = config.apiBaseUrl;
 
@@ -139,7 +139,7 @@ const server = setupServer(
     const { orderItems } = orderSpecification;
 
     if (orderItems[0].productId === 9_999_999) {
-      return rest(ctx.status(400));
+      return res(ctx.status(400));
     }
 
     return res(

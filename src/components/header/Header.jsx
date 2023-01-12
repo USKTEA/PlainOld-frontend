@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 import { Link, useLocation } from 'react-router-dom';
 
+import { useLocalStorage } from 'usehooks-ts';
+
+import defaultTheme from '../../styles/defaultTheme';
+
 const Container = styled.header`
   font-weight: 800;
   width: 100%;
@@ -17,6 +21,12 @@ const Wrapper = styled.div`
   min-width: 1024px;
   height: 100%;
   margin: 0 auto;
+`;
+
+const Title = styled.h2`
+  font-size: 30px;
+  font-weight: 900;
+  color: ${defaultTheme.colors.primaryText};
 `;
 
 const Navigation = styled.nav`
@@ -35,21 +45,32 @@ const List = styled.ul`
   display: flex;
   align-items: center;
   gap: 3em;
+
+  button {
+    padding-bottom: .5em;
+  }
 `;
 
 const StyledLink = styled(Link)`
   color: ${(props) => (props.selected ? '#22DAAB' : '#2E2C6F')};
 `;
 
-const Title = styled.h2`
-  font-size: 30px;
-
-  color: #2E2C6F;
-  font-weight: 900;
+const Logout = styled.button`
+  border: none;
+  font-weight: 800;
+  background-color: white;
+  margin: none;
+  color: ${defaultTheme.colors.primaryText};
+  cursor: pointer;
 `;
 
 export default function Header() {
   const location = useLocation();
+  const [accessToken, setAccessToken] = useLocalStorage('accessToken', '');
+
+  const handleLogout = () => {
+    setAccessToken('');
+  };
 
   return (
     <Container>
@@ -67,7 +88,8 @@ export default function Header() {
             <li>
               <StyledLink
                 to="products"
-                selected={location.pathname.startsWith('/products') || location.pathname === '/order'}
+                selected={location.pathname.startsWith('/products')
+                || location.pathname === '/order'}
               >
                 SHOP
               </StyledLink>
@@ -104,14 +126,24 @@ export default function Header() {
               </StyledLink>
             </li>
             <li>
-              <StyledLink
-                to="/login"
-                selected={
-                  location.pathname === '/login'
-                }
-              >
-                Login
-              </StyledLink>
+              {accessToken ? (
+                <Logout
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Logout>
+              )
+                : (
+                  <StyledLink
+                    to="/login"
+                    selected={
+                      location.pathname === '/login'
+                    }
+                  >
+                    Login
+                  </StyledLink>
+                )}
             </li>
           </List>
         </Navigation>
