@@ -16,7 +16,7 @@ export default class UserStore extends Store {
 
   async login({ username, password }) {
     try {
-      const accessToken = await apiService.postSession({ username, password });
+      const { accessToken } = await apiService.postSession({ username, password });
 
       return accessToken;
     } catch (error) {

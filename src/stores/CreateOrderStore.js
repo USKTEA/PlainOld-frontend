@@ -32,6 +32,7 @@ export default class CreateOrderStore extends Store {
 
     try {
       const result = await apiService.createOrder(orderSpecification);
+
       this.completeProcess(result);
     } catch (e) {
       this.orderFailed();
