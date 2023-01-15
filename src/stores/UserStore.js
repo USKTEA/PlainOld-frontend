@@ -5,6 +5,8 @@ export default class UserStore extends Store {
   constructor(props) {
     super(props);
 
+    this.username = null;
+
     this.errors = {
       login: '',
     };
@@ -25,6 +27,16 @@ export default class UserStore extends Store {
       return '';
     } finally {
       this.publish();
+    }
+  }
+
+  async fetchUserInformation() {
+    try {
+      const { username } = await apiService.fetchUserInformation();
+
+      this.username = username;
+    } catch (error) {
+      localStorage.removeItem('accessToken');
     }
   }
 }
