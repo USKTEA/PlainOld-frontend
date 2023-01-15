@@ -22,11 +22,10 @@ export default class ApiService {
         return config;
       }
 
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 
-      if (accessToken !== '""' && accessToken) {
-        config.headers.Authorization = `Bearer ${
-          accessToken.slice(1, accessToken.length - 1)}`;
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
 
       return config;
@@ -101,6 +100,29 @@ export default class ApiService {
     }, { withCredentials: true });
 
     return { accessToken: data.accessToken };
+  }
+
+  async fetchCartItem() {
+    const { data } = await this.instance.get('/carts');
+    return data;
+  }
+
+  async addCartItem(items) {
+    const { data } = await this.instance.post('/carts', { items });
+
+    return data;
+  }
+
+  async updateCartItem(items) {
+    const { data } = await this.instance.patch('/carts', { items });
+
+    return data;
+  }
+
+  async deleteCartItem(items) {
+    const { data } = await this.instance.post('/carts/delete', { items });
+
+    return data;
   }
 }
 

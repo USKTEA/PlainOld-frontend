@@ -212,7 +212,7 @@ const Save = styled.button`
 
 export default function ChangeQuantityModal({ setModalOpen }) {
   const cartStore = useCartStore();
-  const { itemsInChangeQuantity } = cartStore;
+  const { itemsInChangeQuantity, cart } = cartStore;
 
   const modalRef = useRef(null);
 
@@ -270,7 +270,7 @@ export default function ChangeQuantityModal({ setModalOpen }) {
           {items.map((item) => (
             <ListItem key={item.id}>
               <div>
-                {item.option
+                {cart.checkHasOption({ name: item.name })
                   ? (
                     <Option>
                       <label htmlFor="quantity">

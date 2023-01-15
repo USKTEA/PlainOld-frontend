@@ -160,9 +160,9 @@ export default class Cart {
   }
 
   checkHasOption({ name }) {
-    const founds = this.items.get(name);
+    const { option } = this.items.get(name)[0];
 
-    return !!founds[0].option;
+    return !!option && !(option.color === '' && option.size === 'FREE');
   }
 
   itemQuantity({ name }) {

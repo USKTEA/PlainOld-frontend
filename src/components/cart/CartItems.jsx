@@ -217,12 +217,13 @@ const DeleteButton = styled.button`
 export default function CartItems() {
   const navigate = useNavigate();
   const [, setOrderItems] = useLocalStorage('orderItems', '');
+  const [, setItemInPurchase] = useLocalStorage('itemInPurchase', '');
   const [modalOpen, setModalOpen] = useState(false);
 
   const cartStore = useCartStore();
   const orderItemStore = useOrderItemStore();
 
-  const { cart, selected } = cartStore;
+  const { cart, selected, itemInPurchase } = cartStore;
   const { items } = cart;
 
   const handleOpenModal = ({ name }) => {
@@ -256,6 +257,7 @@ export default function CartItems() {
     orderItemStore.loadItems({ items: items.get(name) });
 
     setOrderItems(orderItemStore.orderItems);
+    setItemInPurchase(itemInPurchase);
 
     navigate('/order');
   };

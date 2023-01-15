@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { cartStore } from '../stores/CartStore';
@@ -45,11 +45,9 @@ describe('CartPage', () => {
   });
 
   context('장바구니에 상품이 없을 경우', () => {
-    beforeEach(() => {
-      localStorage.setItem('cartItems', '');
-    });
-
     it('장바구니가 비어있습니다 메시지를 볼 수 있다', () => {
+      localStorage.setItem('cartItems', '');
+
       render((
         <MemoryRouter>
           <CartPage />
@@ -57,6 +55,22 @@ describe('CartPage', () => {
       ));
 
       screen.getByText('장바구니가 비어있습니다.');
+    });
+  });
+
+  context('로그인을 했을 경우', () => {
+    it('서버로 부터 회원의 카트 정보를 불러온다', async () => {
+      localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+      render((
+        <MemoryRouter>
+          <CartPage />
+        </MemoryRouter>
+      ));
+
+      await waitFor(() => {
+        expect(screen.getAllByText('T-Shirt').length).toBeTruthy();
+      });
     });
   });
 });

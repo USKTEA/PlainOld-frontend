@@ -15,4 +15,9 @@ export default class Item {
     this.totalPrice = this.price * this.quantity;
     this.option = option;
   }
+
+  hasOption() {
+    return !!this.option
+    && (this.option.size !== 'FREE' && this.option.color !== '');
+  }
 }
