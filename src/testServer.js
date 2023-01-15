@@ -25,7 +25,21 @@ const server = setupServer(
       }),
     );
   }),
+  rest.get(`${baseUrl}/users/me`, async (req, res, ctx) => {
+    const accessToken = req.headers.get('authorization').split(' ')[1];
 
+    if (accessToken === 'INVALIDACCESSTOKEN') {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({
+        username: 'tjrxo1234@gmail.com',
+      }),
+    );
+  }),
   rest.get(`${baseUrl}/categories`, async (req, res, ctx) => res(ctx.json({
     categories: [
       {
@@ -133,7 +147,6 @@ const server = setupServer(
     res(ctx.status(400))
   )),
   rest.post(`${baseUrl}/orders`, async (req, res, ctx) => {
-    // 로그인하면 header에 accessToken 넣어야지
     const orderSpecification = await req.json();
 
     const { orderItems } = orderSpecification;

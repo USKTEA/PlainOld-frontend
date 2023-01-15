@@ -102,8 +102,15 @@ export default class ApiService {
     return { accessToken: data.accessToken };
   }
 
+  async fetchUserInformation() {
+    const { data } = await this.instance.get('/users/me');
+
+    return { username: data.username };
+  }
+
   async fetchCartItem() {
     const { data } = await this.instance.get('/carts');
+
     return data;
   }
 

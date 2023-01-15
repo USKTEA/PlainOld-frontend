@@ -1,15 +1,18 @@
 import { Route, Routes } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
+import { useEffect } from 'react';
 
 import { Reset } from 'styled-reset';
 
 import styled, { ThemeProvider } from 'styled-components';
+
+import useUserStore from './hooks/useUserStore';
 
 import GlobalStyle from './styles/GlobalStyle';
 
 import defaultTheme from './styles/defaultTheme';
 
 import Header from './components/header/Header';
-
 import HomePage from './pages/HomePage';
 import CatalogPage from './pages/CatalogPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -26,7 +29,7 @@ const Main = styled.main`
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 1600x;
+  max-width: 1600px;
   min-width: 1024px;
   height: calc(100vh - 4em);
   min-height: 500px;
@@ -35,6 +38,15 @@ const Main = styled.main`
 `;
 
 export default function App() {
+  const [accessToken] = useLocalStorage('accessToken', '');
+  const userStore = useUserStore();
+
+  useEffect(() => {
+    if (accessToken) {
+      userStore.fetchUserInformation();
+    }
+  }, [accessToken]);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Reset />
