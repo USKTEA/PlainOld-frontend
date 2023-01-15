@@ -76,7 +76,7 @@ export default function Cart() {
   const cartStore = useCartStore();
   const orderItemStore = useOrderItemStore();
 
-  const { items } = cartStore.cart;
+  const { cart: { items } } = cartStore;
 
   const handlePurchaseSelected = () => {
     if (cartStore.isSelectedNotEmpty()) {

@@ -110,7 +110,7 @@ export default function OrderItemInformation() {
                 <ItemInformation>
                   <span>{item.name}</span>
                   <OptionQuantityContainer>
-                    {item.option ? (
+                    {item.hasOption() ? (
                       <div>
                         <span>
                           {`${item.option.size} / ${item.option.color}`}

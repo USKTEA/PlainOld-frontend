@@ -3,13 +3,10 @@ import { Route, Routes } from 'react-router-dom';
 import { Reset } from 'styled-reset';
 
 import styled, { ThemeProvider } from 'styled-components';
-import { useLocalStorage } from 'usehooks-ts';
-import { useEffect } from 'react';
+
 import GlobalStyle from './styles/GlobalStyle';
 
 import defaultTheme from './styles/defaultTheme';
-
-import { apiService } from './services/ApiService';
 
 import Header from './components/header/Header';
 
@@ -38,12 +35,6 @@ const Main = styled.main`
 `;
 
 export default function App() {
-  // const [accessToken] = useLocalStorage('accessToken', '');
-
-  // useEffect(() => {
-  //   apiService.setAccessToken(accessToken);
-  // }, [accessToken]);
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Reset />

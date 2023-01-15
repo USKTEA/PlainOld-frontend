@@ -158,6 +158,28 @@ const server = setupServer(
       }),
     );
   }),
+  rest.get(`${baseUrl}/carts`, async (req, res, ctx) => res(
+    ctx.json({
+      items: [
+        {
+          productId: 1,
+          price: 10_000,
+          name: 'T-Shirt',
+          thumbnailUrl: '1',
+          shippingFee: 2_500,
+          freeShippingAmount: 50_000,
+          quantity: 1,
+          totalPrice: 10_000,
+          option: { size: 'L', color: 'Black' },
+        },
+      ],
+    }),
+  )),
+  rest.post(`${baseUrl}/carts`, async (req, res, ctx) => res(
+    ctx.json({
+      counts: 1,
+    }),
+  )),
 );
 
 export default server;

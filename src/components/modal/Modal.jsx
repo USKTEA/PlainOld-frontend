@@ -6,10 +6,10 @@ import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.div`
   position: absolute;
-  width: 100%;
+  width: 130%;
   height: 120%;
   display: flex;
-  top: -1em;
+  top: -10em;
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.2);
