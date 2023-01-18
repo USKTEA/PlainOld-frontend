@@ -6,10 +6,11 @@ import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.div`
   position: absolute;
-  width: 130%;
-  height: 120%;
+  width: 120%;
+  height: 150vh;
   display: flex;
   top: -10em;
+  left: -10em;
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.2);
@@ -17,6 +18,9 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  top: 50%;
+  left: 50%;
+  transform: translate(-0%, -50%);
   height: 10em;
   width: 18em;
   background-color: white;

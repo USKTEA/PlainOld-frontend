@@ -21,6 +21,9 @@ describe('ProductDetailPage', () => {
         screen.getByText('배송 방법');
         screen.getByText('배송비');
         screen.getByText('구매하기');
+        screen.getByText('상세정보');
+        screen.getByText('Review');
+        screen.getByText('Q&A');
       });
     });
   });
@@ -39,6 +42,9 @@ describe('ProductDetailPage', () => {
         screen.getByText('배송 방법');
         screen.getByText('배송비');
         screen.getByText('구매하기');
+        screen.getByText('상세정보');
+        screen.getByText('Review');
+        screen.getByText('Q&A');
       });
     });
   });

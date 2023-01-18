@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -17,11 +17,15 @@ import ColorSelection from './ColorSelection';
 import Items from './Items';
 import ErrorMessage from '../ui/ErrorMessage';
 import ProductDescription from './ProductDescription';
+import ScrollCommand from './ScrollCommand';
+import ReviewSection from './ReviewSection';
 
 const Container = styled.div`
-  height: 100%;
+`;
+
+const ProductSection = styled.div`
   width: 50%;
-  min-height: 50em;
+  min-height: 20em;
   min-width: 1024px;
   padding-block: 5em;
   padding-left: 10em;
@@ -29,6 +33,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   color: ${defaultTheme.colors.primary};
+`;
+
+const InformationSection = styled.div`
 `;
 
 const Wrapper = styled.div`
@@ -46,7 +53,6 @@ const Message = styled.p`
   font-weight: 500;
   margin-top: 5em;
   text-align: center;
-
   color: ${defaultTheme.colors.primary};
 `;
 
@@ -106,8 +112,19 @@ const MessageWrapper = styled.div`
   font-size: 1.2em;
 `;
 
+const Detail = styled.section`
+  margin-top: 2em;
+  height: 30em;
+`;
+
+const QnA = styled.section`
+  height: 30em;
+`;
+
 export default function ProductDetail() {
   const navigate = useNavigate();
+  const focusTarget = useRef([]);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [, setOrderItems] = useLocalStorage('orderItems', '');
   const [, setCartItems] = useLocalStorage('cartItems', '');
@@ -120,20 +137,6 @@ export default function ProductDetail() {
   const { orderItems, sizes, colors } = orderItemStore;
 
   const { items } = orderItems;
-
-  useEffect(() => {
-    setOrderItems(orderItemStore.orderItems);
-  }, [orderItemStore.orderItems]);
-
-  if (loading) {
-    return <Message>now loading...</Message>;
-  }
-
-  if (!product) {
-    return <Message>{errors.loading}</Message>;
-  }
-
-  const { name, image } = product;
 
   const handleAddCart = () => {
     cartStore.addItem(items);
@@ -158,9 +161,39 @@ export default function ProductDetail() {
     cartStore.clearError();
   };
 
+  const handleScrollTo = (name) => {
+    const category = {
+      상세정보: 0,
+      Review: 1,
+      'Q&A': 2,
+    };
+
+    focusTarget.current[category[name]].scrollIntoView();
+  };
+
+  const handleSetRef = (element) => (name) => {
+    if (name === 'Review') {
+      focusTarget.current[1] = element;
+    }
+  };
+
+  useEffect(() => {
+    setOrderItems(orderItemStore.orderItems);
+  }, [orderItemStore.orderItems]);
+
+  if (loading) {
+    return <Message>now loading...</Message>;
+  }
+
+  if (!product) {
+    return <Message>{errors.loading}</Message>;
+  }
+
+  const { name, image, description } = product;
+
   return (
-    <>
-      <Container>
+    <Container>
+      <ProductSection>
         <Image
           src={`/assets/images/${image.productImageUrls[0]}.png`}
           alt={name}
@@ -193,7 +226,7 @@ export default function ProductDetail() {
               구매하기
             </OrderButton>
             <Button
-              onClick={() => handleAddCart()}
+              onClick={handleAddCart}
             >
               장바구니
             </Button>
@@ -208,7 +241,23 @@ export default function ProductDetail() {
               : null}
           </MessageWrapper>
         </Wrapper>
-      </Container>
+      </ProductSection>
+      <InformationSection>
+        <ScrollCommand scrollTo={handleScrollTo} />
+        <Detail
+          ref={(element) => { focusTarget.current[0] = element; }}
+        >
+          {description.productDetail}
+        </Detail>
+        <ReviewSection
+          setRef={handleSetRef}
+        />
+        <QnA
+          ref={(element) => { focusTarget.current[2] = element; }}
+        >
+          상품문의
+        </QnA>
+      </InformationSection>
       {modalOpen && (
         <Modal
           setModalOpen={setModalOpen}
@@ -218,6 +267,6 @@ export default function ProductDetail() {
           secondButton="장바구니"
         />
       )}
-    </>
+    </Container>
   );
 }

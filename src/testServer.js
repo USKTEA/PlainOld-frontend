@@ -193,6 +193,64 @@ const server = setupServer(
       counts: 1,
     }),
   )),
+  rest.get(`${baseUrl}/reviews`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '2') {
+      return res(ctx.json({
+        reviews: [],
+        page: {
+          current: 1,
+          total: 1,
+        },
+      }));
+    }
+
+    return res(
+      ctx.json({
+        reviews: [
+          {
+            id: 1,
+            productId: 1,
+            reviewer: {
+              username: 'tjrxo1234@gmail.com',
+              nickname: '김뚜루',
+            },
+            rate: 5,
+            comment: '좋은 상품입니다',
+            reviewImageUrl: '1',
+            cratedAt: '2022-01-15 12:45',
+          },
+        ],
+        page: {
+          current: 1,
+          total: 1,
+        },
+      }),
+    );
+  }),
+  rest.post(`${baseUrl}/reviews`, async (req, res, ctx) => {
+    const review = await req.json();
+
+    if (review.orderNumber === 'invalidOrderNumber') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      reviewId: 1,
+    }));
+  }),
+  rest.get(`${baseUrl}/orders`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '1') {
+      return res(ctx.json({
+        orderNumber: 'tjrxo1234-202301061131',
+      }));
+    }
+
+    return res(ctx.status(400));
+  }),
 );
 
 export default server;

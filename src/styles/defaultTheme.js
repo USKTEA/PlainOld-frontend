@@ -12,6 +12,7 @@ const defaultTheme = {
     secondaryText: '#22DAAB',
     thirdText: '#212121',
     fourthText: '#BCBBD1',
+    startActive: '#eb4f30',
     red: '#ff424d',
   },
 };
