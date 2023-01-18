@@ -39,12 +39,16 @@ const Main = styled.main`
 
 export default function App() {
   const [accessToken] = useLocalStorage('accessToken', '');
+  const [, setUsername] = useLocalStorage('username', '');
+
   const userStore = useUserStore();
 
   useEffect(() => {
     if (accessToken) {
       userStore.fetchUserInformation();
     }
+
+    return () => setUsername('');
   }, [accessToken]);
 
   return (

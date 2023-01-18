@@ -131,6 +131,24 @@ export default class ApiService {
 
     return data;
   }
+
+  async fetchReviews({ productId, pageNumber }) {
+    const { data } = await this.instance.get(`/reviews?productId=${productId}&page=${pageNumber}`);
+
+    return { reviews: data.reviews, page: data.page };
+  }
+
+  async fetchOrderByProductId({ productId }) {
+    const { data } = await this.instance.get(`/orders?productId=${productId}`);
+
+    return { orderNumber: data.orderNumber };
+  }
+
+  async postReview(review) {
+    const { data } = await this.instance.post('/reviews', review);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();
