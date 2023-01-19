@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import defaultTheme from '../../styles/defaultTheme';
 
 import useGetReviewStore from '../../hooks/useGetReviewStore';
-import useCreateReviewStore from '../../hooks/useCreateReviewStore';
+import useEditReviewStore from '../../hooks/useEditReviewStore';
 import useProductStore from '../../hooks/useProductStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 
@@ -13,7 +13,7 @@ import Rating from './Rating';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 280vh;
+  height: 250em;
   top: -10em;
   left: -10em;
   display: flex;
@@ -26,9 +26,9 @@ const Container = styled.div`
 const Wrapper = styled.div`
   top: 50%;
   left: 50%;
-  transform: translate(-0%, -50%);
-  height: 38em;
-  width: 24em;
+  transform: translate(-10%, 0%);
+  height: 39em;
+  width: 27em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,19 +42,6 @@ const SubWrapper = styled.div`
   padding: 1em;
   display: flex;
   flex-direction: column;
-
-  textarea {
-    font-size: .9em;
-    height: 15em;
-    margin-bottom: 1em;
-    padding: 1em;
-    border: 1px solid ${defaultTheme.colors.fourth};
-    color: ${defaultTheme.colors.primaryText};
-    resize: none;
-    :focus {
-      outline: 1px solid ${defaultTheme.colors.fifth};
-    }
-  }
 `;
 
 const Title = styled.label`
@@ -105,6 +92,19 @@ const RateWrapper = styled.div`
   }
 `;
 
+const ReviewForm = styled.textarea`
+    font-size: .9em;
+    height: 15em;
+    margin-bottom: 1em;
+    padding: 1em;
+    color: ${defaultTheme.colors.primaryText};
+    border: 1px solid ${defaultTheme.colors.fourth};
+    resize: none;
+    :focus {
+      outline: 1px solid ${defaultTheme.colors.fifth};
+    }
+`;
+
 const ImageUpload = styled.div`
   margin-top: 1em;
   display: flex;
@@ -135,20 +135,30 @@ const ImageUpload = styled.div`
 `;
 
 const Submit = styled.button`
+  font-size: .9em;
   height: 3em;
   width: 100%;
   border: none;
   background-color: ${defaultTheme.colors.primary};
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 `;
 
-export default function WriteReviewModal({ setModalOpen }) {
+const ErrorMessage = styled.strong`
+  font-size: .7em;
+  text-align: end;
+  color: ${defaultTheme.colors.red};
+`;
+
+export default function EditReviewModal({ setModalOpen }) {
   const modalRef = useRef(null);
   const productStore = useProductStore();
   const getReviewStore = useGetReviewStore();
   const getOrderStore = useGetOrderStore();
-  const createReviewStore = useCreateReviewStore();
+  const editReviewStore = useEditReviewStore();
 
   const handler = ({ target }) => {
     if (modalRef.current && !modalRef.current.contains(target)) {
@@ -160,27 +170,28 @@ export default function WriteReviewModal({ setModalOpen }) {
     document.addEventListener('mousedown', handler);
 
     return () => {
-      createReviewStore.clear();
+      editReviewStore.clear();
       document.removeEventListener('mousedown', handler);
     };
   }, []);
 
   const { product } = productStore;
-  const { review } = createReviewStore;
-  const { orderNumber } = getOrderStore;
+  const { review } = editReviewStore;
 
   const handleChangeComment = (comment) => {
-    createReviewStore.changeComment({ comment });
+    editReviewStore.changeComment({ comment });
+  };
+
+  const handleChangeRate = (rate) => {
+    editReviewStore.changeRate(rate);
   };
 
   const handleSubmitReview = async () => {
-    await createReviewStore.submitReview(
-      { orderNumber, productId: product.id },
-    );
+    await editReviewStore.submitReview();
 
-    const { createdReviewId } = createReviewStore;
+    const { reviewId } = editReviewStore;
 
-    if (createdReviewId) {
+    if (reviewId) {
       getOrderStore.clear();
       getReviewStore.fetchReviews({ productId: product.id, pageNumber: 1 });
       setModalOpen((previous) => !previous);
@@ -193,7 +204,7 @@ export default function WriteReviewModal({ setModalOpen }) {
         <Title
           htmlFor="comment"
         >
-          구매평 작성
+          구매평 수정
         </Title>
         <SubWrapper>
           <Item>
@@ -209,9 +220,9 @@ export default function WriteReviewModal({ setModalOpen }) {
           </Item>
           <RateWrapper>
             <span>상품은 어떠셨나요?</span>
-            <Rating />
+            <Rating review={review} changeRate={handleChangeRate} />
           </RateWrapper>
-          <textarea
+          <ReviewForm
             name="review"
             id="comment"
             placeholder="어떤 점이 좋으셨나요?"
@@ -220,6 +231,13 @@ export default function WriteReviewModal({ setModalOpen }) {
             value={review.comment}
             onChange={(e) => handleChangeComment(e.target.value)}
           />
+          {editReviewStore.hasError()
+            ? (
+              <ErrorMessage>
+                {editReviewStore.getError()}
+              </ErrorMessage>
+            )
+            : null}
           <ImageUpload>
             <span>사진 첨부</span>
             <input value="+" readOnly />

@@ -48,7 +48,11 @@ const RateContentReply = styled.div`
 export default function Review({ review, handleClick }) {
   return (
     <Container className="review">
-      <button type="button" onClick={() => handleClick(review.id)}>
+      <button
+        className="review-open"
+        type="button"
+        onClick={() => handleClick(review.id)}
+      >
         <RateContentReply>
           <ReviewRate rate={review.rate} />
           <p>

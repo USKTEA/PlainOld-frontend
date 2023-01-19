@@ -1,32 +1,7 @@
 import { apiService } from '../services/ApiService';
-import Store from './Store';
+import ReviewStore from './ReviewStore';
 
-export default class CreateReviewStore extends Store {
-  constructor() {
-    super();
-
-    this.review = {
-      rate: 5,
-      comment: '',
-    };
-
-    this.createdReviewId = null;
-
-    this.errors = {
-      comment: '',
-      submit: '',
-      orderNumber: '',
-      productId: '',
-    };
-
-    this.errorMessage = {
-      comment: '구매평은 5글자 이상 작성 바랍니다',
-      submit: '구매평이 정상적으로 등록되지 않았습니다 잠시 후 다시 시도해주세요',
-      orderNumber: '주문번호 오류',
-      productId: '상품정보 오류',
-    };
-  }
-
+export default class CreateReviewStore extends ReviewStore {
   changeRate(rate) {
     this.review = { ...this.review, rate };
 
@@ -46,13 +21,13 @@ export default class CreateReviewStore extends Store {
           { ...this.review, orderNumber, productId },
         );
 
-        this.createdReviewId = reviewId;
+        this.reviewId = reviewId;
       } catch (error) {
         this.errors.submit = this.errorMessage.submit;
-      } finally {
-        this.publish();
       }
     }
+
+    this.publish();
   }
 
   checkReviewCanPost({ orderNumber, productId }) {
@@ -77,20 +52,14 @@ export default class CreateReviewStore extends Store {
     return true;
   }
 
-  clear() {
-    this.createdReviewId = null;
+  hasError() {
+    const errors = Object.values(this.errors).filter((error) => error);
 
-    this.review = {
-      rate: 5,
-      comment: '',
-    };
+    return !!errors.length;
+  }
 
-    this.errors = {
-      comment: '',
-      submit: '',
-      orderNumber: '',
-      productId: '',
-    };
+  getError() {
+    return Object.values(this.errors).filter((error) => error).at(0);
   }
 }
 

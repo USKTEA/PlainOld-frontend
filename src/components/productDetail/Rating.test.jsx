@@ -3,9 +3,23 @@ import Rating from './Rating';
 
 const context = describe;
 
-describe('Rateing', () => {
-  it('초기값으로 5점이 세팅된다', () => {
-    const { container } = render(<Rating />);
+const changeRate = jest.fn();
+
+describe('Rating', () => {
+  const renderRating = () => {
+    const review = {
+      rate: 5,
+      comment: '',
+    };
+
+    return render(<Rating
+      review={review}
+      changeRate={changeRate}
+    />);
+  };
+
+  it('구매평의 점수를 보여준다', () => {
+    const { container } = renderRating();
 
     const activeStars = container.getElementsByClassName('active-star');
 
@@ -14,11 +28,7 @@ describe('Rateing', () => {
 
   context('버튼을 클릭했을 경우', () => {
     it('버튼에 해당하는 점수가 반영된다', () => {
-      const { container } = render(<Rating />);
-
-      const activeStars = container.getElementsByClassName('active-star');
-
-      expect(activeStars).toHaveLength(5);
+      renderRating();
 
       const scoreButtons = screen.getAllByRole('button');
 
@@ -26,7 +36,7 @@ describe('Rateing', () => {
 
       fireEvent.click(fourPoints);
 
-      expect(activeStars).toHaveLength(4);
+      expect(changeRate).toBeCalledWith(4);
     });
   });
 });

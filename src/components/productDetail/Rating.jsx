@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import useCreateReviewStore from '../../hooks/useCreateReviewStore';
 import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.ul`
@@ -26,15 +25,8 @@ const Star = styled.button`
   }
 `;
 
-export default function Rate() {
-  const createReviewStore = useCreateReviewStore();
+export default function Rate({ review, changeRate }) {
   const rates = Array.from({ length: 5 }, (_, index) => index + 1);
-
-  const { review } = createReviewStore;
-
-  const handleChangeRate = (rate) => {
-    createReviewStore.changeRate(rate);
-  };
 
   return (
     <Container>
@@ -45,7 +37,7 @@ export default function Rate() {
               <ActiveStar
                 type="button"
                 className="active-star"
-                onClick={() => handleChangeRate(rate)}
+                onClick={() => changeRate(rate)}
               >
                 ★
               </ActiveStar>
@@ -54,7 +46,7 @@ export default function Rate() {
               <Star
                 type="button"
                 className="star"
-                onClick={() => handleChangeRate(rate)}
+                onClick={() => changeRate(rate)}
               >
                 ★
               </Star>

@@ -1,36 +1,43 @@
 import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
+import { editReviewStore } from '../../stores/EditReviewStore';
 
-import { createReviewStore } from '../../stores/CreateReviewStore';
 import { getOrderStore } from '../../stores/GetOrderStore';
 import { productStore } from '../../stores/ProductStore';
 
-import WriteReviewModal from './WriteReviewModal';
+import EditReviewModal from './EditReviewModal';
 
 const setModalOpen = jest.fn();
 
 const context = describe;
 
-describe('WriteReviewModal', () => {
-  const renderWriteReviewModal = () => render(
-    <WriteReviewModal setModalOpen={setModalOpen} />,
+describe('EditReviewModal', () => {
+  const renderEditReviewModal = () => render(
+    <EditReviewModal setModalOpen={setModalOpen} />,
   );
+
+  const review = {
+    id: 1,
+    rate: 5,
+    comment: '아주 좋은 상품',
+  };
 
   beforeEach(() => {
     productStore.clear();
-    createReviewStore.clear();
+    editReviewStore.clear();
+    editReviewStore.setReview(review);
   });
 
-  context('구매평 작성 모달이 열리는 경우', () => {
+  context('구매평 수정 모달이 열리는 경우', () => {
     it('구매평을 남기고자 하는 상품의 정보를 볼 수 있다', async () => {
       const productId = 1;
 
       await productStore.fetchProduct({ id: productId });
 
-      renderWriteReviewModal();
+      renderEditReviewModal();
 
-      expect(screen.getByText('구매평 작성'));
+      expect(screen.getByText('구매평 수정'));
       expect(screen.getByText('T-shirt'));
     });
   });
@@ -41,7 +48,7 @@ describe('WriteReviewModal', () => {
 
       await productStore.fetchProduct({ id: productId });
 
-      const { container } = renderWriteReviewModal();
+      const { container } = renderEditReviewModal();
 
       const scoreButtons = screen.getAllByRole('button');
 
@@ -59,12 +66,18 @@ describe('WriteReviewModal', () => {
 
       await productStore.fetchProduct({ id: productId });
 
-      renderWriteReviewModal();
+      renderEditReviewModal();
+
+      fireEvent.change(screen.getByLabelText('구매평 수정'), {
+        target: {
+          value: '',
+        },
+      });
 
       fireEvent.click(screen.getByRole('button', { name: '등록' }));
 
       expect(setModalOpen).not.toBeCalled();
-      expect(screen.getByText('구매평 작성'));
+      expect(screen.getByText('구매평 수정'));
     });
   });
 
@@ -75,9 +88,9 @@ describe('WriteReviewModal', () => {
       await productStore.fetchProduct({ id: productId });
       await getOrderStore.fetchOrderDoNotHaveReview({ productId });
 
-      renderWriteReviewModal();
+      renderEditReviewModal();
 
-      fireEvent.change(screen.getByLabelText('구매평 작성'), {
+      fireEvent.change(screen.getByLabelText('구매평 수정'), {
         target: {
           value: '좋은 상품입니다!',
         },
