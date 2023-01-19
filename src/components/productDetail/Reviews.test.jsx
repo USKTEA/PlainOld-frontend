@@ -37,12 +37,12 @@ describe('Reviews', () => {
 
       const { container } = render(<Reviews />);
 
-      const reviews = container.getElementsByClassName('review');
+      const reviews = container.getElementsByClassName('review-open');
       const firstReview = reviews[0];
 
       fireEvent.click(firstReview);
 
-      screen.getByText('로그인이 필요합니다');
+      screen.getByPlaceholderText('로그인이 필요합니다');
     });
   });
 });

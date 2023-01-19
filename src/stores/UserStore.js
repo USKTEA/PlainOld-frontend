@@ -39,6 +39,13 @@ export default class UserStore extends Store {
       localStorage.removeItem('accessToken');
     }
   }
+
+  clear() {
+    this.username = null;
+    this.errors = {
+      login: '',
+    };
+  }
 }
 
 export const userStore = new UserStore();

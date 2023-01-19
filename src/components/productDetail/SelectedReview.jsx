@@ -1,6 +1,13 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import useDeleteReviewStore from '../../hooks/useDeleteReviewStore';
+import useEditReviewStore from '../../hooks/useEditReviewStore';
+import useGetOrderStore from '../../hooks/useGetOrderStore';
+import useGetReviewStore from '../../hooks/useGetReviewStore';
+import useProductStore from '../../hooks/useProductStore';
 import useUserStore from '../../hooks/useUserStore';
 import defaultTheme from '../../styles/defaultTheme';
+import EditReviewModal from './EditReviewModal';
 
 import ReviewRate from './ReviewRate';
 
@@ -121,46 +128,96 @@ const ButtonContainer = styled.div`
 `;
 
 export default function SelectedReview({ review, handleClick }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const { username } = useUserStore();
 
-  console.log(username);
+  const productStore = useProductStore();
+  const getOrderStore = useGetOrderStore();
+  const getReviewStore = useGetReviewStore();
+  const editReviewStore = useEditReviewStore();
+  const deleteReviewStore = useDeleteReviewStore();
+
+  const handleModalOpen = () => {
+    editReviewStore.setReview(review);
+    setModalOpen((previous) => !previous);
+  };
+
+  const handleDeleteReview = async () => {
+    await deleteReviewStore.delete({ id: review.id });
+
+    const { product } = productStore;
+    const { reviewId } = deleteReviewStore;
+
+    if (reviewId) {
+      getOrderStore.clear();
+      getReviewStore.fetchReviews({ productId: product.id, pageNumber: 1 });
+    }
+  };
+
   return (
-    <Container className="review">
-      <button type="button" onClick={() => handleClick(review.id)}>
-        <RateContentReply>
-          <ReviewRate rate={review.rate} />
-          <p>
-            {review.comment}
-          </p>
-        </RateContentReply>
-        <ReviewInformation>
-          <p>
-            {review.reviewer.nickname}
-          </p>
-          <p>
-            {review.createdAt}
-          </p>
-        </ReviewInformation>
-      </button>
-      <SubContainer>
-        <Wrapper>
-          <span>댓글 0</span>
-          <ReplyForm>
-            <textarea type="text" placeholder={username ? '댓글' : '로그인이 필요합니다'} />
-            <SubmitButton type="button">작성</SubmitButton>
-          </ReplyForm>
-        </Wrapper>
-        <div>
-          {review.reviewer.username === username
-            ? (
-              <ButtonContainer>
-                <button type="button">수정</button>
-                <button type="button">삭제</button>
-              </ButtonContainer>
-            )
-            : null}
-        </div>
-      </SubContainer>
-    </Container>
+    <>
+      <Container className="review">
+        <button
+          className="review-open"
+          type="button"
+          onClick={() => handleClick(review.id)}
+        >
+          <RateContentReply>
+            <ReviewRate rate={review.rate} />
+            <p>
+              {review.comment}
+            </p>
+          </RateContentReply>
+          <ReviewInformation>
+            <p>
+              {review.reviewer.nickname}
+            </p>
+            <p>
+              {review.createdAt}
+            </p>
+          </ReviewInformation>
+        </button>
+        <SubContainer>
+          <Wrapper>
+            <span>댓글 0</span>
+            <ReplyForm>
+              <textarea
+                type="text"
+                placeholder={username ? '댓글' : '로그인이 필요합니다'}
+                readOnly={!username}
+              />
+              <SubmitButton type="button">작성</SubmitButton>
+            </ReplyForm>
+          </Wrapper>
+          <div>
+            {review.reviewer.username === username
+              ? (
+                <ButtonContainer>
+                  <button
+                    type="button"
+                    onClick={handleModalOpen}
+                  >
+                    수정
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDeleteReview}
+                  >
+                    삭제
+
+                  </button>
+                </ButtonContainer>
+              )
+              : null}
+          </div>
+        </SubContainer>
+      </Container>
+      {modalOpen && (
+        <EditReviewModal
+          setModalOpen={setModalOpen}
+        />
+      ) }
+    </>
   );
 }

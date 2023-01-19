@@ -10,11 +10,11 @@ import useProductStore from '../../hooks/useProductStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 
 import PagenationBlock from './PagenationBlock';
-import WriteReviewModal from './WirteReviewModal';
+import WriteReviewModal from './WriteReviewModal';
 import Reviews from './Reviews';
 
 const Container = styled.section`
-  height: 30em;
+  min-height: 30em;
 `;
 
 const Wrapper = styled.div`

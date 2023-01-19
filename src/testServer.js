@@ -146,6 +146,17 @@ const server = setupServer(
   rest.get(`${baseUrl}/products/9999999`, async (req, res, ctx) => (
     res(ctx.status(400))
   )),
+  rest.get(`${baseUrl}/orders`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '1') {
+      return res(ctx.json({
+        orderNumber: 'tjrxo1234-202301061131',
+      }));
+    }
+
+    return res(ctx.status(400));
+  }),
   rest.post(`${baseUrl}/orders`, async (req, res, ctx) => {
     const orderSpecification = await req.json();
 
@@ -240,17 +251,23 @@ const server = setupServer(
       reviewId: 1,
     }));
   }),
-  rest.get(`${baseUrl}/orders`, async (req, res, ctx) => {
-    const productId = req.url.searchParams.get('productId');
+  rest.patch(`${baseUrl}/reviews`, async (req, res, ctx) => {
+    const review = await req.json();
 
-    if (productId === '1') {
-      return res(ctx.json({
-        orderNumber: 'tjrxo1234-202301061131',
-      }));
+    if (review.id === 9999999) {
+      return res(ctx.status(400));
     }
 
-    return res(ctx.status(400));
+    return res(ctx.json({
+      reviewId: review.id,
+    }));
   }),
+  rest.delete(`${baseUrl}/reviews/1`, async (req, res, ctx) => res(
+    ctx.json({ reviewId: 1 }),
+  )),
+  rest.delete(`${baseUrl}/reviews/9999999`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
 );
 
 export default server;

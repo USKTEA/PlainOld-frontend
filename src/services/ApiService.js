@@ -149,6 +149,18 @@ export default class ApiService {
 
     return data;
   }
+
+  async patchReview(review) {
+    const { data } = await this.instance.patch('/reviews', review);
+
+    return data;
+  }
+
+  async deleteReview(id) {
+    const { data } = await this.instance.delete(`/reviews/${id}`);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

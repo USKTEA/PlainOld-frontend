@@ -6,6 +6,7 @@ import { productStore } from '../../stores/ProductStore';
 import { getReviewStore } from '../../stores/GetReviewStore';
 
 import ReviewSection from './ReviewSection';
+import { userStore } from '../../stores/UserStore';
 
 const navigate = jest.fn();
 
@@ -132,13 +133,35 @@ describe('Review', () => {
 
         const { container } = renderReviewSection();
 
-        const reviews = container.getElementsByClassName('review');
+        const reviews = container.getElementsByClassName('review-open');
         const firstReview = reviews[0];
 
         fireEvent.click(firstReview);
 
-        console.log(firstReview);
         expect(screen.getByPlaceholderText('로그인이 필요합니다'));
+      });
+    });
+
+    context('로그인을 하고 내가 작성한 구매평을 클릭했을 경우', () => {
+      it('수정과 삭제 버튼을 그리고 댓글을 남기는 폼을 볼 수 있다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+        await userStore.fetchUserInformation();
+        const productId = 1;
+
+        await productStore.fetchProduct({ id: productId });
+        await getReviewStore.fetchReviews({ productId });
+
+        const { container } = renderReviewSection();
+
+        const reviews = container.getElementsByClassName('review-open');
+        const firstReview = reviews[0];
+
+        fireEvent.click(firstReview);
+
+        screen.getByPlaceholderText('댓글');
+        screen.getByRole('button', { name: '삭제' });
+        screen.getByRole('button', { name: '수정' });
       });
     });
   });

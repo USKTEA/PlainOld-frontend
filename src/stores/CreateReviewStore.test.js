@@ -9,40 +9,6 @@ describe('CreateReviewStore', () => {
     createReviewStore = new CreateReviewStore();
   });
 
-  it('작성하는 review의 rate은 초기 값으로 5가 세팅되어 있다', () => {
-    const { review } = createReviewStore;
-
-    expect(review.rate).toBe(5);
-  });
-
-  describe('ChangeRate', () => {
-    it('작성 중인 review의 rate을 변경한다', () => {
-      let { review } = createReviewStore;
-
-      expect(review.rate).toBe(5);
-
-      createReviewStore.changeRate(4);
-
-      review = createReviewStore.review;
-
-      expect(review.rate).toBe(4);
-    });
-  });
-
-  describe('ChangeComment', () => {
-    it('작성 중인 review의 comment를 변경한다', () => {
-      let { review } = createReviewStore;
-
-      expect(review.comment).toBe('');
-
-      createReviewStore.changeComment({ comment: '좋은 상품!' });
-
-      review = createReviewStore.review;
-
-      expect(review.comment).toBe('좋은 상품!');
-    });
-  });
-
   describe('SubmitReview', () => {
     context('orderNumber가 없을 경우', () => {
       it('구매평은 제출되지 않고 error가 세팅된다', async () => {
@@ -105,10 +71,44 @@ describe('CreateReviewStore', () => {
 
         await createReviewStore.submitReview({ orderNumber, productId });
 
-        const { createdReviewId } = createReviewStore;
+        const { reviewId } = createReviewStore;
 
-        expect(createdReviewId).toBeTruthy();
+        expect(reviewId).toBeTruthy();
       });
+    });
+  });
+
+  describe('HasError', () => {
+    context('세팅된 에러가 있을 경우', () => {
+      it('true를 반환한다', async () => {
+        createReviewStore.changeComment({ comment: '좋은 상품' });
+
+        const orderNumber = 'invalidOrderNumber';
+        const productId = 1;
+
+        await createReviewStore.submitReview({ orderNumber, productId });
+
+        expect(createReviewStore.hasError()).toBeTruthy();
+      });
+    });
+
+    context('세팅된 에러가 없을 경우', () => {
+      it('false를 반환한다', () => {
+        expect(createReviewStore.hasError()).toBeFalsy();
+      });
+    });
+  });
+
+  describe('GetError', () => {
+    it('현재 세팅되어 있는 에러메시지를 반환한다', async () => {
+      createReviewStore.changeComment({ comment: '좋은 상품' });
+
+      const orderNumber = 'invalidOrderNumber';
+      const productId = 1;
+
+      await createReviewStore.submitReview({ orderNumber, productId });
+
+      expect(createReviewStore.getError()).toBeTruthy();
     });
   });
 });

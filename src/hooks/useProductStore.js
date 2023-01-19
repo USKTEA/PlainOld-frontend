@@ -1,6 +1,6 @@
 import { productStore } from '../stores/ProductStore';
 import useStore from './useStore';
 
-export default function useCategoryStore() {
+export default function useProductStore() {
   return useStore(productStore);
 }

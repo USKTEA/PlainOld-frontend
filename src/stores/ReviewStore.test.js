@@ -1,23 +1,43 @@
-import GetReviewStore from './GetReviewStore';
+import ReviewStore from './ReviewStore';
 
-describe('ReviewStore', () => {
-  let getReviewStore;
+describe('CreateReviewStore', () => {
+  let reviewStore;
 
   beforeEach(() => {
-    getReviewStore = new GetReviewStore();
+    reviewStore = new ReviewStore();
   });
 
-  describe('FetchReviews', () => {
-    it('ProductId를 통해 상품의 구매평을 서버로 부터 받아온다', async () => {
-      const productId = 1;
+  it('작성하는 review의 rate은 초기 값으로 5가 세팅되어 있다', () => {
+    const { review } = reviewStore;
 
-      await getReviewStore.fetchReviews({ productId });
+    expect(review.rate).toBe(5);
+  });
 
-      const { reviews } = getReviewStore;
+  describe('ChangeRate', () => {
+    it('작성 중인 review의 rate을 변경한다', () => {
+      let { review } = reviewStore;
 
-      expect(reviews).toHaveLength(1);
-      expect(reviews[0].comment).toBe('좋은 상품입니다');
-      expect(reviews[0].rate).toBe(5);
+      expect(review.rate).toBe(5);
+
+      reviewStore.changeRate(4);
+
+      review = reviewStore.review;
+
+      expect(review.rate).toBe(4);
+    });
+  });
+
+  describe('ChangeComment', () => {
+    it('작성 중인 review의 comment를 변경한다', () => {
+      let { review } = reviewStore;
+
+      expect(review.comment).toBe('');
+
+      reviewStore.changeComment({ comment: '좋은 상품!' });
+
+      review = reviewStore.review;
+
+      expect(review.comment).toBe('좋은 상품!');
     });
   });
 });
