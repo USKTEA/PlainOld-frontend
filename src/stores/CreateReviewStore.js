@@ -14,11 +14,13 @@ export default class CreateReviewStore extends ReviewStore {
     this.publish();
   }
 
-  async submitReview({ orderNumber, productId }) {
+  async submitReview({ orderNumber, productId, imageUrl }) {
     if (this.checkReviewCanPost({ orderNumber, productId })) {
       try {
         const { reviewId } = await apiService.postReview(
-          { ...this.review, orderNumber, productId },
+          {
+            ...this.review, orderNumber, productId, imageUrl,
+          },
         );
 
         this.reviewId = reviewId;
@@ -50,6 +52,18 @@ export default class CreateReviewStore extends ReviewStore {
     }
 
     return true;
+  }
+
+  addImage(image) {
+    this.review = { ...this.review, image };
+
+    this.publish();
+  }
+
+  deleteImage() {
+    this.review = { ...this.review, image: null };
+
+    this.publish();
   }
 
   hasError() {

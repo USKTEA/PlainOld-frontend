@@ -22,7 +22,7 @@ describe('SelectedReview', () => {
       },
       rate: 5,
       comment: '좋은 상품입니다',
-      reviewImageUrl: '1',
+      imageUrl: '1',
       cratedAt: '2022-01-15 12:45',
     };
 
@@ -34,6 +34,13 @@ describe('SelectedReview', () => {
     userStore.clear();
   });
 
+  context('포토 구매평인 경우', () => {
+    it('이미지를 볼 수 있다', () => {
+      renderSelectedReview();
+
+      screen.getByAltText('구매평이미지');
+    });
+  });
   context('로그인을 하지 않았을 경우', () => {
     it('로그인이 필요합니다 메시지를 볼 수 있다', () => {
       renderSelectedReview();

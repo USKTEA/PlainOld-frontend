@@ -14,18 +14,16 @@ describe('Reviews', () => {
     localStorage.removeItem('accessToken');
   });
 
-  it('해당 상품의 구매평을 보여준다', async () => {
+  it('구매평이 보인다', async () => {
     const productId = 1;
 
     await productStore.fetchProduct({ id: productId });
     await getReviewStore.fetchReviews({ productId });
 
-    const { container } = render(<Reviews />);
-
-    const rates = container.getElementsByClassName('star-active');
+    render(<Reviews />);
 
     screen.getByText('좋은 상품입니다');
-    expect(rates).toHaveLength(5);
+    screen.getByAltText('구매평이미지');
   });
 
   context('로그인을 하지 않고 구매평을 클릭했을 경우', () => {

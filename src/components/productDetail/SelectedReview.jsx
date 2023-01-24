@@ -1,38 +1,47 @@
 import { useState } from 'react';
+
 import styled from 'styled-components';
+import defaultTheme from '../../styles/defaultTheme';
+
 import useDeleteReviewStore from '../../hooks/useDeleteReviewStore';
 import useEditReviewStore from '../../hooks/useEditReviewStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 import useGetReviewStore from '../../hooks/useGetReviewStore';
 import useProductStore from '../../hooks/useProductStore';
 import useUserStore from '../../hooks/useUserStore';
-import defaultTheme from '../../styles/defaultTheme';
-import EditReviewModal from './EditReviewModal';
 
+import EditReviewModal from './EditReviewModal';
 import ReviewRate from './ReviewRate';
 
 const Container = styled.li`
-  height: 20em;
+  min-height: 20em;
+  height: 100%;
   width: 100%;
   padding-top: 1em;
   padding-bottom: 1em;
   border-bottom: 1px solid ${defaultTheme.colors.fourth};
   display: flex;
-  flex-direction: column;
 
   p {
     color: ${defaultTheme.colors.primaryText}
   }
+`;
+
+const SubContainer = styled.div`
+  width: 90%;
 
   > button {
+    width: 100%;
     background-color: white;
   }
 `;
 
 const ReviewInformation = styled.div`
   font-size: .8em;
-  font-weight: 300;
+  font-weight: 100;
   height: 100%;
+  width: 10%;
+  padding-top: .9em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,7 +53,7 @@ const ReviewInformation = styled.div`
   }
 `;
 
-const RateContentReply = styled.div`
+const RateCommentReply = styled.div`
   height: 100%;
   width: 90%;
   display: flex;
@@ -53,13 +62,9 @@ const RateContentReply = styled.div`
   justify-content: space-between;
 
   p {
-    margin-top: 1.3em;
+    margin-top: .5em;
+    margin-bottom: .5em;
   }
-`;
-
-const SubContainer = styled.div`
-  display: flex;
-  width: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -95,6 +100,10 @@ const ReplyForm = styled.div`
     :focus {
       outline: none;
     }
+
+    ::placeholder {
+      color: ${defaultTheme.colors.fourthText}
+    }
   }
 `;
 
@@ -116,7 +125,7 @@ const ButtonContainer = styled.div`
   width: 100%;
 
   button {
-   width: 3em;
+   width: 4em;
    font-size: .8em;
    background-color: white;
    color: ${defaultTheme.colors.fourthText};
@@ -158,27 +167,27 @@ export default function SelectedReview({ review, handleClick }) {
   return (
     <>
       <Container className="review">
-        <button
-          className="review-open"
-          type="button"
-          onClick={() => handleClick(review.id)}
-        >
-          <RateContentReply>
-            <ReviewRate rate={review.rate} />
-            <p>
-              {review.comment}
-            </p>
-          </RateContentReply>
-          <ReviewInformation>
-            <p>
-              {review.reviewer.nickname}
-            </p>
-            <p>
-              {review.createdAt}
-            </p>
-          </ReviewInformation>
-        </button>
         <SubContainer>
+          <button
+            className="review-open"
+            type="button"
+            onClick={() => handleClick(review.id)}
+          >
+            <RateCommentReply>
+              <ReviewRate rate={review.rate} />
+              <p>
+                {review.comment}
+              </p>
+              {review.imageUrl ? (
+                <img
+                  src={review.imageUrl}
+                  alt="구매평이미지"
+                  height="300"
+                  width="300"
+                />
+              ) : null }
+            </RateCommentReply>
+          </button>
           <Wrapper>
             <span>댓글 0</span>
             <ReplyForm>
@@ -190,6 +199,14 @@ export default function SelectedReview({ review, handleClick }) {
               <SubmitButton type="button">작성</SubmitButton>
             </ReplyForm>
           </Wrapper>
+        </SubContainer>
+        <ReviewInformation>
+          <p>
+            {review.reviewer.nickname}
+          </p>
+          <p>
+            {review.createdAt}
+          </p>
           <div>
             {review.reviewer.username === username
               ? (
@@ -205,13 +222,12 @@ export default function SelectedReview({ review, handleClick }) {
                     onClick={handleDeleteReview}
                   >
                     삭제
-
                   </button>
                 </ButtonContainer>
               )
               : null}
           </div>
-        </SubContainer>
+        </ReviewInformation>
       </Container>
       {modalOpen && (
         <EditReviewModal

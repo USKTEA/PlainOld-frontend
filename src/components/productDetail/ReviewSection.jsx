@@ -84,6 +84,7 @@ const SelectBoxWrapper = styled.div`
     font-weight: 500;
     height: 1em;
     color: ${defaultTheme.colors.fourthText};
+    cursor: pointer;
   }
 `;
 
@@ -116,14 +117,23 @@ const NoReviewContainer = styled.div`
 export default function ReviewSection({ setRef }) {
   const navigate = useNavigate();
   const [accessToken] = useLocalStorage('accessToken', '');
-  const [selected, setSelected] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const productStore = useProductStore();
   const getReviewStore = useGetReviewStore();
   const getOrderStore = useGetOrderStore();
 
-  const { reviews, loading, errors } = getReviewStore;
+  const {
+    reviews, loading, errors, fetchPhotoReviewsOnly,
+  } = getReviewStore;
+
+  const { product } = productStore;
+
+  const handleFetchReviews = async () => {
+    getReviewStore.toggleFetchPhotoReviewsOnly();
+
+    await getReviewStore.fetchReviews({ productId: product.id });
+  };
 
   const handleWriteReview = async () => {
     if (!accessToken) {
@@ -147,6 +157,7 @@ export default function ReviewSection({ setRef }) {
     return <p>now loading...</p>;
   }
 
+  console.log(reviews);
   return (
     <>
       <Container
@@ -172,7 +183,8 @@ export default function ReviewSection({ setRef }) {
               type="checkbox"
               id="picture-review-only"
               name="picture-review-only"
-              onClick={() => setSelected((prev) => !prev)}
+              onClick={handleFetchReviews}
+              checked={fetchPhotoReviewsOnly}
               value="true"
               readOnly
             />
