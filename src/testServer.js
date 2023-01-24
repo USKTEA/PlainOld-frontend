@@ -206,6 +206,7 @@ const server = setupServer(
   )),
   rest.get(`${baseUrl}/reviews`, async (req, res, ctx) => {
     const productId = req.url.searchParams.get('productId');
+    const photoReviews = req.url.searchParams.get('photoReviews');
 
     if (productId === '2') {
       return res(ctx.json({
@@ -215,6 +216,31 @@ const server = setupServer(
           total: 1,
         },
       }));
+    }
+
+    if (photoReviews === 'true') {
+      return res(
+        ctx.json({
+          reviews: [
+            {
+              id: 1,
+              productId: 1,
+              reviewer: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              rate: 5,
+              comment: '좋은 상품입니다',
+              imageUrl: '1',
+              cratedAt: '2022-01-15 12:45',
+            },
+          ],
+          page: {
+            current: 1,
+            total: 1,
+          },
+        }),
+      );
     }
 
     return res(
@@ -229,7 +255,18 @@ const server = setupServer(
             },
             rate: 5,
             comment: '좋은 상품입니다',
-            reviewImageUrl: '1',
+            imageUrl: '1',
+            cratedAt: '2022-01-15 12:45',
+          },
+          {
+            id: 2,
+            productId: 1,
+            reviewer: {
+              username: 'tjrxo1234@gmail.com',
+              nickname: '김뚜루',
+            },
+            rate: 5,
+            comment: '매우 좋은 상품입니다',
             cratedAt: '2022-01-15 12:45',
           },
         ],
@@ -268,6 +305,21 @@ const server = setupServer(
   rest.delete(`${baseUrl}/reviews/9999999`, async (req, res, ctx) => res(
     ctx.status(400),
   )),
+  rest.post(`${baseUrl}/files`, async (req, res, ctx) => {
+    const formData = await req.arrayBuffer();
+
+    const fileType = formData.get('file').type;
+
+    const fileName = formData.get('file').name;
+
+    if (fileType !== 'image/png' || fileName === 'shouldNotUploaded.png') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      url: 'fileUrl',
+    }));
+  }),
 );
 
 export default server;

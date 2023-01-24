@@ -4,7 +4,8 @@ import defaultTheme from '../../styles/defaultTheme';
 import ReviewRate from './ReviewRate';
 
 const Container = styled.li`
-  height: 6em;
+  min-height: 5em;
+  height: 100%;
   width: 100%;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -25,24 +26,34 @@ const ReviewInformation = styled.div`
   font-size: .8em;
   font-weight: 300;
   height: 100%;
+  width: 9%;
+  padding-top: .6em;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 
   p {
-    color: ${defaultTheme.colors.sixth};
+    color: ${defaultTheme.colors.fourthText};
     margin-bottom: .5em;
     font-weight: 100;
   }
 `;
 
-const RateContentReply = styled.div`
+const RateCommentReply = styled.div`
   height: 100%;
   width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-content: space-between;
+
+  p {
+    margin-top: .5em;
+  }
+
+  img {
+    margin-top: .5em;
+  }
 `;
 
 export default function Review({ review, handleClick }) {
@@ -53,15 +64,24 @@ export default function Review({ review, handleClick }) {
         type="button"
         onClick={() => handleClick(review.id)}
       >
-        <RateContentReply>
+        <RateCommentReply>
           <ReviewRate rate={review.rate} />
           <p>
             {review.comment}
           </p>
+          {review.imageUrl
+            ? (
+              <img
+                src={review.imageUrl}
+                alt="구매평이미지"
+                height="45"
+                width="45"
+              />
+            ) : null}
           {review.replyCount
             ? <p>{`댓글 ${review.replyCount}`}</p>
             : null}
-        </RateContentReply>
+        </RateCommentReply>
         <ReviewInformation>
           <p>
             {review.reviewer.nickname}

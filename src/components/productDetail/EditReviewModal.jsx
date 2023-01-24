@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import defaultTheme from '../../styles/defaultTheme';
@@ -9,6 +9,7 @@ import useProductStore from '../../hooks/useProductStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 
 import Rating from './Rating';
+import useReviewImageFileStore from '../../hooks/useReviewImageFileStore';
 
 const Container = styled.div`
   position: absolute;
@@ -64,8 +65,8 @@ const Item = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  width: 4em;
-  height: 4em;
+  width: 5em;
+  height: 5em;
   padding: .5em;
   margin-right: 1em;
   display: flex;
@@ -115,22 +116,23 @@ const ImageUpload = styled.div`
     font-weight: 300;
   }
 
-  input {
-    font-family: 'Roboto';
-    font-weight: 300;
+  label {
+    font-weight: 100;
     font-size: 3em;
     height: 1.5em;
     width: 1.5em;
     margin-top: .3em;
-    text-align: center;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid ${defaultTheme.colors.fourth};
     color: ${defaultTheme.colors.fifth};
     background-color: #f8f8f8;
     cursor: pointer;
-    :focus {
-      outline: none;
-    }
+  }
+
+  input {
+    display: none;
   }
 `;
 
@@ -153,12 +155,46 @@ const ErrorMessage = styled.strong`
   color: ${defaultTheme.colors.red};
 `;
 
+const Preview = styled.div`
+  margin-top: .5em;
+  height: 4.4em;
+  width: 30%;
+  display: flex;
+
+  img {
+    height: 67px;
+    width: 67px
+  }
+`;
+
+const DeleteImage = styled.button`
+  height: 18px;
+  width: 18px;
+  margin-left: .2em;
+  display: flex;
+  text-align: center;
+  vertical-align: middle;
+  background-color: ${defaultTheme.colors.fourth};
+  color: white;
+  border: none;
+  cursor: pointer;
+  :hover {
+    background-color: ${defaultTheme.colors.fifth};
+  }
+`;
+
 export default function EditReviewModal({ setModalOpen }) {
   const modalRef = useRef(null);
+  const [currentImage, setCurrentImage] = useState(null);
+
+  const reviewImageFileStore = useReviewImageFileStore();
   const productStore = useProductStore();
   const getReviewStore = useGetReviewStore();
   const getOrderStore = useGetOrderStore();
   const editReviewStore = useEditReviewStore();
+
+  const { product } = productStore;
+  const { review } = editReviewStore;
 
   const handler = ({ target }) => {
     if (modalRef.current && !modalRef.current.contains(target)) {
@@ -168,15 +204,14 @@ export default function EditReviewModal({ setModalOpen }) {
 
   useEffect(() => {
     document.addEventListener('mousedown', handler);
+    setCurrentImage(review.imageUrl);
 
     return () => {
       editReviewStore.clear();
+      reviewImageFileStore.clear();
       document.removeEventListener('mousedown', handler);
     };
   }, []);
-
-  const { product } = productStore;
-  const { review } = editReviewStore;
 
   const handleChangeComment = (comment) => {
     editReviewStore.changeComment({ comment });
@@ -186,13 +221,45 @@ export default function EditReviewModal({ setModalOpen }) {
     editReviewStore.changeRate(rate);
   };
 
+  const handleAddImage = (event) => {
+    const image = event.target.files[0];
+
+    const currentImageURL = URL.createObjectURL(image);
+
+    reviewImageFileStore.addFile(image);
+
+    setCurrentImage(currentImageURL);
+  };
+
+  const handleDeleteImage = () => {
+    reviewImageFileStore.deleteFile();
+    editReviewStore.deleteImage();
+
+    setCurrentImage(null);
+  };
+
   const handleSubmitReview = async () => {
+    if (reviewImageFileStore.hasFilesToUpload()) {
+      await reviewImageFileStore.upload();
+    }
+
+    if (reviewImageFileStore.errors.upload) {
+      return;
+    }
+
+    const { url } = reviewImageFileStore;
+
+    if (url) {
+      editReviewStore.changeImage(url);
+    }
+
     await editReviewStore.submitReview();
 
     const { reviewId } = editReviewStore;
 
     if (reviewId) {
       getOrderStore.clear();
+      reviewImageFileStore.clear();
       getReviewStore.fetchReviews({ productId: product.id, pageNumber: 1 });
       setModalOpen((previous) => !previous);
     }
@@ -231,16 +298,41 @@ export default function EditReviewModal({ setModalOpen }) {
             value={review.comment}
             onChange={(e) => handleChangeComment(e.target.value)}
           />
-          {editReviewStore.hasError()
+          {editReviewStore.hasError() || reviewImageFileStore.errors.upload
             ? (
               <ErrorMessage>
-                {editReviewStore.getError()}
+                {reviewImageFileStore.errors.upload || editReviewStore.getError()}
               </ErrorMessage>
             )
             : null}
           <ImageUpload>
             <span>사진 첨부</span>
-            <input value="+" readOnly />
+            {currentImage
+              ? (
+                <Preview>
+                  <img
+                    src={currentImage}
+                    alt="이미지 미리보기"
+                  />
+                  <DeleteImage
+                    type="button"
+                    onClick={handleDeleteImage}
+                  >
+                    x
+                  </DeleteImage>
+                </Preview>
+              )
+              : (
+                <>
+                  <label htmlFor="input-file">+</label>
+                  <input
+                    id="input-file"
+                    name="file"
+                    type="file"
+                    onChange={handleAddImage}
+                  />
+                </>
+              )}
           </ImageUpload>
         </SubWrapper>
         <Submit

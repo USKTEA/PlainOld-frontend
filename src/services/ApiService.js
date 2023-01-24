@@ -132,8 +132,10 @@ export default class ApiService {
     return data;
   }
 
-  async fetchReviews({ productId, pageNumber }) {
-    const { data } = await this.instance.get(`/reviews?productId=${productId}&page=${pageNumber}`);
+  async fetchReviews({ productId, pageNumber, fetchPhotoReviewsOnly }) {
+    const { data } = await this.instance.get(
+      `/reviews?productId=${productId}&photoReviews=${fetchPhotoReviewsOnly}&page=${pageNumber}`,
+    );
 
     return { reviews: data.reviews, page: data.page };
   }
@@ -160,6 +162,20 @@ export default class ApiService {
     const { data } = await this.instance.delete(`/reviews/${id}`);
 
     return data;
+  }
+
+  async uploadReviewImage(file) {
+    const { data } = await this.instance.post(
+      '/files?folder=review-image',
+      file,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    return { url: data.url };
   }
 }
 

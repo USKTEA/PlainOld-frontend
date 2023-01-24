@@ -1,4 +1,5 @@
 import {
+  cleanup,
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 import { getOrderStore } from '../../stores/GetOrderStore';
@@ -57,7 +58,7 @@ describe('Review', () => {
 
       const { reviews } = getReviewStore;
 
-      expect(reviews).toHaveLength(1);
+      expect(reviews).toHaveLength(2);
 
       screen.getByText('좋은 상품입니다');
     });
@@ -162,6 +163,51 @@ describe('Review', () => {
         screen.getByPlaceholderText('댓글');
         screen.getByRole('button', { name: '삭제' });
         screen.getByRole('button', { name: '수정' });
+      });
+    });
+  });
+
+  describe('포토 구매평만 보기', () => {
+    context('포토 구매평만 보기에 체크가 되지 않았을 경우', () => {
+      it('모든 구매평을 불러온다', async () => {
+        const productId = 1;
+
+        await productStore.fetchProduct({ id: productId });
+        await getReviewStore.fetchReviews({ productId });
+
+        renderReviewSection();
+
+        const { reviews } = getReviewStore;
+
+        expect(screen.getByLabelText('포토 구매평만 보기')).not.toBeChecked();
+        expect(reviews).toHaveLength(2);
+        expect(screen.getAllByAltText('구매평이미지').length).toBe(1);
+
+        cleanup();
+      });
+    });
+
+    context('포토 구매평만 보기에 체크가 되어있을 경우', () => {
+      it('포토 구매평만 불러온다', async () => {
+        const productId = 1;
+
+        await productStore.fetchProduct({ id: productId });
+        await getReviewStore.fetchReviews({ productId });
+
+        renderReviewSection();
+
+        let { reviews } = getReviewStore;
+
+        expect(screen.getByLabelText('포토 구매평만 보기')).not.toBeChecked();
+        expect(reviews).toHaveLength(2);
+        expect(screen.getAllByAltText('구매평이미지').length).toBe(1);
+
+        fireEvent.click(screen.getByLabelText('포토 구매평만 보기'));
+
+        await waitFor(() => {
+          reviews = getReviewStore.reviews;
+          expect(reviews).toHaveLength(1);
+        });
       });
     });
   });

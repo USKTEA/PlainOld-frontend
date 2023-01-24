@@ -48,6 +48,10 @@ export default function App() {
       userStore.fetchUserInformation();
     }
 
+    if (!accessToken) {
+      userStore.clear();
+    }
+
     return () => setUsername('');
   }, [accessToken]);
 

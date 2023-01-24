@@ -7,6 +7,7 @@ export default class EditReviewStore extends ReviewStore {
       id: review.id,
       rate: review.rate,
       comment: review.comment,
+      imageUrl: review.imageUrl,
     };
   }
 
@@ -35,6 +36,14 @@ export default class EditReviewStore extends ReviewStore {
     }
 
     return true;
+  }
+
+  deleteImage() {
+    this.review = { ...this.review, imageUrl: null };
+  }
+
+  changeImage(imageUrl) {
+    this.review = { ...this.review, imageUrl };
   }
 }
 

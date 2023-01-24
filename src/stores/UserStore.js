@@ -45,6 +45,8 @@ export default class UserStore extends Store {
     this.errors = {
       login: '',
     };
+
+    this.publish();
   }
 }
 

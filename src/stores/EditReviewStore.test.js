@@ -110,4 +110,42 @@ describe('EditReviewStore', () => {
       expect(editReviewStore.getError()).toBeTruthy();
     });
   });
+
+  describe('DeleteImage', () => {
+    it('구매평의 이미지를 삭제한다', () => {
+      const review = {
+        id: 1,
+        rate: 5,
+        comment: '아주 좋은 상품!',
+        imageUrl: '1',
+      };
+
+      editReviewStore.setReview(review);
+
+      expect(editReviewStore.review.imageUrl).toBeTruthy();
+
+      editReviewStore.deleteImage();
+
+      expect(editReviewStore.review.imageUrl).toBeFalsy();
+    });
+  });
+
+  describe('ChangeImage', () => {
+    it('구매평의 이미지를 변경한다', () => {
+      const review = {
+        id: 1,
+        rate: 5,
+        comment: '아주 좋은 상품!',
+        imageUrl: '1',
+      };
+
+      editReviewStore.setReview(review);
+
+      expect(editReviewStore.review.imageUrl).toBe('1');
+
+      editReviewStore.changeImage('2');
+
+      expect(editReviewStore.review.imageUrl).toBe('2');
+    });
+  });
 });

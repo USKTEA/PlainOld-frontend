@@ -6,6 +6,8 @@ export default class GetReviewStore extends Store {
     super();
 
     this.reviews = [];
+    this.fetchPhotoReviewsOnly = false;
+
     this.page = null;
 
     this.loading = false;
@@ -19,18 +21,24 @@ export default class GetReviewStore extends Store {
     };
   }
 
-  async fetchReviews({ productId, pageNumber }) {
+  async fetchReviews({ productId, pageNumber = 1 }) {
     this.startLoad();
 
     try {
       const { reviews, page } = await apiService.fetchReviews(
-        { productId, pageNumber },
+        { productId, pageNumber, fetchPhotoReviewsOnly: this.fetchPhotoReviewsOnly },
       );
 
       this.completeLoad(reviews, page);
     } catch (e) {
       this.failLoad();
     }
+  }
+
+  toggleFetchPhotoReviewsOnly() {
+    this.fetchPhotoReviewsOnly = !this.fetchPhotoReviewsOnly;
+
+    this.publish();
   }
 
   startLoad() {
@@ -56,6 +64,7 @@ export default class GetReviewStore extends Store {
 
   clear() {
     this.reviews = [];
+    this.fetchPhotoReviewsOnly = false;
     this.page = null;
     this.loading = false;
     this.errors = {
