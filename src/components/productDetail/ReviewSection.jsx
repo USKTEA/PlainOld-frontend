@@ -120,8 +120,8 @@ export default function ReviewSection({ setRef }) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const productStore = useProductStore();
-  const getReviewStore = useGetReviewStore();
   const getOrderStore = useGetOrderStore();
+  const getReviewStore = useGetReviewStore();
 
   const {
     reviews, loading, errors, fetchPhotoReviewsOnly,
@@ -157,7 +157,6 @@ export default function ReviewSection({ setRef }) {
     return <p>now loading...</p>;
   }
 
-  console.log(reviews);
   return (
     <>
       <Container
