@@ -12,6 +12,9 @@ import useUserStore from '../../hooks/useUserStore';
 
 import EditReviewModal from './EditReviewModal';
 import ReviewRate from './ReviewRate';
+import Reply from './Reply';
+import useCreateReplyStore from '../../hooks/useCreateReplyStore';
+import useGetReplyStore from '../../hooks/useGetReplyStore';
 
 const Container = styled.li`
   min-height: 20em;
@@ -102,6 +105,7 @@ const ReplyForm = styled.div`
     }
 
     ::placeholder {
+      font-size: .8em;
       color: ${defaultTheme.colors.fourthText}
     }
   }
@@ -136,7 +140,17 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export default function SelectedReview({ review, handleClick }) {
+const Replies = styled.ul`
+  margin-top: .5em;
+`;
+
+const ErrorMessage = styled.strong`
+  font-size: .9em;
+  margin-right: 1em;
+  color: ${defaultTheme.colors.red};
+`;
+
+export default function SelectedReview({ review, replies, handleClick }) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { username } = useUserStore();
@@ -146,6 +160,8 @@ export default function SelectedReview({ review, handleClick }) {
   const getReviewStore = useGetReviewStore();
   const editReviewStore = useEditReviewStore();
   const deleteReviewStore = useDeleteReviewStore();
+  const createReplyStore = useCreateReplyStore();
+  const getReplyStore = useGetReplyStore();
 
   const handleModalOpen = () => {
     editReviewStore.setReview(review);
@@ -161,6 +177,25 @@ export default function SelectedReview({ review, handleClick }) {
     if (reviewId) {
       getOrderStore.clear();
       getReviewStore.fetchReviews({ productId: product.id, pageNumber: 1 });
+    }
+  };
+
+  const handleSubmitReply = async () => {
+    if (!username) {
+      return;
+    }
+
+    if (!createReplyStore.validate()) {
+      return;
+    }
+
+    const id = await createReplyStore.create({ reviewId: review.id });
+
+    if (id) {
+      const { reviews } = getReviewStore;
+      const reviewIds = reviews.reduce((acc, i) => [...acc, i.id], []);
+
+      await getReplyStore.fetchReplies({ reviewIds });
     }
   };
 
@@ -189,14 +224,45 @@ export default function SelectedReview({ review, handleClick }) {
             </RateCommentReply>
           </button>
           <Wrapper>
-            <span>댓글 0</span>
+            <span>
+              {`댓글 ${replies.filter((reply) => !reply.parent).length}`}
+            </span>
+            <Replies>
+              {replies.map((reviewReply) => (
+                <li key={reviewReply[0].id}>
+                  <ul>
+                    {reviewReply.map((reply, index) => (
+                      <Reply
+                        key={reply.id}
+                        reply={reply}
+                        isFirstReply={index === 0}
+                      />
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </Replies>
             <ReplyForm>
               <textarea
                 type="text"
                 placeholder={username ? '댓글' : '로그인이 필요합니다'}
                 readOnly={!username}
+                value={createReplyStore.reply.comment}
+                onChange={(e) => createReplyStore.change(e.target.value)}
               />
-              <SubmitButton type="button">작성</SubmitButton>
+              {createReplyStore.errors.create
+                ? (
+                  <ErrorMessage>
+                    {createReplyStore.errors.create}
+                  </ErrorMessage>
+                )
+                : null}
+              <SubmitButton
+                type="button"
+                onClick={handleSubmitReply}
+              >
+                작성
+              </SubmitButton>
             </ReplyForm>
           </Wrapper>
         </SubContainer>

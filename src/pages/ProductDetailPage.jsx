@@ -8,6 +8,7 @@ import useCartStore from '../hooks/useCartStore';
 import useOrderItemStore from '../hooks/useOrderItemStore';
 import useGetReviewStore from '../hooks/useGetReviewStore';
 import useGetOrderStore from '../hooks/useGetOrderStore';
+import useGetReplyStore from '../hooks/useGetReplyStore';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -15,8 +16,9 @@ export default function ProductDetailPage() {
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
   const cartStore = useCartStore();
-  const getReviewStore = useGetReviewStore();
   const getOrderStore = useGetOrderStore();
+  const getReviewStore = useGetReviewStore();
+  const getReplyStore = useGetReplyStore();
 
   const fetchProduct = async () => {
     await productStore.fetchProduct({ id });
@@ -32,13 +34,22 @@ export default function ProductDetailPage() {
     }
   };
 
-  const fetchReviews = async () => {
+  const fetchReplies = async ({ reviewIds }) => {
+    await getReplyStore.fetchReplies({ reviewIds });
+  };
+
+  const fetchReviewsAndReplies = async () => {
     await getReviewStore.fetchReviews({ productId: id, pageNumber: 1 });
+
+    const { reviews } = getReviewStore;
+    const reviewIds = reviews.reduce((acc, review) => [...acc, review.id], []);
+
+    await fetchReplies({ reviewIds });
   };
 
   useEffect(() => {
     fetchProduct();
-    fetchReviews();
+    fetchReviewsAndReplies();
 
     return () => {
       productStore.clear();

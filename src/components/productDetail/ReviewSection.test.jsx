@@ -1,13 +1,14 @@
 import {
-  cleanup,
-  fireEvent, render, screen, waitFor,
+  cleanup, fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
-import { getOrderStore } from '../../stores/GetOrderStore';
+
+import { userStore } from '../../stores/UserStore';
 import { productStore } from '../../stores/ProductStore';
+import { getOrderStore } from '../../stores/GetOrderStore';
 import { getReviewStore } from '../../stores/GetReviewStore';
+import { getReplyStore } from '../../stores/GetReplyStore';
 
 import ReviewSection from './ReviewSection';
-import { userStore } from '../../stores/UserStore';
 
 const navigate = jest.fn();
 
@@ -31,36 +32,65 @@ describe('Review', () => {
     getOrderStore.clear();
   });
 
-  context('상품의 구매평이 없을 경우', () => {
-    it('등록된 구매평이 없습니다 메시지를 볼 수 있다', async () => {
-      const productId = 2;
+  describe('구매평', () => {
+    context('상품의 구매평이 없을 경우', () => {
+      it('등록된 구매평이 없습니다 메시지를 볼 수 있다', async () => {
+        const productId = 2;
 
-      await getReviewStore.fetchReviews({ productId });
+        await getReviewStore.fetchReviews({ productId });
 
-      renderReviewSection();
+        renderReviewSection();
 
-      const { reviews } = getReviewStore;
+        const { reviews } = getReviewStore;
 
-      expect(reviews).toHaveLength(0);
+        expect(reviews).toHaveLength(0);
 
-      screen.getByText('등록된 구매평이 없습니다.');
+        screen.getByText('등록된 구매평이 없습니다.');
+      });
+    });
+
+    context('상품의 구매평이 있을 경우', () => {
+      it('등록된 구매평을 볼 수 있다', async () => {
+        const productId = 1;
+
+        await productStore.fetchProduct({ id: productId });
+        await getReviewStore.fetchReviews({ productId });
+
+        renderReviewSection();
+
+        const { reviews } = getReviewStore;
+
+        expect(reviews).toHaveLength(2);
+
+        screen.getByText('좋은 상품입니다');
+      });
     });
   });
 
-  context('상품의 구매평이 있을 경우', () => {
-    it('등록된 구매평을 볼 수 있다', async () => {
-      const productId = 1;
+  describe('구매평 댓글', () => {
+    context('구매평에 댓글이 있는 경우', () => {
+      it('댓글의 갯수를 볼 수 있다', async () => {
+        const productId = 3;
 
-      await productStore.fetchProduct({ id: productId });
-      await getReviewStore.fetchReviews({ productId });
+        await productStore.fetchProduct({ id: productId });
+        await getReviewStore.fetchReviews({ productId });
 
-      renderReviewSection();
+        const { reviews } = getReviewStore;
 
-      const { reviews } = getReviewStore;
+        const reviewIds = reviews.reduce(
+          (acc, review) => [...acc, review.id],
+          [],
+        );
 
-      expect(reviews).toHaveLength(2);
+        await getReplyStore.fetchReplies({ reviewIds });
 
-      screen.getByText('좋은 상품입니다');
+        renderReviewSection();
+
+        expect(reviews).toHaveLength(2);
+
+        screen.getByText('좋은 상품입니다');
+        screen.getByText('댓글 1');
+      });
     });
   });
 

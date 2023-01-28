@@ -218,6 +218,42 @@ const server = setupServer(
       }));
     }
 
+    if (productId === '3') {
+      return res(
+        ctx.json({
+          reviews: [
+            {
+              id: 3,
+              productId: 3,
+              reviewer: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              rate: 5,
+              comment: '좋은 상품입니다',
+              imageUrl: '1',
+              cratedAt: '2022-01-15 12:45',
+            },
+            {
+              id: 4,
+              productId: 3,
+              reviewer: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              rate: 5,
+              comment: '매우 좋은 상품입니다',
+              cratedAt: '2022-01-15 12:45',
+            },
+          ],
+          page: {
+            current: 1,
+            total: 1,
+          },
+        }),
+      );
+    }
+
     if (photoReviews === 'true') {
       return res(
         ctx.json({
@@ -320,6 +356,71 @@ const server = setupServer(
       url: 'fileUrl',
     }));
   }),
+  rest.get(`${baseUrl}/replies`, async (req, res, ctx) => {
+    const reviewIds = req.url.searchParams.get('reviewIds').split(',');
+
+    if (reviewIds[0] === '3' && reviewIds[1] === '4') {
+      return res(
+        ctx.json({
+          replies: [
+            {
+              id: 1,
+              parent: null,
+              reviewId: 3,
+              comment: '정말 좋아보여요',
+              replier: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              createdAt: '2022-01-15 12:45',
+            },
+          ],
+        }),
+      );
+    }
+
+    return res(
+      ctx.status(204),
+    );
+  }),
+  rest.post(`${baseUrl}/replies`, async (req, res, ctx) => {
+    const { reviewId } = await req.json();
+
+    if (reviewId === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({
+        id: 1,
+      }),
+    );
+  }),
+  rest.patch(`${baseUrl}/replies`, async (req, res, ctx) => {
+    const { id } = await req.json();
+
+    if (id === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({
+        id,
+      }),
+    );
+  }),
+  rest.delete(`${baseUrl}/replies/1`, async (req, res, ctx) => res(
+    ctx.json({
+      id: 1,
+    }),
+  )),
+  rest.delete(`${baseUrl}/replies/9999999`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
 );
 
 export default server;

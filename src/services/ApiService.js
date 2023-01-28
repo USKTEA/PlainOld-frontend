@@ -177,6 +177,41 @@ export default class ApiService {
 
     return { url: data.url };
   }
+
+  async fetchReplies({ reviewIds }) {
+    const { data, status } = await this.instance.get(
+      '/replies',
+      {
+        params: {
+          reviewIds: reviewIds.join(','),
+        },
+      },
+    );
+
+    if (status === 204) {
+      return { replies: [] };
+    }
+
+    return data;
+  }
+
+  async createReply(reply) {
+    const { data } = await this.instance.post('/replies', reply);
+
+    return data;
+  }
+
+  async editReply({ toEdit }) {
+    const { data } = await this.instance.patch('/replies', toEdit);
+
+    return data;
+  }
+
+  async deleteReply(id) {
+    const { data } = await this.instance.delete(`/replies/${id}`);
+
+    return { replyId: data.id };
+  }
 }
 
 export const apiService = new ApiService();

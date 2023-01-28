@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import defaultTheme from '../../styles/defaultTheme';
 
@@ -56,7 +57,13 @@ const RateCommentReply = styled.div`
   }
 `;
 
-export default function Review({ review, handleClick }) {
+const Reply = styled.span`
+  margin-top: .5em;
+  font-weight: 700;
+  color: ${defaultTheme.colors.primaryText};
+`;
+
+export default function Review({ review, replies, handleClick }) {
   return (
     <Container className="review">
       <button
@@ -78,8 +85,12 @@ export default function Review({ review, handleClick }) {
                 width="45"
               />
             ) : null}
-          {review.replyCount
-            ? <p>{`댓글 ${review.replyCount}`}</p>
+          {replies.length
+            ? (
+              <Reply>
+                {`댓글 ${replies.filter((reply) => !reply.parent).length}`}
+              </Reply>
+            )
             : null}
         </RateCommentReply>
         <ReviewInformation>
