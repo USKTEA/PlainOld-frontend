@@ -22,7 +22,7 @@ const context = describe;
 
 const setRef = () => jest.fn();
 
-describe('Review', () => {
+describe('ReviewSection', () => {
   const renderReviewSection = () => render(<ReviewSection setRef={setRef} />);
 
   beforeEach(() => {

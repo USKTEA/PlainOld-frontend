@@ -123,6 +123,22 @@ const SubmitButton = styled.button`
   background-color: ${defaultTheme.colors.secondary};
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+
+const CancelButton = styled.button`
+  font-size: .8em;
+  font-weight: 300;
+  margin-top: 1em;
+  height: 2.5em;
+  width: 4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${defaultTheme.colors.primaryText};
+`;
+
 const ErrorMessage = styled.strong`
   font-size: .9em;
   margin-right: 1em;
@@ -147,6 +163,10 @@ export default function Reply({ reply, isFirstReply }) {
     createReplyStore.setToReply({ replyId: reply.id });
   };
 
+  const handleCancelReply = () => {
+    createReplyStore.removeToReply();
+  };
+
   const handleSubmitReply = async () => {
     if (!createReplyStore.validateReplyToReply()) {
       return;
@@ -165,7 +185,9 @@ export default function Reply({ reply, isFirstReply }) {
   };
 
   const handleSelectToEdit = () => {
-    editReplyStore.setToEdit({ id: reply.id, reviewId: reply.reviewId, comment: reply.comment });
+    editReplyStore.setToEdit(
+      { id: reply.id, reviewId: reply.reviewId, comment: reply.comment },
+    );
   };
 
   const handleDeleteReply = async () => {
@@ -249,12 +271,20 @@ export default function Reply({ reply, isFirstReply }) {
                         </ErrorMessage>
                       )
                       : null}
-                    <SubmitButton
-                      type="button"
-                      onClick={handleSubmitReply}
-                    >
-                      작성
-                    </SubmitButton>
+                    <ButtonContainer>
+                      <CancelButton
+                        type="button"
+                        onClick={handleCancelReply}
+                      >
+                        취소
+                      </CancelButton>
+                      <SubmitButton
+                        type="button"
+                        onClick={handleSubmitReply}
+                      >
+                        작성
+                      </SubmitButton>
+                    </ButtonContainer>
                   </ReplyForm>
                 )
                 : null}

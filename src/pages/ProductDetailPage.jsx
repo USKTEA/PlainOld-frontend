@@ -9,6 +9,7 @@ import useOrderItemStore from '../hooks/useOrderItemStore';
 import useGetReviewStore from '../hooks/useGetReviewStore';
 import useGetOrderStore from '../hooks/useGetOrderStore';
 import useGetReplyStore from '../hooks/useGetReplyStore';
+import useGetInquiryStore from '../hooks/useGetInquiryStore';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export default function ProductDetailPage() {
   const getOrderStore = useGetOrderStore();
   const getReviewStore = useGetReviewStore();
   const getReplyStore = useGetReplyStore();
+  const getInquiryStore = useGetInquiryStore();
 
   const fetchProduct = async () => {
     await productStore.fetchProduct({ id });
@@ -47,9 +49,14 @@ export default function ProductDetailPage() {
     await fetchReplies({ reviewIds });
   };
 
+  const fetchInquiries = async () => {
+    await getInquiryStore.fetchInquiries({ productId: id, pageNumber: 1 });
+  };
+
   useEffect(() => {
     fetchProduct();
     fetchReviewsAndReplies();
+    fetchInquiries();
 
     return () => {
       productStore.clear();

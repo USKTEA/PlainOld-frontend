@@ -130,7 +130,7 @@ export default class Cart {
     const items = this.items.get(name);
 
     if (items.length === 1) {
-      return this;
+      return this.deleteItem({ name });
     }
 
     const index = items.findIndex((i) => i.id === id);

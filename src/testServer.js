@@ -421,6 +421,50 @@ const server = setupServer(
   rest.delete(`${baseUrl}/replies/9999999`, async (req, res, ctx) => res(
     ctx.status(400),
   )),
+  rest.get(`${baseUrl}/inquiries`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '1') {
+      return res(
+        ctx.json({
+          inquiries: [
+            {
+              id: 1,
+              productId: 1,
+              status: 'PENDING',
+              type: 'PUBLIC',
+              title: '사이즈 문의드립니다',
+              content: '이렇게 입으면 클까요',
+              querist: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              createdAt: '2023-01-29 14:32',
+            },
+            {
+              id: 2,
+              productId: 1,
+              status: 'FINISHED',
+              type: 'SECRET',
+              title: '비밀글입니다.',
+              content: '비밀글입니다.',
+              querist: {
+                username: 'rlatjrxo1234@gmail.com',
+                nickname: '안김뚜루',
+              },
+              createdAt: '2023-01-30 14:32',
+            },
+          ],
+          page: {
+            current: 1,
+            total: 1,
+          },
+        }),
+      );
+    }
+
+    return res(ctx.status(204));
+  }),
 );
 
 export default server;

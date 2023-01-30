@@ -9,9 +9,9 @@ import useGetReviewStore from '../../hooks/useGetReviewStore';
 import useProductStore from '../../hooks/useProductStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 
-import PagenationBlock from './PagenationBlock';
 import WriteReviewModal from './WriteReviewModal';
 import Reviews from './Reviews';
+import ReviewPagination from './ReviewPagination';
 
 const Container = styled.section`
   min-height: 30em;
@@ -197,7 +197,7 @@ export default function ReviewSection({ setRef }) {
             ? (
               <ReviewContainer>
                 <Reviews />
-                <PagenationBlock />
+                <ReviewPagination />
               </ReviewContainer>
             )
             : (

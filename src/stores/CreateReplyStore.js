@@ -72,6 +72,22 @@ export default class CreateReplyStore extends Store {
     this.publish();
   }
 
+  removeToReply() {
+    this.toReply = null;
+
+    this.replyToReply = {
+      reviewId: null,
+      parent: null,
+      comment: '',
+    };
+
+    this.errors = {
+      create: '',
+    };
+
+    this.publish();
+  }
+
   change(comment) {
     this.reply = { ...this.reply, comment };
 

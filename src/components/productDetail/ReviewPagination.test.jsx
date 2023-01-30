@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import PagenationBlock from './PagenationBlock';
+import ReviewPagination from './ReviewPagination';
 
 const fetchReviews = jest.fn();
 jest.mock('../../hooks/useGetReviewStore', () => () => ({
@@ -19,19 +19,18 @@ jest.mock('../../hooks/useGetReviewStore', () => () => ({
     page: 1,
     total: 1,
   },
-
   fetchReviews,
 }));
 
-describe('PagenationBlock', () => {
+describe('ReviewPagination', () => {
   it('ReviewStore에 있는 page의 totalPage만큼 페이지를 보여준다', () => {
-    const { container } = render(<PagenationBlock />);
+    const { container } = render(<ReviewPagination />);
 
     expect(container.getElementsByClassName('page').length).toBe(1);
   });
 
   it('페이지에 해당하는 버튼을 누르면 해당 페이지에 있는 리뷰목록을 호출하는 함수가 실행된다', () => {
-    render(<PagenationBlock />);
+    render(<ReviewPagination />);
 
     fireEvent.click(screen.getByRole('button', { name: 1 }));
 
