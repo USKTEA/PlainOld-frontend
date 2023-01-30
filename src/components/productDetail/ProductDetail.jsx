@@ -19,6 +19,7 @@ import ErrorMessage from '../ui/ErrorMessage';
 import ProductDescription from './ProductDescription';
 import ScrollCommand from './ScrollCommand';
 import ReviewSection from './ReviewSection';
+import QnASection from './QnASection';
 
 const Container = styled.div`
 `;
@@ -117,10 +118,6 @@ const Detail = styled.section`
   height: 30em;
 `;
 
-const QnA = styled.section`
-  height: 30em;
-`;
-
 export default function ProductDetail() {
   const navigate = useNavigate();
   const focusTarget = useRef([]);
@@ -172,8 +169,18 @@ export default function ProductDetail() {
   };
 
   const handleSetRef = (element) => (name) => {
-    if (name === 'Review') {
+    switch (name) {
+    case 'Review':
       focusTarget.current[1] = element;
+      break;
+
+    case 'QnA':
+      focusTarget.current[2] = element;
+      break;
+
+    default:
+      focusTarget.current[0] = element;
+      break;
     }
   };
 
@@ -252,11 +259,9 @@ export default function ProductDetail() {
         <ReviewSection
           setRef={handleSetRef}
         />
-        <QnA
-          ref={(element) => { focusTarget.current[2] = element; }}
-        >
-          상품문의
-        </QnA>
+        <QnASection
+          setRef={handleSetRef}
+        />
       </InformationSection>
       {modalOpen && (
         <Modal

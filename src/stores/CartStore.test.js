@@ -571,7 +571,7 @@ describe('CartStore', () => {
     });
 
     context('name에 해당하는 item의 옵션이 1개일 경우', () => {
-      it('옵션은 삭제되지 않는다', () => {
+      it('상품 전체가 삭제된다', () => {
         const name = 'T=Shirt';
         const largeBlack = new Item({
           id: 1,
@@ -597,7 +597,7 @@ describe('CartStore', () => {
 
         cart = cartStore.cart;
 
-        expect(cart.items.get(name).length).toBe(1);
+        expect(cart.items.get(name)).toBeFalsy();
       });
     });
   });

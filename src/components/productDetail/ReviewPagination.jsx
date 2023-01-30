@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import useReviewStore from '../../hooks/useGetReviewStore';
 
-const Pagenation = styled.div`
+const Pagination = styled.div`
   margin-top: 1em;
 
   button {
@@ -11,7 +11,7 @@ const Pagenation = styled.div`
   }
 `;
 
-export default function PagenationBlock() {
+export default function ReviewPagination() {
   const reviewStore = useReviewStore();
 
   const { reviews, page } = reviewStore;
@@ -19,7 +19,7 @@ export default function PagenationBlock() {
   const { productId } = reviews[0];
 
   return (
-    <Pagenation>
+    <Pagination>
       {Array.from({ length: page.total }, (_, index) => index + 1)
         .map((number) => (
           <li key={number}>
@@ -32,6 +32,6 @@ export default function PagenationBlock() {
             </button>
           </li>
         ))}
-    </Pagenation>
+    </Pagination>
   );
 }

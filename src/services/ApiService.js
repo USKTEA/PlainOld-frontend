@@ -212,6 +212,18 @@ export default class ApiService {
 
     return { replyId: data.id };
   }
+
+  async fetchInquiries({ productId, pageNumber }) {
+    const { data, status } = await this.instance.get(
+      `/inquiries?productId=${productId}&pageNumber=${pageNumber}`,
+    );
+
+    if (status === 204) {
+      return { inquiries: [] };
+    }
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

@@ -213,7 +213,7 @@ describe('Cart', () => {
 
   describe('옵션 삭제', () => {
     context('선텍된 아이템의 옵션이 하나 밖에 없을 경우', () => {
-      it('옵션은 삭제되지 않는다', () => {
+      it('장바구니에서 상품이 삭제된다', () => {
         const largeBlack = new Item({
           id: 1,
           productId: 1,
@@ -238,7 +238,7 @@ describe('Cart', () => {
           container.getElementsByClassName('option-delete-button')[0],
         );
 
-        expect(screen.getAllByText('T-Shirt').length).toBeTruthy();
+        expect(screen.queryAllByText('T-Shirt').length).toBeFalsy();
       });
     });
 

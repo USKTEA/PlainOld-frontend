@@ -442,7 +442,7 @@ describe('Cart', () => {
     });
 
     context('Cart에 있는 item 중 name과 일치하는 item의 옵션이 1개인 경우', () => {
-      it('option을 삭제하지 않는다', () => {
+      it('상품을 삭제한다', () => {
         const name = 'T-Shirt';
 
         const largeBlack = new Item({
@@ -465,7 +465,7 @@ describe('Cart', () => {
 
         cart = cart.deleteOption({ id: 1, name });
 
-        expect(cart.items.get(name).length).toBe(1);
+        expect(cart.items.get(name)).toBeFalsy();
       });
     });
   });
