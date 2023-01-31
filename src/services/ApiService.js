@@ -224,6 +224,12 @@ export default class ApiService {
 
     return data;
   }
+
+  async createInquiry({ inquiry }) {
+    const { data } = await this.instance.post('/inquiries', inquiry);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

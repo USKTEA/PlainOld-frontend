@@ -465,6 +465,19 @@ const server = setupServer(
 
     return res(ctx.status(204));
   }),
+  rest.post(`${baseUrl}/inquiries`, async (req, res, ctx) => {
+    const inquiry = await req.json();
+
+    if (inquiry.productId === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({ id: 1 }),
+    );
+  }),
 );
 
 export default server;

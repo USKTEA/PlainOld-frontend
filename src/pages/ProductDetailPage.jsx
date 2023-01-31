@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
-import ProductDetail from '../components/productDetail/ProductDetail';
+import { useLocalStorage } from 'usehooks-ts';
 
 import useProductStore from '../hooks/useProductStore';
 import useCartStore from '../hooks/useCartStore';
@@ -11,8 +10,11 @@ import useGetOrderStore from '../hooks/useGetOrderStore';
 import useGetReplyStore from '../hooks/useGetReplyStore';
 import useGetInquiryStore from '../hooks/useGetInquiryStore';
 
+import ProductDetail from '../components/productDetail/ProductDetail';
+
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const [accessToken] = useLocalStorage('accessToken', '');
 
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
@@ -64,7 +66,7 @@ export default function ProductDetailPage() {
       orderItemStore.reset();
       cartStore.clearError();
     };
-  }, []);
+  }, [accessToken]);
 
   return (<ProductDetail />);
 }
