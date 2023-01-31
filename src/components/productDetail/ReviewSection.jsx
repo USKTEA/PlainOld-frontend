@@ -14,7 +14,7 @@ import Reviews from './Reviews';
 import ReviewPagination from './ReviewPagination';
 
 const Container = styled.section`
-  min-height: 30em;
+  min-height: 25em;
 `;
 
 const Wrapper = styled.div`
