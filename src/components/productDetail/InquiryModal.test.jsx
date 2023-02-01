@@ -277,4 +277,25 @@ describe('InquiryModal', () => {
       });
     });
   });
+
+  describe('상품문의 삭제', () => {
+    context('삭제 버튼을 클릭했을 경우', () => {
+      it('상품문의는 삭제된다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+        await userStore.fetchUserInformation();
+
+        render(<InquiryModal
+          inquiry={myInquiry}
+          setInquiry={setInquiry}
+        />);
+
+        fireEvent.click(screen.getByRole('button', { name: '삭제' }));
+
+        await waitFor(() => {
+          expect(setInquiry).toBeCalledWith(null);
+        });
+      });
+    });
+  });
 });

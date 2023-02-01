@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
+import useDeleteInquiryStore from '../../hooks/useDeleteInquiryStore';
 import useEditInquiryStore from '../../hooks/useEditInquiryStore';
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 
@@ -71,6 +72,13 @@ const SubWrapper = styled.div`
     color: ${defaultTheme.colors.sixth};
     background-color: white;
     cursor: pointer;
+  }
+
+  em {
+    font-size: .8em;
+    vertical-align: middle;
+    margin-left: 1em;
+    color: red;
   }
 `;
 
@@ -241,6 +249,7 @@ export default function InquiryModal({ inquiry, setInquiry }) {
 
   const getInquiryStore = useGetInquiryStore();
   const editInquiryStore = useEditInquiryStore();
+  const deleteInquiryStore = useDeleteInquiryStore();
   const { username, role } = useUserStore();
 
   const handler = ({ target }) => {
@@ -249,12 +258,24 @@ export default function InquiryModal({ inquiry, setInquiry }) {
     }
   };
 
+  const handleCancelEdit = () => {
+    editInquiryStore.clear();
+  };
+
   const handleSetInquiry = () => {
     editInquiryStore.setInquiry({ id: inquiry.id, title: inquiry.title, content: inquiry.content });
   };
 
-  const handleCancelEdit = () => {
-    editInquiryStore.clear();
+  const handleDeleteInquiry = async () => {
+    const id = await deleteInquiryStore.delete({ inquiryId: inquiry.id });
+
+    if (id) {
+      await getInquiryStore.fetchInquiries(
+        { productId: inquiry.productId, pageNumber: 1 },
+      );
+
+      setInquiry(null);
+    }
   };
 
   const handleSubmitInquiry = async () => {
@@ -268,6 +289,7 @@ export default function InquiryModal({ inquiry, setInquiry }) {
       await getInquiryStore.fetchInquiries(
         { productId: inquiry.productId, pageNumber: 1 },
       );
+
       setInquiry(null);
     }
   };
@@ -277,6 +299,7 @@ export default function InquiryModal({ inquiry, setInquiry }) {
 
     return () => {
       editInquiryStore.clear();
+      deleteInquiryStore.clear();
       document.removeEventListener('mousedown', handler);
     };
   }, []);
@@ -313,9 +336,17 @@ export default function InquiryModal({ inquiry, setInquiry }) {
                       )}
                     <button
                       type="button"
+                      onClick={handleDeleteInquiry}
                     >
                       삭제
                     </button>
+                    {deleteInquiryStore.errors.delete
+                      ? (
+                        <em>
+                          {deleteInquiryStore.errors.delete}
+                        </em>
+                      )
+                      : null}
                   </>
                 ) : null}
             </div>

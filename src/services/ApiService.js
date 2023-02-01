@@ -239,6 +239,12 @@ export default class ApiService {
 
     return data;
   }
+
+  async deleteInquiry(id) {
+    const { data } = await this.instance.delete(`/inquiries/${id}`);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();
