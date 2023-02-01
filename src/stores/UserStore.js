@@ -6,6 +6,7 @@ export default class UserStore extends Store {
     super(props);
 
     this.username = null;
+    this.role = null;
 
     this.errors = {
       login: '',
@@ -32,9 +33,10 @@ export default class UserStore extends Store {
 
   async fetchUserInformation() {
     try {
-      const { username } = await apiService.fetchUserInformation();
+      const { username, role } = await apiService.fetchUserInformation();
 
       this.username = username;
+      this.role = role;
     } catch (error) {
       localStorage.removeItem('accessToken');
     }
@@ -42,6 +44,8 @@ export default class UserStore extends Store {
 
   clear() {
     this.username = null;
+    this.role = null;
+
     this.errors = {
       login: '',
     };

@@ -110,6 +110,10 @@ const ReplyForm = styled.div`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+
 const SubmitButton = styled.button`
   font-size: .8em;
   font-weight: 300;
@@ -121,10 +125,6 @@ const SubmitButton = styled.button`
   justify-content: center;
   color: white;
   background-color: ${defaultTheme.colors.secondary};
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
 `;
 
 const CancelButton = styled.button`

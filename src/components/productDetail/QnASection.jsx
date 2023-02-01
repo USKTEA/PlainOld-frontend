@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
+
+import styled from 'styled-components';
 
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 
@@ -79,7 +80,7 @@ export default function QnASection({ setRef }) {
 
   const getInquiryStore = useGetInquiryStore();
 
-  const { inquiries } = getInquiryStore;
+  const { inquiries, page } = getInquiryStore;
 
   const handleOpenInquiryModal = () => {
     if (!accessToken) {
@@ -96,7 +97,7 @@ export default function QnASection({ setRef }) {
       >
         <Title>
           Q&A
-          <span>{` (${inquiries.length})`}</span>
+          <span>{` (${page ? page.counts : 0})`}</span>
         </Title>
         <Message>구매하시려는 상품에 대해 궁금한 점이 있으면 문의주세요.</Message>
         <ButtonWrapper>

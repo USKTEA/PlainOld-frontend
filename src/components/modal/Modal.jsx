@@ -7,7 +7,7 @@ import defaultTheme from '../../styles/defaultTheme';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 150vh;
+  height: 150em;
   display: flex;
   top: -10em;
   left: -10em;
@@ -20,7 +20,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   top: 50%;
   left: 50%;
-  transform: translate(-0%, -50%);
+  transform: translate(-0%, -300%);
   height: 10em;
   width: 18em;
   background-color: white;

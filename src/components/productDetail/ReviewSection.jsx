@@ -124,7 +124,7 @@ export default function ReviewSection({ setRef }) {
   const getReviewStore = useGetReviewStore();
 
   const {
-    reviews, loading, errors, fetchPhotoReviewsOnly,
+    reviews, page, loading, errors, fetchPhotoReviewsOnly,
   } = getReviewStore;
 
   const { product } = productStore;
@@ -165,7 +165,7 @@ export default function ReviewSection({ setRef }) {
         <Wrapper>
           <Title>
             구매평
-            <span>{` (${reviews.length})`}</span>
+            <span>{` (${page ? page.counts : 0})`}</span>
           </Title>
           {getOrderStore.errors.cantWriteReview
             ? <ErrorMessage>{getOrderStore.errors.cantWriteReview}</ErrorMessage>
