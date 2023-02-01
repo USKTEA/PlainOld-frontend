@@ -19,7 +19,7 @@ describe('GetInquiryStore', () => {
 
       inquiries = getInquiryStore.inquiries;
 
-      expect(inquiries).toHaveLength(2);
+      expect(inquiries).toHaveLength(3);
     });
   });
 

@@ -10,7 +10,6 @@ import useCartStore from '../../hooks/useCartStore';
 
 import defaultTheme from '../../styles/defaultTheme';
 
-import numberFormat from '../../utils/numberFormat';
 import Modal from '../modal/Modal';
 import SizeSelection from './SizeSelection';
 import ColorSelection from './ColorSelection';
@@ -21,8 +20,7 @@ import ScrollCommand from './ScrollCommand';
 import ReviewSection from './ReviewSection';
 import QnASection from './QnASection';
 
-const Container = styled.div`
-`;
+import numberFormat from '../../utils/numberFormat';
 
 const ProductSection = styled.div`
   width: 50%;
@@ -34,9 +32,6 @@ const ProductSection = styled.div`
   display: flex;
   justify-content: center;
   color: ${defaultTheme.colors.primary};
-`;
-
-const InformationSection = styled.div`
 `;
 
 const Wrapper = styled.div`
@@ -199,7 +194,7 @@ export default function ProductDetail() {
   const { name, image, description } = product;
 
   return (
-    <Container>
+    <div>
       <ProductSection>
         <Image
           src={`/assets/images/${image.productImageUrls[0]}.png`}
@@ -249,7 +244,7 @@ export default function ProductDetail() {
           </MessageWrapper>
         </Wrapper>
       </ProductSection>
-      <InformationSection>
+      <div>
         <ScrollCommand scrollTo={handleScrollTo} />
         <Detail
           ref={(element) => { focusTarget.current[0] = element; }}
@@ -262,7 +257,7 @@ export default function ProductDetail() {
         <QnASection
           setRef={handleSetRef}
         />
-      </InformationSection>
+      </div>
       {modalOpen && (
         <Modal
           setModalOpen={setModalOpen}
@@ -272,6 +267,6 @@ export default function ProductDetail() {
           secondButton="장바구니"
         />
       )}
-    </Container>
+    </div>
   );
 }

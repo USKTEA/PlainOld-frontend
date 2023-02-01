@@ -14,7 +14,7 @@ import Rating from './Rating';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 250em;
+  height: 150em;
   top: -10em;
   left: -10em;
   display: flex;
@@ -27,7 +27,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   top: 50%;
   left: 50%;
-  transform: translate(-0%, -50%);
+  transform: translate(-0%, 50%);
   height: 38em;
   width: 24em;
   display: flex;

@@ -34,9 +34,19 @@ const server = setupServer(
       );
     }
 
+    if (accessToken === 'ADMIN') {
+      return res(
+        ctx.json({
+          username: 'admin@admin.com',
+          role: 'ADMIN',
+        }),
+      );
+    }
+
     return res(
       ctx.json({
         username: 'tjrxo1234@gmail.com',
+        role: 'MEMBER',
       }),
     );
   }),
@@ -49,10 +59,6 @@ const server = setupServer(
     ],
   }))),
   rest.get(`${baseUrl}/products`, async (req, res, ctx) => res(ctx.json({
-    page: {
-      current: 1,
-      total: 1,
-    },
     products: [
       {
         id: 1,
@@ -62,6 +68,11 @@ const server = setupServer(
         thumbnailUrl: 1,
       },
     ],
+    page: {
+      current: 1,
+      total: 1,
+      counts: 1,
+    },
   }))),
   rest.get(`${baseUrl}/products/1`, async (req, res, ctx) => res(ctx.json(
     {
@@ -214,6 +225,7 @@ const server = setupServer(
         page: {
           current: 1,
           total: 1,
+          counts: 0,
         },
       }));
     }
@@ -249,6 +261,7 @@ const server = setupServer(
           page: {
             current: 1,
             total: 1,
+            counts: 2,
           },
         }),
       );
@@ -274,6 +287,7 @@ const server = setupServer(
           page: {
             current: 1,
             total: 1,
+            counts: 1,
           },
         }),
       );
@@ -309,6 +323,7 @@ const server = setupServer(
         page: {
           current: 1,
           total: 1,
+          counts: 2,
         },
       }),
     );
@@ -444,6 +459,19 @@ const server = setupServer(
             {
               id: 2,
               productId: 1,
+              status: 'PENDING',
+              type: 'PUBLIC',
+              title: '색상 문의드립니다',
+              content: '이런 색상인가요',
+              querist: {
+                username: 'rlatjrxo1234@gmail.com',
+                nickname: '안김뚜루',
+              },
+              createdAt: '2023-01-29 15:32',
+            },
+            {
+              id: 3,
+              productId: 1,
               status: 'FINISHED',
               type: 'SECRET',
               title: '비밀글입니다.',
@@ -458,6 +486,7 @@ const server = setupServer(
           page: {
             current: 1,
             total: 1,
+            counts: 3,
           },
         }),
       );
@@ -475,7 +504,24 @@ const server = setupServer(
     }
 
     return res(
-      ctx.json({ id: 1 }),
+      ctx.json(
+        { id: 1 },
+      ),
+    );
+  }),
+  rest.patch(`${baseUrl}/inquiries`, async (req, res, ctx) => {
+    const inquiry = await req.json();
+
+    if (inquiry.id === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json(
+        { id: 1 },
+      ),
     );
   }),
 );

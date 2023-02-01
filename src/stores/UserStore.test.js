@@ -41,9 +41,10 @@ describe('UserStore', () => {
 
         await userStore.fetchUserInformation();
 
-        const { username } = userStore;
+        const { username, role } = userStore;
 
         expect(username).toBe('tjrxo1234@gmail.com');
+        expect(role).toBe('MEMBER');
       });
     });
 

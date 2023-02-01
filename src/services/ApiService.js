@@ -105,7 +105,10 @@ export default class ApiService {
   async fetchUserInformation() {
     const { data } = await this.instance.get('/users/me');
 
-    return { username: data.username };
+    return {
+      username: data.username,
+      role: data.role,
+    };
   }
 
   async fetchCartItem() {
@@ -227,6 +230,12 @@ export default class ApiService {
 
   async createInquiry({ inquiry }) {
     const { data } = await this.instance.post('/inquiries', inquiry);
+
+    return data;
+  }
+
+  async editInquiry({ inquiry }) {
+    const { data } = await this.instance.patch('/inquiries', inquiry);
 
     return data;
   }
