@@ -41,13 +41,13 @@ describe('OrderPage', () => {
     });
   });
 
-  // context('로그인을 하지 않았을 경우', () => {
-  //   it('로그인 화면으로 이동한다', () => {
-  //     localStorage.setItem('accessToken', JSON.stringify(''));
+  context('로그인을 하지 않았을 경우', () => {
+    it('로그인 화면으로 이동한다', () => {
+      localStorage.setItem('accessToken', JSON.stringify(''));
 
-  //     renderOrderPage();
+      renderOrderPage();
 
-  //     expect(navigate).toBeCalledWith('/login');
-  //   });
-  // });
+      expect(navigate).toBeCalledWith('/login');
+    });
+  });
 });

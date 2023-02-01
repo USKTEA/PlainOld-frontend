@@ -524,6 +524,12 @@ const server = setupServer(
       ),
     );
   }),
+  rest.delete(`${baseUrl}/inquiries/1`, async (req, res, ctx) => res(
+    ctx.json({ id: 1 }),
+  )),
+  rest.delete(`${baseUrl}/inquiries/9999999`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
 );
 
 export default server;

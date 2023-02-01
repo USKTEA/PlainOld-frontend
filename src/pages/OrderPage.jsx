@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import { useNavigate } from 'react-router-dom';
 
 import useOrderFromStore from '../hooks/useOrderFomStore';
 import useOrderItemStore from '../hooks/useOrderItemStore';
@@ -7,8 +8,8 @@ import useOrderItemStore from '../hooks/useOrderItemStore';
 import OrderForm from '../components/orderForm/OrderForm';
 
 export default function OrderPage() {
-  // const navigate = useNavigate();
-  // const [accessToken] = useLocalStorage('accessToken', '');
+  const navigate = useNavigate();
+  const [accessToken] = useLocalStorage('accessToken', '');
   const [orderItems] = useLocalStorage('orderItems', '');
 
   const orderItemStore = useOrderItemStore();
@@ -25,11 +26,11 @@ export default function OrderPage() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigate('/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!accessToken) {
+      navigate('/login');
+    }
+  }, []);
 
   return (<OrderForm />);
 }
