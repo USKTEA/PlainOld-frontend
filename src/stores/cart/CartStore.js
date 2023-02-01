@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import Store from './Store';
-import Cart from '../models/Cart';
-import Item from '../models/Item';
+import Store from '../Store';
+import Cart from '../../models/Cart';
+import Item from '../../models/Item';
 
 export default class CartStore extends Store {
   constructor() {

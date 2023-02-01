@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ThemeProvider } from 'styled-components';
 
-import { orderFormStore } from '../../stores/OrderFormStore';
+import { orderFormStore } from '../../stores/order/OrderFormStore';
 
 import ShippingInformation from './ShippingInformation';
 

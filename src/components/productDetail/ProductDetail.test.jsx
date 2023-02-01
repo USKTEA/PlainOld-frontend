@@ -3,9 +3,9 @@ import {
 } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 
-import { orderItemStore } from '../../stores/OrderItemStore';
-import { productStore } from '../../stores/ProductStore';
-import { cartStore } from '../../stores/CartStore';
+import { orderItemStore } from '../../stores/order/OrderItemStore';
+import { productStore } from '../../stores/product/ProductStore';
+import { cartStore } from '../../stores/cart/CartStore';
 
 import ProductDetail from './ProductDetail';
 

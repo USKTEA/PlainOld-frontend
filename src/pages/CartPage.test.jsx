@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { cartStore } from '../stores/CartStore';
+import { cartStore } from '../stores/cart/CartStore';
 
 import Item from '../models/Item';
 

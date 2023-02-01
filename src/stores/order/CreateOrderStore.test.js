@@ -1,4 +1,4 @@
-import OrderSpecification from '../models/OrderSpecification';
+import OrderSpecification from '../../models/OrderSpecification';
 import CreateOrderStore from './CreateOrderStore';
 
 const context = describe;

@@ -2,8 +2,8 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { orderFormStore } from '../../stores/OrderFormStore';
-import { orderItemStore } from '../../stores/OrderItemStore';
+import { orderFormStore } from '../../stores/order/OrderFormStore';
+import { orderItemStore } from '../../stores/order/OrderItemStore';
 
 import Agreements from './Agreements';
 

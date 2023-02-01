@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { productStore } from '../../stores/ProductStore';
+import { productStore } from '../../stores/product/ProductStore';
 
 import Products from './Products';
 

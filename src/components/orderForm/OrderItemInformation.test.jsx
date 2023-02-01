@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { orderItemStore } from '../../stores/OrderItemStore';
+import { orderItemStore } from '../../stores/order/OrderItemStore';
 
 import OrderItemInformation from './OrderItemInformation';
 

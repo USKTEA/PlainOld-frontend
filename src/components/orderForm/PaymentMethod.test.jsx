@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 
-import { orderFormStore } from '../../stores/OrderFormStore';
+import { orderFormStore } from '../../stores/order/OrderFormStore';
 
 import PaymentMethod from './PaymentMethod';
 

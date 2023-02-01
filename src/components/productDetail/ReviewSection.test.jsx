@@ -2,11 +2,11 @@ import {
   cleanup, fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { userStore } from '../../stores/UserStore';
-import { productStore } from '../../stores/ProductStore';
-import { getOrderStore } from '../../stores/GetOrderStore';
-import { getReviewStore } from '../../stores/GetReviewStore';
-import { getReplyStore } from '../../stores/GetReplyStore';
+import { userStore } from '../../stores/user/UserStore';
+import { productStore } from '../../stores/product/ProductStore';
+import { getOrderStore } from '../../stores/order/GetOrderStore';
+import { getReviewStore } from '../../stores/review/GetReviewStore';
+import { getReplyStore } from '../../stores/reply/GetReplyStore';
 
 import ReviewSection from './ReviewSection';
 

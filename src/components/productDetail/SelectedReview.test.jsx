@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { createReplyStore } from '../../stores/CreateReplyStore';
-import { productStore } from '../../stores/ProductStore';
-import { userStore } from '../../stores/UserStore';
+import { createReplyStore } from '../../stores/reply/CreateReplyStore';
+import { productStore } from '../../stores/product/ProductStore';
+import { userStore } from '../../stores/user/UserStore';
 
 import SelectedReview from './SelectedReview';
 

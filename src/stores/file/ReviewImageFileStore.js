@@ -1,4 +1,4 @@
-import { apiService } from '../services/ApiService';
+import { apiService } from '../../services/ApiService';
 import FileStore from './FileStore';
 
 export default class ReviewImageFileStore extends FileStore {

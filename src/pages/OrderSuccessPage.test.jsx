@@ -1,8 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-
-import OrderSpecification from '../models/OrderSpecification';
-
-import CreateOrderStore from '../stores/CreateOrderStore';
+import { render, screen } from '@testing-library/react';
 
 import OrderSuccessPage from './OrderSuccessPage';
 

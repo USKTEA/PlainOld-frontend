@@ -1,4 +1,4 @@
-import Item from '../models/Item';
+import Item from '../../models/Item';
 import CartStore from './CartStore';
 
 const context = describe;
