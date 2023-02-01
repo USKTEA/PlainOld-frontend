@@ -1,4 +1,4 @@
-import { apiService } from '../services/ApiService';
+import { apiService } from '../../services/ApiService';
 import ReviewStore from './ReviewStore';
 
 export default class EditReviewStore extends ReviewStore {

@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import Cart from '../models/Cart';
-import Item from '../models/Item';
+import Cart from '../../models/Cart';
+import Item from '../../models/Item';
 
-import { apiService } from '../services/ApiService';
+import { apiService } from '../../services/ApiService';
 
 import CartStore from './CartStore';
 

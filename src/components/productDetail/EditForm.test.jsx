@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { editReplyStore } from '../../stores/EditReplyStore';
+import { editReplyStore } from '../../stores/reply/EditReplyStore';
 
 import EditForm from './EditForm';
 

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { editReplyStore } from '../../stores/EditReplyStore';
-import { userStore } from '../../stores/UserStore';
+import { editReplyStore } from '../../stores/reply/EditReplyStore';
+import { userStore } from '../../stores/user/UserStore';
 
 import Reply from './Reply';
 

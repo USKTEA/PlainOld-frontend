@@ -2,8 +2,8 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { editInquiryStore } from '../../stores/EditInquiryStore';
-import { userStore } from '../../stores/UserStore';
+import { editInquiryStore } from '../../stores/inquiry/EditInquiryStore';
+import { userStore } from '../../stores/user/UserStore';
 
 import InquiryModal from './InquiryModal';
 

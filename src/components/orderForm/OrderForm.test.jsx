@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 
-import { orderItemStore } from '../../stores/OrderItemStore';
+import { orderItemStore } from '../../stores/order/OrderItemStore';
 
 import OrderForm from './OrderForm';
 

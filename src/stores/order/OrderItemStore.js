@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import Store from './Store';
+import Store from '../Store';
 
-import OrderItems from '../models/OrderItems';
-import Item from '../models/Item';
-import rgbToHex from '../utils/rgbToHex';
+import OrderItems from '../../models/OrderItems';
+import Item from '../../models/Item';
+import rgbToHex from '../../utils/rgbToHex';
 
 export default class OrderItemStore extends Store {
   constructor() {

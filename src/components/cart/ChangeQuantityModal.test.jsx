@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import Item from '../../models/Item';
 
-import { cartStore } from '../../stores/CartStore';
+import { cartStore } from '../../stores/cart/CartStore';
 
 import ChangeQuantityModal from './ChangeQuantityModal';
 

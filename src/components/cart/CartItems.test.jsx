@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { cartStore } from '../../stores/CartStore';
+import { cartStore } from '../../stores/cart/CartStore';
 
 import Item from '../../models/Item';
 

@@ -2,9 +2,9 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { createInquiryStore } from '../../stores/CreateInquiryStore';
-import { productStore } from '../../stores/ProductStore';
-import { userStore } from '../../stores/UserStore';
+import { createInquiryStore } from '../../stores/inquiry/CreateInquiryStore';
+import { productStore } from '../../stores/product/ProductStore';
+import { userStore } from '../../stores/user/UserStore';
 
 import WriteInquiryModal from './WriteInquiryModal';
 

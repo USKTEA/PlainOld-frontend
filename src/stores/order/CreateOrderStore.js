@@ -1,8 +1,8 @@
-import Store from './Store';
+import Store from '../Store';
 
-import OrderSpecification from '../models/OrderSpecification';
+import OrderSpecification from '../../models/OrderSpecification';
 
-import { apiService } from '../services/ApiService';
+import { apiService } from '../../services/ApiService';
 
 export default class CreateOrderStore extends Store {
   constructor() {

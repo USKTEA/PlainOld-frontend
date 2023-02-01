@@ -1,4 +1,4 @@
-import { editReviewStore } from '../stores/EditReviewStore';
+import { editReviewStore } from '../stores/review/EditReviewStore';
 import useStore from './useStore';
 
 export default function useEditReviewStore() {

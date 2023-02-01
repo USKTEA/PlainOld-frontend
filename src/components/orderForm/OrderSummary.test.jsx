@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { orderItemStore } from '../../stores/OrderItemStore';
+import { orderItemStore } from '../../stores/order/OrderItemStore';
 
 import OrderSummary from './OrderSummary';
 

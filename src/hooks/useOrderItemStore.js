@@ -1,4 +1,4 @@
-import { orderItemStore } from '../stores/OrderItemStore';
+import { orderItemStore } from '../stores/order/OrderItemStore';
 
 import useStore from './useStore';
 

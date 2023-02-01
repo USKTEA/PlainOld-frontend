@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { getInquiryStore } from '../../stores/GetInquiryStore';
-import { productStore } from '../../stores/ProductStore';
-import { userStore } from '../../stores/UserStore';
+import { getInquiryStore } from '../../stores/inquiry/GetInquiryStore';
+import { productStore } from '../../stores/product/ProductStore';
+import { userStore } from '../../stores/user/UserStore';
 
 import Inquiries from './Inquiries';
 

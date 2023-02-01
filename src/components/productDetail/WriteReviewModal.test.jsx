@@ -2,10 +2,10 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { createReviewStore } from '../../stores/CreateReviewStore';
-import { fileStore } from '../../stores/FileStore';
-import { getOrderStore } from '../../stores/GetOrderStore';
-import { productStore } from '../../stores/ProductStore';
+import { createReviewStore } from '../../stores/review/CreateReviewStore';
+import { fileStore } from '../../stores/file/FileStore';
+import { getOrderStore } from '../../stores/order/GetOrderStore';
+import { productStore } from '../../stores/product/ProductStore';
 
 import WriteReviewModal from './WriteReviewModal';
 

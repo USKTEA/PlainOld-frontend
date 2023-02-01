@@ -1,5 +1,5 @@
-import { apiService } from '../services/ApiService';
-import Store from './Store';
+import { apiService } from '../../services/ApiService';
+import Store from '../Store';
 
 export default class GetReplyStore extends Store {
   constructor() {

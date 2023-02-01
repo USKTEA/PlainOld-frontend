@@ -1,5 +1,5 @@
 import useStore from './useStore';
-import { getReplyStore } from '../stores/GetReplyStore';
+import { getReplyStore } from '../stores/reply/GetReplyStore';
 
 export default function useGetReplyStore() {
   return useStore(getReplyStore);

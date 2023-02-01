@@ -1,4 +1,4 @@
-import { categoryStore } from '../stores/CategoryStore';
+import { categoryStore } from '../stores/category/CategoryStore';
 import useStore from './useStore';
 
 export default function useCategoryStore() {
