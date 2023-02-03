@@ -2,6 +2,7 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
+import { getAnswerStore } from '../../stores/answer/GetAnswerStore';
 import { editInquiryStore } from '../../stores/inquiry/EditInquiryStore';
 import { userStore } from '../../stores/user/UserStore';
 
@@ -54,11 +55,26 @@ describe('InquiryModal', () => {
     createdAt: '2023-01-29 15:32',
   };
 
+  const answeredInquiry = {
+    id: 4,
+    productId: 1,
+    status: 'PENDING',
+    type: 'PUBLIC',
+    title: '이렇게 입을까요',
+    content: '이렇게 입고싶은데요',
+    querist: {
+      username: 'rlatjrxo1234@gmail.com',
+      nickname: '안김뚜루',
+    },
+    createdAt: '2023-01-29 15:32',
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.removeItem('accessToken');
     userStore.clear();
     editInquiryStore.clear();
+    getAnswerStore.clear();
   });
 
   it('상품문의를 볼 수 있다', () => {
@@ -295,6 +311,47 @@ describe('InquiryModal', () => {
         await waitFor(() => {
           expect(setInquiry).toBeCalledWith(null);
         });
+      });
+    });
+  });
+
+  describe('상품문의 답변', () => {
+    context('답변이 있을 경우', () => {
+      it('답변을 볼 수 있다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+        const inquiryIds = [answeredInquiry.id];
+
+        await getAnswerStore.fetchAnswers({ inquiryIds });
+        await userStore.fetchUserInformation();
+
+        render(<InquiryModal
+          inquiry={answeredInquiry}
+          setInquiry={setInquiry}
+        />);
+
+        screen.getByText('관리자');
+        screen.getByText('맞습니다 그렇게 입으시면 됩니다');
+      });
+    });
+  });
+
+  describe('상품문의 답변', () => {
+    context('어드민일 경우', () => {
+      it('상품문의 답변을 작성할 수 있다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
+
+        const inquiryIds = [answeredInquiry.id];
+
+        await getAnswerStore.fetchAnswers({ inquiryIds });
+        await userStore.fetchUserInformation();
+
+        render(<InquiryModal
+          inquiry={answeredInquiry}
+          setInquiry={setInquiry}
+        />);
+
+        expect(screen.queryByPlaceholderText('관리자만 답글 작성이 가능합니다')).toBeFalsy();
       });
     });
   });

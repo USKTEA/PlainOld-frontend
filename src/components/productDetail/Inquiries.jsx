@@ -1,6 +1,8 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
+import { useState } from 'react';
+
+import useGetAnswerStore from '../../hooks/useGetAnswerStore';
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 import useUserStore from '../../hooks/useUserStore';
 
@@ -98,7 +100,10 @@ export default function Inquiries() {
   const [currentInquiry, setCurrentInquiry] = useState(null);
 
   const getInquiryStore = useGetInquiryStore();
+  const getAnswerStore = useGetAnswerStore();
   const { username, role } = useUserStore();
+
+  const { answers } = getAnswerStore;
   const { inquiries } = getInquiryStore;
 
   const handleOpenModal = (inquiry) => {
@@ -110,6 +115,10 @@ export default function Inquiries() {
 
     setCurrentInquiry(inquiry);
   };
+
+  const countAnswer = (inquiryId) => (answers.get(inquiryId)
+    ? answers.get(inquiryId).length
+    : '');
 
   return (
     <>
@@ -135,7 +144,7 @@ export default function Inquiries() {
               inquiryType={inquiry.type}
             >
               {inquiry.type === 'PUBLIC'
-                ? `${inquiry.title} 1`
+                ? `${`${inquiry.title} ${countAnswer(inquiry.id)}`}`
                 : `${inquiry.title} ⨶`}
             </OpenInquiryButton>
             <span>

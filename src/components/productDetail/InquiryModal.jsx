@@ -1,13 +1,17 @@
 import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
+
 import useDeleteInquiryStore from '../../hooks/useDeleteInquiryStore';
 import useEditInquiryStore from '../../hooks/useEditInquiryStore';
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
-
+import useCreateAnswerStore from '../../hooks/useCreateAnswerStore';
+import useGetAnswerStore from '../../hooks/useGetAnswerStore';
+import useEditAnswerStore from '../../hooks/useEditAnswerStore';
 import useUserStore from '../../hooks/useUserStore';
 
 import defaultTheme from '../../styles/defaultTheme';
+import Answers from './Answers';
 
 const Container = styled.div`
   position: absolute;
@@ -26,7 +30,7 @@ const Wrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-0%, 100%);
-  min-height: 29em;
+  min-height: 27em;
   width: 50em;
   display: flex;
   flex-direction: column;
@@ -175,7 +179,7 @@ const SubmitButton = styled.button`
   justify-content: center;
   border: 1px solid ${defaultTheme.colors.primary};
   color: ${defaultTheme.colors.primaryText};
-  background-color: white;
+  background-color: ${(props) => (props.error ? '#11111' : '#fff')};
   cursor: pointer;
 `;
 
@@ -216,6 +220,7 @@ const ErrorMessage = styled.strong`
 
 const ReplyForm = styled.div`
   margin-top: 1em;
+  margin-bottom: 1.5em;
   width: 95%;
   border: 1px solid ${defaultTheme.colors.fourth};
   border-radius: 3px;
@@ -250,6 +255,12 @@ export default function InquiryModal({ inquiry, setInquiry }) {
   const getInquiryStore = useGetInquiryStore();
   const editInquiryStore = useEditInquiryStore();
   const deleteInquiryStore = useDeleteInquiryStore();
+  const getAnswerStore = useGetAnswerStore();
+
+  const createAnswerStore = useCreateAnswerStore();
+  const editAnswerStore = useEditAnswerStore();
+  const { answer } = useCreateAnswerStore();
+  const { answers } = useGetAnswerStore();
   const { username, role } = useUserStore();
 
   const handler = ({ target }) => {
@@ -263,7 +274,9 @@ export default function InquiryModal({ inquiry, setInquiry }) {
   };
 
   const handleSetInquiry = () => {
-    editInquiryStore.setInquiry({ id: inquiry.id, title: inquiry.title, content: inquiry.content });
+    editInquiryStore.setInquiry(
+      { id: inquiry.id, title: inquiry.title, content: inquiry.content },
+    );
   };
 
   const handleDeleteInquiry = async () => {
@@ -294,12 +307,32 @@ export default function InquiryModal({ inquiry, setInquiry }) {
     }
   };
 
+  const handleSubmitAnswer = async () => {
+    if (!createAnswerStore.isAnswerComplete()) {
+      return;
+    }
+
+    const id = await createAnswerStore.submit();
+
+    const { inquiries } = getInquiryStore;
+
+    const inquiryIds = inquiries
+      .reduce((acc, i) => [...acc, i.id], []);
+
+    if (id) {
+      await getAnswerStore.fetchAnswers({ inquiryIds });
+    }
+  };
+
   useEffect(() => {
+    createAnswerStore.setInquiryId({ inquiryId: inquiry.id });
     document.addEventListener('mousedown', handler);
 
     return () => {
       editInquiryStore.clear();
       deleteInquiryStore.clear();
+      createAnswerStore.clear();
+      editAnswerStore.clear();
       document.removeEventListener('mousedown', handler);
     };
   }, []);
@@ -405,15 +438,21 @@ export default function InquiryModal({ inquiry, setInquiry }) {
             )
             : <InquiryContent>{inquiry.content}</InquiryContent>}
         </InquiryContentWrapper>
-        <p>여기는 답변공간!</p>
+        {answers.get(inquiry.id)
+          ? <Answers answers={answers.get(inquiry.id)} />
+          : null}
         <ReplyForm>
           <textarea
             type="text"
             placeholder={role === 'ADMIN' ? '답글' : '관리자만 답글 작성이 가능합니다'}
             readOnly={!(role === 'ADMIN')}
+            value={answer.content}
+            onChange={(e) => createAnswerStore.changeContent(e.target.value)}
           />
           <SubmitButton
             type="button"
+            error={createAnswerStore.errors}
+            onClick={handleSubmitAnswer}
           >
             작성
           </SubmitButton>

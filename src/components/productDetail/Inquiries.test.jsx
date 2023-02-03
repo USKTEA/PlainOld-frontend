@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+import { getAnswerStore } from '../../stores/answer/GetAnswerStore';
 import { getInquiryStore } from '../../stores/inquiry/GetInquiryStore';
 import { productStore } from '../../stores/product/ProductStore';
 import { userStore } from '../../stores/user/UserStore';
@@ -10,6 +11,7 @@ const context = describe;
 
 describe('Inquiries', () => {
   beforeEach(() => {
+    getAnswerStore.clear();
     getInquiryStore.clear();
     productStore.clear();
     userStore.clear();
@@ -37,7 +39,7 @@ describe('Inquiries', () => {
     screen.getByText('2023-01-29 14:32');
 
     screen.getByText('답변완료');
-    screen.getByText(/비밀글입니다. ⨶/);
+    screen.getByText('비밀글입니다. ⨶');
     expect(screen.getAllByText('안김뚜루').length).toBeTruthy();
     screen.getByText('2023-01-30 14:32');
   });
@@ -92,11 +94,28 @@ describe('Inquiries', () => {
 
         render(<Inquiries />);
 
-        fireEvent.click(screen.getByRole('button', { name: /비밀글입니다./ }));
+        fireEvent.click(screen.getByRole('button', { name: '비밀글입니다. ⨶' }));
 
         expect(screen.queryByRole('button', { name: '✕' })).toBeFalsy();
         expect(screen.queryByRole('button', { name: '작성' })).toBeFalsy();
       });
+    });
+  });
+
+  describe('상품문의에 답변이 있을 경우', () => {
+    it('답변의 개수를 볼 수 있다', async () => {
+      localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+      const productId = 3;
+      const inquiryIds = [4];
+
+      await userStore.fetchUserInformation();
+      await productStore.fetchProduct({ id: productId });
+      await getInquiryStore.fetchInquiries({ productId });
+      await getAnswerStore.fetchAnswers({ inquiryIds });
+
+      render(<Inquiries />);
+
+      screen.getByText('이렇게 입으면 될까요 1');
     });
   });
 });
