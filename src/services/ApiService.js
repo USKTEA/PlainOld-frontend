@@ -245,6 +245,38 @@ export default class ApiService {
 
     return data;
   }
+
+  async fetchAnswers({ inquiryIds }) {
+    const { data, status } = await this.instance.get('/answers', {
+      params: {
+        inquiryIds: inquiryIds.join(','),
+      },
+    });
+
+    if (status === 204) {
+      return { answers: [] };
+    }
+
+    return data;
+  }
+
+  async createAnswer({ answer }) {
+    const { data } = await this.instance.post('/answers', answer);
+
+    return data;
+  }
+
+  async editAnswer({ answer }) {
+    const { data } = await this.instance.patch('/answers', answer);
+
+    return data;
+  }
+
+  async deleteAnswer(id) {
+    const { data } = await this.instance.delete(`/answers/${id}`);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

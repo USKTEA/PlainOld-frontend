@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import useGetAnswerStore from '../../hooks/useGetAnswerStore';
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 
 const Pagination = styled.div`
@@ -15,10 +16,20 @@ const Pagination = styled.div`
 
 export default function InquiryPagination() {
   const getInquiryStore = useGetInquiryStore();
+  const getAnswerStore = useGetAnswerStore();
 
   const { inquiries, page } = getInquiryStore;
 
   const { productId } = inquiries[0];
+
+  const handleFetchInquiries = async (number) => {
+    await getInquiryStore.fetchInquiries({ productId, pageNumber: number });
+
+    const inquiryIds = getInquiryStore.inquiries
+      .reduce((acc, i) => [...acc, i.id], []);
+
+    await getAnswerStore.fetchAnswers({ inquiryIds });
+  };
 
   return (
     <Pagination>
@@ -28,7 +39,7 @@ export default function InquiryPagination() {
             <button
               className="page"
               type="button"
-              onClick={() => getInquiryStore.fetchInquiries({ productId, pageNumber: number })}
+              onClick={() => handleFetchInquiries(number)}
             >
               {number}
             </button>

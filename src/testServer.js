@@ -486,7 +486,34 @@ const server = setupServer(
           page: {
             current: 1,
             total: 1,
-            counts: 3,
+            counts: 4,
+          },
+        }),
+      );
+    }
+
+    if (productId === '3') {
+      return res(
+        ctx.json({
+          inquiries: [
+            {
+              id: 4,
+              productId: 2,
+              status: 'PENDING',
+              type: 'PUBLIC',
+              title: '이렇게 입으면 될까요',
+              content: '이렇게 입으면 좋을까요',
+              querist: {
+                username: 'tjrxo1234@gmail.com',
+                nickname: '김뚜루',
+              },
+              createdAt: '2023-01-30 15:32',
+            },
+          ],
+          page: {
+            current: 1,
+            total: 1,
+            counts: 1,
           },
         }),
       );
@@ -528,6 +555,64 @@ const server = setupServer(
     ctx.json({ id: 1 }),
   )),
   rest.delete(`${baseUrl}/inquiries/9999999`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
+  rest.get(`${baseUrl}/answers`, async (req, res, ctx) => {
+    const inquiryIds = req.url.searchParams.get('inquiryIds').split(',');
+
+    if (inquiryIds[0] === '4') {
+      return res(
+        ctx.json({
+          answers: [
+            {
+              id: 1,
+              inquiryId: 4,
+              answerer: {
+                username: 'admin@admin.com',
+                nickname: '관리자',
+              },
+              content: '맞습니다 그렇게 입으시면 됩니다',
+              createdAt: '2023-01-30 16:32',
+            },
+          ],
+        }),
+      );
+    }
+
+    return res(
+      ctx.status(204),
+    );
+  }),
+  rest.post(`${baseUrl}/answers`, async (req, res, ctx) => {
+    const answer = await req.json();
+
+    if (answer.inquiryId === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({ id: 1 }),
+    );
+  }),
+  rest.patch(`${baseUrl}/answers`, async (req, res, ctx) => {
+    const answer = await req.json();
+
+    if (answer.id === 9_999_999) {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({ id: answer.id }),
+    );
+  }),
+  rest.delete(`${baseUrl}/answers/1`, async (req, res, ctx) => res(
+    ctx.json({ id: 1 }),
+  )),
+  rest.delete(`${baseUrl}/answers/9999999`, async (req, res, ctx) => res(
     ctx.status(400),
   )),
 );

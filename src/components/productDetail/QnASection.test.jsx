@@ -67,7 +67,7 @@ describe('QnASection', () => {
         screen.getByText('2023-01-29 14:32');
 
         screen.getByText('답변완료');
-        screen.getByText(/비밀글입니다. ⨶/);
+        screen.getByText('비밀글입니다. ⨶');
         expect(screen.getAllByText('안김뚜루').length).toBeTruthy();
         screen.getByText('2023-01-30 14:32');
       });
