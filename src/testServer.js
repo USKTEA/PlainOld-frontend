@@ -172,7 +172,7 @@ const server = setupServer(
   rest.get(`${baseUrl}/products/9999999`, async (req, res, ctx) => (
     res(ctx.status(400))
   )),
-  rest.patch(`${baseUrl}/orders`, async (req, res, ctx) => {
+  rest.patch(`${baseUrl}/orders/shippingInformation`, async (req, res, ctx) => {
     const { orderNumber } = await req.json();
 
     if (orderNumber === 'SHOULDFAIL') {
@@ -180,7 +180,18 @@ const server = setupServer(
     }
 
     return res(ctx.json({
-      orderNumber: 'tjrxo1234-11111111',
+      orderNumber,
+    }));
+  }),
+  rest.patch(`${baseUrl}/orders/orderStatus`, async (req, res, ctx) => {
+    const { orderNumber } = await req.json();
+
+    if (orderNumber === 'INVALID') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      orderNumber,
     }));
   }),
   rest.get(`${baseUrl}/orders`, async (req, res, ctx) => {
@@ -199,6 +210,30 @@ const server = setupServer(
 
     if (accessToken === 'NOTHAVEORDER') {
       return res(ctx.status(204));
+    }
+
+    if (accessToken === 'HAVEONECANCELED') {
+      return res(ctx.json({
+        orders: [
+          {
+            orderNumber: '1',
+            orderLines: [
+              {
+                productName: 'T-shirt',
+                thumbnailUrl: '1',
+                option: {
+                  color: 'Black',
+                  size: 'XL',
+                },
+                quantity: 1,
+                totalPrice: 10_000,
+              },
+            ],
+            status: '취소완료',
+            createdAt: '2022-01-15 12:45',
+          },
+        ],
+      }));
     }
 
     return res(ctx.json({
@@ -709,6 +744,38 @@ const server = setupServer(
   )),
   rest.delete(`${baseUrl}/answers/9999999`, async (req, res, ctx) => res(
     ctx.status(400),
+  )),
+  rest.post(`${baseUrl}/cancelRequest`, async (req, res, ctx) => {
+    const { orderNumber } = await req.json();
+
+    if (orderNumber === 'INVALID') {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({ id: 1 }),
+    );
+  }),
+  rest.get(`${baseUrl}/cancelRequest/tjrxo1234-11111111`, async (req, res, ctx) => res(
+    ctx.json({
+      id: 1,
+      orderNumber: 'tjrxo1234-11111111',
+      createdAt: '2023-01-30 12:22',
+      content: '이래서 취소했습니다',
+    }),
+  )),
+  rest.get(`${baseUrl}/cancelRequest/INVALID`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
+  rest.get(`${baseUrl}/cancelRequest/1`, async (req, res, ctx) => res(
+    ctx.json({
+      id: 1,
+      orderNumber: '1',
+      createdAt: '2023-01-30 12:22',
+      content: '이래서 취소했습니다',
+    }),
   )),
 );
 

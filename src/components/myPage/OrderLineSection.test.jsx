@@ -3,6 +3,7 @@ import OrderLineSection from './OrderLineSection';
 
 describe('OrderLineSection', () => {
   it('주문상품들을 볼 수 있다', () => {
+    const orderNumber = 'tjrxo1234-11111111';
     const orderLines = [
       {
         productName: 'T-shirt',
@@ -19,6 +20,7 @@ describe('OrderLineSection', () => {
     const status = '입금대기';
 
     render(<OrderLineSection
+      orderNumber={orderNumber}
       orderLines={orderLines}
       shippingFee={shippingFee}
       status={status}

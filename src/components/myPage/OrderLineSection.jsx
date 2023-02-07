@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import useCancelOrderStore from '../../hooks/useCancelOrderStore';
+import useCreateCancelRequestStore from '../../hooks/useCreateCancelRequestStore';
+import useGetCancelRequestStore from '../../hooks/useGetCancelRequestStore';
 import defaultTheme from '../../styles/defaultTheme';
 import numberFormat from '../../utils/numberFormat';
 
@@ -132,7 +135,22 @@ const Status = styled.div`
   }
 `;
 
-export default function OrderLineSection({ orderLines, shippingFee, status }) {
+export default function OrderLineSection({
+  orderNumber, orderLines, shippingFee, status,
+}) {
+  const cancelOrderStore = useCancelOrderStore();
+  const createCancelRequestStore = useCreateCancelRequestStore();
+  const getCancelRequestStore = useGetCancelRequestStore();
+
+  const handleOpenOrderCancelModal = () => {
+    cancelOrderStore.setOrderNumber(orderNumber);
+    createCancelRequestStore.setOrderNumber(orderNumber);
+  };
+
+  const handleOpenCancelRequestModal = async () => {
+    await getCancelRequestStore.fetchCancelRequest({ orderNumber });
+  };
+
   const hasOption = (option) => {
     if (option.size === 'FREE' && option.color === '') {
       return false;
@@ -198,11 +216,22 @@ export default function OrderLineSection({ orderLines, shippingFee, status }) {
         >
           <div>
             <span>{status}</span>
-            <button
-              type="button"
-            >
-              취소
-            </button>
+            {status === '취소완료' ? (
+              <button
+                type="button"
+                onClick={handleOpenCancelRequestModal}
+              >
+                취소상세
+              </button>
+            ) : null}
+            {status === '입금대기' ? (
+              <button
+                type="button"
+                onClick={handleOpenOrderCancelModal}
+              >
+                취소
+              </button>
+            ) : null}
           </div>
         </Status>
       </OrderLineDetail>

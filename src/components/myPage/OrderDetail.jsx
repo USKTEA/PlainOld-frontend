@@ -92,6 +92,7 @@ export default function OrderDetail() {
         <strong>{order.orderNumber}</strong>
       </OrderSummary>
       <OrderLineSection
+        orderNumber={order.orderNumber}
         orderLines={order.orderLines}
         shippingFee={order.shippingFee}
         status={order.status}

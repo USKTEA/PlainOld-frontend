@@ -1,7 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { getOrderStore } from '../../stores/order/GetOrderStore';
 import { userStore } from '../../stores/user/UserStore';
 import MyPage from './MyPage';
+
+const context = describe;
 
 describe('MyPage', () => {
   const renderMyPage = () => {
@@ -15,6 +20,7 @@ describe('MyPage', () => {
   beforeEach(() => {
     localStorage.removeItem('accessToken');
     userStore.clear();
+    getOrderStore.clear();
   });
 
   describe('네비게이션바', () => {
@@ -40,6 +46,42 @@ describe('MyPage', () => {
 
       screen.getByText(/김뚜루/);
       screen.getByText(/누적 구매금액:/);
+    });
+  });
+
+  describe('주문 취소', () => {
+    context('취소 버튼을 클릭했을 경우', () => {
+      it('주문 취소 모달을 볼 수 있다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+        await userStore.fetchUserInformation();
+        await getOrderStore.fetchUserOrders();
+
+        renderMyPage();
+
+        fireEvent.click(screen.getByRole('button', { name: '취소' }));
+
+        screen.getByText('주문 취소');
+      });
+    });
+  });
+
+  describe('취소 상세', () => {
+    context('취소 상세 버튼을 클릭했을 경우', () => {
+      it('취소 상세 정보를 볼 수 있다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('HAVEONECANCELED'));
+
+        await userStore.fetchUserInformation();
+        await getOrderStore.fetchUserOrders();
+
+        renderMyPage();
+
+        fireEvent.click(screen.getByRole('button', { name: '취소상세' }));
+
+        await waitFor(() => {
+          screen.getByText('취소 상세정보');
+        });
+      });
     });
   });
 });

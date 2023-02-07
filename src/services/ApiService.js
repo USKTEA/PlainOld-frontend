@@ -75,8 +75,8 @@ export default class ApiService {
     return data;
   }
 
-  async editOrder({ editRequest }) {
-    const { data } = await this.instance.patch('/orders', editRequest);
+  async editOrderShippingInformation({ editRequest }) {
+    const { data } = await this.instance.patch('/orders/shippingInformation', editRequest);
 
     return data;
   }
@@ -105,6 +105,12 @@ export default class ApiService {
 
   async fetchOrder({ orderNumber }) {
     const { data } = await this.instance.get(`/orders/${orderNumber}`);
+
+    return data;
+  }
+
+  async cancelOrder({ request }) {
+    const { data } = await this.instance.patch('/orders/orderStatus', request);
 
     return data;
   }
@@ -304,6 +310,18 @@ export default class ApiService {
 
   async deleteAnswer(id) {
     const { data } = await this.instance.delete(`/answers/${id}`);
+
+    return data;
+  }
+
+  async createCancelRequest({ request }) {
+    const { data } = await this.instance.post('/cancelRequest', request);
+
+    return data;
+  }
+
+  async fetchCancelRequest(orderNumber) {
+    const { data } = await this.instance.get(`/cancelRequest/${orderNumber}`);
 
     return data;
   }
