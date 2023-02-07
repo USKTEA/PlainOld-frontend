@@ -1,5 +1,11 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+import useCreateCancelRequestStore from '../../hooks/useCreateCancelRequestStore';
+import useGetCancelRequestStore from '../../hooks/useGetCancelRequestStore';
+
+import CancelOrderModal from './CancelOrderModal';
+import CancelRequestInformationModal from './CancelRequestInformationModal';
 import MyPageNavigation from './MyPageNavigation';
 import OrderDetail from './OrderDetail';
 import OrderHistory from './OrderHistory';
@@ -20,15 +26,26 @@ const Wrapper = styled.div`
 export default function MyPage() {
   const { orderNumber } = useParams();
 
+  const { request } = useCreateCancelRequestStore();
+  const { cancelRequest } = useGetCancelRequestStore();
+
   return (
-    <Container>
-      <MyPageNavigation />
-      <Wrapper>
-        <UserInformation />
-        {orderNumber
-          ? <OrderDetail />
-          : <OrderHistory />}
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <MyPageNavigation />
+        <Wrapper>
+          <UserInformation />
+          {orderNumber
+            ? <OrderDetail />
+            : <OrderHistory />}
+        </Wrapper>
+      </Container>
+      {request.orderNumber
+        ? <CancelOrderModal />
+        : null}
+      {cancelRequest
+        ? <CancelRequestInformationModal />
+        : null}
+    </>
   );
 }

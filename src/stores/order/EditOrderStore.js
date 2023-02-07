@@ -63,7 +63,7 @@ export default class EditOrderStore extends Store {
         message: this.order.message,
       };
 
-      const { orderNumber } = await apiService.editOrder({ editRequest });
+      const { orderNumber } = await apiService.editOrderShippingInformation({ editRequest });
 
       return orderNumber;
     } catch (error) {

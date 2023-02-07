@@ -1,9 +1,15 @@
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useLocalStorage } from 'usehooks-ts';
-import useGetOrderStore from '../../hooks/useGetOrderStore';
+
+import styled from 'styled-components';
 import defaultTheme from '../../styles/defaultTheme';
+
+import useCancelOrderStore from '../../hooks/useCancelOrderStore';
+import useCreateCancelRequestStore from '../../hooks/useCreateCancelRequestStore';
+import useGetOrderStore from '../../hooks/useGetOrderStore';
+
 import numberFormat from '../../utils/numberFormat';
+import useGetCancelRequestStore from '../../hooks/useGetCancelRequestStore';
 
 const Container = styled.ul`
   margin-top: 1em;
@@ -107,6 +113,7 @@ const ButtonContainer = styled.div`
     border: 1px solid ${defaultTheme.colors.fourth};
     color: ${defaultTheme.colors.primaryText};
     background-color: white;
+    cursor: pointer;
   }
 `;
 
@@ -115,6 +122,9 @@ export default function Histories({ orders }) {
   const [, setCurrentOrder] = useLocalStorage('currentOrder', '');
 
   const getOrderStore = useGetOrderStore();
+  const cancelOrderStore = useCancelOrderStore();
+  const createCancelRequestStore = useCreateCancelRequestStore();
+  const getCancelRequestStore = useGetCancelRequestStore();
 
   const toDate = (time) => time.split(' ')[0];
 
@@ -135,6 +145,15 @@ export default function Histories({ orders }) {
     if (order) {
       navigate(`order/${orderNumber}`);
     }
+  };
+
+  const handleOpenOrderCancelModal = (orderNumber) => {
+    cancelOrderStore.setOrderNumber(orderNumber);
+    createCancelRequestStore.setOrderNumber(orderNumber);
+  };
+
+  const handleGetCancelRequest = async (orderNumber) => {
+    await getCancelRequestStore.fetchCancelRequest({ orderNumber });
   };
 
   return (
@@ -194,11 +213,22 @@ export default function Histories({ orders }) {
               </Status>
             </OrderDetail>
             <ButtonContainer>
-              <button
-                type="button"
-              >
-                취소
-              </button>
+              {order.status === '취소완료' ? (
+                <button
+                  type="button"
+                  onClick={() => handleGetCancelRequest(order.orderNumber)}
+                >
+                  취소상세
+                </button>
+              ) : null}
+              {order.status === '입금대기' ? (
+                <button
+                  type="button"
+                  onClick={() => handleOpenOrderCancelModal(order.orderNumber)}
+                >
+                  취소
+                </button>
+              ) : null}
             </ButtonContainer>
           </OrderDetailWrapper>
         </Order>
