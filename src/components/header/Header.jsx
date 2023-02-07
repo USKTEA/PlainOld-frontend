@@ -106,7 +106,7 @@ export default function Header() {
           <List>
             <li>
               <StyledLink
-                to="/mypage"
+                to={accessToken ? '/mypage' : '/login'}
                 selected={
                   location.pathname === '/mypage'
                   || location.pathname.startsWith('/orders')

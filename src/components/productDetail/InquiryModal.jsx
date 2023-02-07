@@ -262,11 +262,18 @@ export default function InquiryModal({ inquiry, setInquiry }) {
   const { answer } = useCreateAnswerStore();
   const { answers } = useGetAnswerStore();
   const { username, role } = useUserStore();
+  const { inquiries } = getInquiryStore;
 
   const handler = ({ target }) => {
     if (modalRef.current && !modalRef.current.contains(target)) {
       setInquiry(null);
     }
+  };
+
+  const fetchInquiries = async () => {
+    await getInquiryStore.fetchInquiries(
+      { productId: inquiry.productId, pageNumber: 1 },
+    );
   };
 
   const handleCancelEdit = () => {
@@ -283,9 +290,7 @@ export default function InquiryModal({ inquiry, setInquiry }) {
     const id = await deleteInquiryStore.delete({ inquiryId: inquiry.id });
 
     if (id) {
-      await getInquiryStore.fetchInquiries(
-        { productId: inquiry.productId, pageNumber: 1 },
-      );
+      await fetchInquiries();
 
       setInquiry(null);
     }
@@ -299,9 +304,7 @@ export default function InquiryModal({ inquiry, setInquiry }) {
     const id = await editInquiryStore.submit();
 
     if (id) {
-      await getInquiryStore.fetchInquiries(
-        { productId: inquiry.productId, pageNumber: 1 },
-      );
+      await fetchInquiries();
 
       setInquiry(null);
     }
@@ -314,12 +317,11 @@ export default function InquiryModal({ inquiry, setInquiry }) {
 
     const id = await createAnswerStore.submit();
 
-    const { inquiries } = getInquiryStore;
-
     const inquiryIds = inquiries
       .reduce((acc, i) => [...acc, i.id], []);
 
     if (id) {
+      await fetchInquiries();
       await getAnswerStore.fetchAnswers({ inquiryIds });
     }
   };

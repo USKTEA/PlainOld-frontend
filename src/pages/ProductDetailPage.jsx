@@ -12,6 +12,7 @@ import useGetInquiryStore from '../hooks/useGetInquiryStore';
 
 import ProductDetail from '../components/productDetail/ProductDetail';
 import useGetAnswerStore from '../hooks/useGetAnswerStore';
+import useCreateReviewStore from '../hooks/useCreateReviewStore';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export default function ProductDetailPage() {
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
   const cartStore = useCartStore();
+  const createReviewStore = useCreateReviewStore();
   const getOrderStore = useGetOrderStore();
   const getReviewStore = useGetReviewStore();
   const getReplyStore = useGetReplyStore();
@@ -61,7 +63,9 @@ export default function ProductDetailPage() {
     const inquiryIds = inquiries
       .reduce((acc, i) => [...acc, i.id], []);
 
-    await getAnswerStore.fetchAnswers({ inquiryIds });
+    if (inquiries.length) {
+      await getAnswerStore.fetchAnswers({ inquiryIds });
+    }
   };
 
   useEffect(() => {
@@ -70,6 +74,7 @@ export default function ProductDetailPage() {
     fetchInquiriesAndAnswers();
 
     return () => {
+      createReviewStore.clear();
       productStore.clear();
       getOrderStore.clear();
       orderItemStore.reset();

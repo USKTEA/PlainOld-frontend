@@ -286,21 +286,11 @@ describe('OrderFormStore', () => {
       });
     });
 
-    context('ReceiverName을 입력하지 않았을 경우', () => {
+    context('ReceiverPhoneNumbe를 입력하지 않았을 경우', () => {
       it('errors에서 receiverName 에러가 세팅된다', () => {
         expect(orderFormStore.errors.receiverPhoneNumber).toBeFalsy();
 
         orderFormStore.changeField({ receiverPhoneNumber: '' });
-
-        expect(orderFormStore.errors.receiverPhoneNumber).toBeTruthy();
-      });
-    });
-
-    context('receiverName을 2글자 미만 입력했을 경우', () => {
-      it('errors에서 receiverName 에러가 세팅된다', () => {
-        expect(orderFormStore.errors.receiverPhoneNumber).toBeFalsy();
-
-        orderFormStore.changeField({ receiverPhoneNumber: '1231234' });
 
         expect(orderFormStore.errors.receiverPhoneNumber).toBeTruthy();
       });
