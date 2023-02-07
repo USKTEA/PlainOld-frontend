@@ -1,12 +1,33 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import { useLocalStorage } from 'usehooks-ts';
+import useGetOrderStore from '../hooks/useGetOrderStore';
+
+import MyPage from '../components/myPage/MyPage';
 
 export default function AccountPage() {
+  const [accessToken] = useLocalStorage('accessToken', '');
+  const [currentOrder] = useLocalStorage('currentOrder', '');
+
+  const getOrderStore = useGetOrderStore();
+
+  const fetchUserOrders = async () => {
+    await getOrderStore.fetchUserOrders();
+  };
+
+  const fetchOrder = async () => {
+    await getOrderStore.fetchOrder({ orderNumber: currentOrder });
+  };
+
+  useEffect(() => {
+    fetchUserOrders();
+
+    if (currentOrder) {
+      fetchOrder();
+    }
+  }, [accessToken]);
+
   return (
-    <>
-      <nav>
-        <Link to="/orders">주문 조회</Link>
-      </nav>
-      <p>누적 구매금액: 900,000원</p>
-    </>
+    <MyPage />
   );
 }

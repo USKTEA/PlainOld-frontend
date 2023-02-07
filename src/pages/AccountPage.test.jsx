@@ -1,15 +1,22 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import AccountPage from './AccountPage';
 
-test('AccountPage', () => {
-  render((
-    <MemoryRouter initialEntries={['/account']}>
-      <AccountPage />
-    </MemoryRouter>
-  ));
+describe('AccountPage', () => {
+  it('마이페이지를 보여준다', async () => {
+    render((
+      <MemoryRouter initialEntries={['/account']}>
+        <AccountPage />
+      </MemoryRouter>
+    ));
 
-  screen.getByText('주문 조회');
-  screen.getByText(/누적 구매금액:/);
+    await waitFor(() => {
+      screen.getByRole('heading', { name: '주문 조회' });
+      screen.getByRole('button', { name: '주문 조회' });
+      screen.getByRole('button', { name: '정보 수정' });
+      screen.getByRole('button', { name: '회원탈퇴' });
+      screen.getByText(/누적 구매금액:/);
+    });
+  });
 });

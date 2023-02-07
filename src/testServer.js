@@ -38,7 +38,20 @@ const server = setupServer(
       return res(
         ctx.json({
           username: 'admin@admin.com',
+          nickname: '관리자',
+          purchaseAmount: 0,
           role: 'ADMIN',
+        }),
+      );
+    }
+
+    if (accessToken === 'NOTHAVEORDER') {
+      return res(
+        ctx.json({
+          username: 'rlatjrxo1234@gmail.com',
+          nickname: '안김뚜루',
+          purchaseAmount: 0,
+          role: 'MEMBER',
         }),
       );
     }
@@ -46,6 +59,8 @@ const server = setupServer(
     return res(
       ctx.json({
         username: 'tjrxo1234@gmail.com',
+        nickname: '김뚜루',
+        purchaseAmount: 10_000,
         role: 'MEMBER',
       }),
     );
@@ -157,6 +172,17 @@ const server = setupServer(
   rest.get(`${baseUrl}/products/9999999`, async (req, res, ctx) => (
     res(ctx.status(400))
   )),
+  rest.patch(`${baseUrl}/orders`, async (req, res, ctx) => {
+    const { orderNumber } = await req.json();
+
+    if (orderNumber === 'SHOULDFAIL') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      orderNumber: 'tjrxo1234-11111111',
+    }));
+  }),
   rest.get(`${baseUrl}/orders`, async (req, res, ctx) => {
     const productId = req.url.searchParams.get('productId');
 
@@ -168,6 +194,75 @@ const server = setupServer(
 
     return res(ctx.status(400));
   }),
+  rest.get(`${baseUrl}/orders/me`, async (req, res, ctx) => {
+    const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+
+    if (accessToken === 'NOTHAVEORDER') {
+      return res(ctx.status(204));
+    }
+
+    return res(ctx.json({
+      orders: [
+        {
+          orderNumber: '1',
+          orderLines: [
+            {
+              productName: 'T-shirt',
+              thumbnailUrl: '1',
+              option: {
+                color: 'Black',
+                size: 'XL',
+              },
+              quantity: 1,
+              totalPrice: 10_000,
+            },
+          ],
+          status: '입금대기',
+          createdAt: '2022-01-15 12:45',
+        },
+      ],
+    }));
+  }),
+  rest.get(`${baseUrl}/orders/tjrxo1234-11111111`, async (req, res, ctx) => res(
+    ctx.json({
+      orderNumber: 'tjrxo1234-11111111',
+      orderLines: [
+        {
+          productName: 'T-shirt',
+          thumbnailUrl: '1',
+          option: {
+            color: 'Black',
+            size: 'XL',
+          },
+          totalPrice: 10_000,
+          quantity: 1,
+        },
+      ],
+      orderer: {
+        name: '김뚜루',
+        phoneNumber: '010-1111-1111',
+        email: 'tjrxo1234@gmail.com',
+      },
+      shippingInformation: {
+        receiver: {
+          name: '김뚜루',
+          phoneNumber: '010-1111-1111',
+        },
+        address: {
+          zipCode: '111111',
+          address1: '서울시 성동구 상원12길 34',
+          address2: '에이원 지식산업센터',
+        },
+        message: '',
+      },
+      status: '입금대기',
+      shippingFee: 3500,
+      cost: 13_500,
+      payment: 'CASH',
+      createdAt: '2022-01-15 12:45',
+    }),
+  )),
+  rest.get(`${baseUrl}/orders/INVALID`, async (req, res, ctx) => res(ctx.status(400))),
   rest.post(`${baseUrl}/orders`, async (req, res, ctx) => {
     const orderSpecification = await req.json();
 

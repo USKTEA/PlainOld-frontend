@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 
 import Header from './Header';
 
+const pathName = jest.fn();
+
 jest.mock('react-router-dom', () => ({
   Link({ children, to }) {
     return (
@@ -13,7 +15,7 @@ jest.mock('react-router-dom', () => ({
   useLocation() {
     return {
       pathname: {
-        startsWith: jest.fn(),
+        startsWith: pathName,
       },
     };
   },
@@ -25,6 +27,10 @@ describe('Header', () => {
   const renderHeader = () => {
     render(<Header />);
   };
+
+  beforeEach(() => {
+    localStorage.removeItem('accessToken');
+  });
 
   context('로그인을 했을 경우', () => {
     it('로그인 링크는 보이지 않고 로그아웃을 버튼을 보여준다', () => {
@@ -43,8 +49,6 @@ describe('Header', () => {
 
   context('로그인을 하지 않았을 경우', () => {
     it('로그아웃은 보이지 않고 로그인 링크가 보인다', () => {
-      localStorage.removeItem('accessToken');
-
       renderHeader();
 
       screen.getByRole('link', { name: 'Plain-O' });
@@ -53,6 +57,24 @@ describe('Header', () => {
       screen.getByRole('link', { name: 'Account' });
       screen.getByRole('link', { name: 'Cart' });
       screen.getByRole('link', { name: 'Login' });
+    });
+  });
+
+  context('로그인을 하지 않으면 Account 링크는', () => {
+    it('로그인페이지로 이동한다', () => {
+      renderHeader();
+
+      expect(screen.getByRole('link', { name: 'Account' }).getAttribute('href')).toBe('/login');
+    });
+  });
+
+  context('로그인을 했으면 Account 링크는', () => {
+    it('mypage로 이동한다', () => {
+      localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+      renderHeader();
+
+      expect(screen.getByRole('link', { name: 'Account' }).getAttribute('href')).toBe('/mypage');
     });
   });
 });

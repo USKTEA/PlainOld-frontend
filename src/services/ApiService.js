@@ -75,6 +75,40 @@ export default class ApiService {
     return data;
   }
 
+  async editOrder({ editRequest }) {
+    const { data } = await this.instance.patch('/orders', editRequest);
+
+    return data;
+  }
+
+  async fetchOrderByProductId({ productId }) {
+    const { data } = await this.instance.get(`/orders?productId=${productId}`);
+
+    return { orderNumber: data.orderNumber };
+  }
+
+  async fetchUserOrders() {
+    try {
+      const { data, status } = await this.instance.get('/orders/me');
+
+      if (status === 204) {
+        return { orders: [] };
+      }
+
+      return data;
+    } catch (error) {
+      window.location.href = '/login';
+
+      return '';
+    }
+  }
+
+  async fetchOrder({ orderNumber }) {
+    const { data } = await this.instance.get(`/orders/${orderNumber}`);
+
+    return data;
+  }
+
   async reissueToken() {
     try {
       const { data: { accessToken } } = await this.instance.post(
@@ -107,6 +141,8 @@ export default class ApiService {
 
     return {
       username: data.username,
+      nickname: data.nickname,
+      purchaseAmount: data.purchaseAmount,
       role: data.role,
     };
   }
@@ -141,12 +177,6 @@ export default class ApiService {
     );
 
     return { reviews: data.reviews, page: data.page };
-  }
-
-  async fetchOrderByProductId({ productId }) {
-    const { data } = await this.instance.get(`/orders?productId=${productId}`);
-
-    return { orderNumber: data.orderNumber };
   }
 
   async postReview(review) {

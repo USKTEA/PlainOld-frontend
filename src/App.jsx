@@ -43,9 +43,13 @@ export default function App() {
 
   const userStore = useUserStore();
 
+  const fetchUserInformation = async () => {
+    await userStore.fetchUserInformation();
+  };
+
   useEffect(() => {
     if (accessToken) {
-      userStore.fetchUserInformation();
+      fetchUserInformation();
     }
 
     if (!accessToken) {
@@ -70,6 +74,7 @@ export default function App() {
           <Route path="/order-failure" element={<OrderFailurePage />} />
           <Route path="/brand" element={<BrandPage />} />
           <Route path="/mypage" element={<AccountPage />} />
+          <Route path="/mypage/order/:orderNumber" element={<AccountPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/error" element={<ErrorPage />} />

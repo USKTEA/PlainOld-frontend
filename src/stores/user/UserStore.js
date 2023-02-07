@@ -6,7 +6,9 @@ export default class UserStore extends Store {
     super(props);
 
     this.username = null;
+    this.nickname = null;
     this.role = null;
+    this.purchaseAmount = null;
 
     this.errors = {
       login: '',
@@ -33,17 +35,25 @@ export default class UserStore extends Store {
 
   async fetchUserInformation() {
     try {
-      const { username, role } = await apiService.fetchUserInformation();
+      const {
+        username, nickname, purchaseAmount, role,
+      } = await apiService.fetchUserInformation();
 
       this.username = username;
+      this.nickname = nickname;
+      this.purchaseAmount = purchaseAmount;
       this.role = role;
     } catch (error) {
       localStorage.removeItem('accessToken');
+    } finally {
+      this.publish();
     }
   }
 
   clear() {
     this.username = null;
+    this.nickname = null;
+    this.purchaseAmount = null;
     this.role = null;
 
     this.errors = {
