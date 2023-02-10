@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -65,11 +65,13 @@ const Logout = styled.button`
 `;
 
 export default function Header() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [accessToken, setAccessToken] = useLocalStorage('accessToken', '');
 
   const handleLogout = () => {
     setAccessToken('');
+    navigate('/');
   };
 
   return (

@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+
 import useCancelOrderStore from '../../hooks/useCancelOrderStore';
 import useCreateCancelRequestStore from '../../hooks/useCreateCancelRequestStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
+
 import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.div`
@@ -94,6 +97,8 @@ const ErrorMessage = styled.span`
 
 export default function CancelOrderModal() {
   const modalRef = useRef();
+  const location = useLocation();
+
   const createCancelRequestStore = useCreateCancelRequestStore();
   const cancelOrderStore = useCancelOrderStore();
   const getOrderStore = useGetOrderStore();
@@ -123,6 +128,7 @@ export default function CancelOrderModal() {
 
       if (id) {
         await getOrderStore.fetchUserOrders();
+        await getOrderStore.fetchOrder({ orderNumber });
 
         handleCloseModal();
       }
@@ -137,7 +143,7 @@ export default function CancelOrderModal() {
       createCancelRequestStore.clear();
       document.removeEventListener('mousedown', handler);
     };
-  }, []);
+  }, [location]);
 
   return (
     <Container>

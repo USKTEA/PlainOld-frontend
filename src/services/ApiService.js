@@ -325,6 +325,18 @@ export default class ApiService {
 
     return data;
   }
+
+  async getRedirectUrl({ provider }) {
+    const { data } = await this.instance.get(`/oauth/${provider}`);
+
+    return data;
+  }
+
+  async postOAuthSession({ provider, code }) {
+    const { data } = await this.instance.post('/oauth/session', { provider, code });
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

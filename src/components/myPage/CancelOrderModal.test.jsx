@@ -1,6 +1,7 @@
 import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import { createCancelRequestStore } from '../../stores/cancelRequest/CreateCancelRequestStore';
 import { cancelOrderStore } from '../../stores/order/CancelOrderStore';
@@ -10,12 +11,19 @@ import CancelOrderModal from './CancelOrderModal';
 const context = describe;
 
 describe('CancelOrderModal', () => {
+  const renderCancelOrderModal = () => {
+    render((
+      <MemoryRouter>
+        <CancelOrderModal />
+      </MemoryRouter>));
+  };
+
   beforeEach(() => {
     createCancelRequestStore.clear();
   });
 
   it('주문취소 모달을 보여준다', () => {
-    render(<CancelOrderModal />);
+    renderCancelOrderModal();
 
     screen.getByText('주문 취소');
     screen.getByLabelText('취소사유');
@@ -31,7 +39,7 @@ describe('CancelOrderModal', () => {
         cancelOrderStore.setOrderNumber(orderNumber);
         createCancelRequestStore.setOrderNumber(orderNumber);
 
-        render(<CancelOrderModal />);
+        renderCancelOrderModal();
 
         fireEvent.click(screen.getByRole('button', { name: '제출' }));
 

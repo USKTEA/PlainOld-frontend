@@ -10,18 +10,18 @@ const Commands = styled.ul`
     width: 33%;
 
     button {
-    font-size: .8em;
-    font-weight: 500;
-    height: 2em;
-    width: 100%;
-    text-align: center;
-    vertical-align: middle;
-    border: none;
-    border-bottom: 1px solid ${defaultTheme.colors.fourth};
-    color: ${defaultTheme.colors.primaryText};
-    background-color: white;
-    cursor: pointer;
-  }
+      font-size: .8em;
+      font-weight: 500;
+      height: 2em;
+      width: 100%;
+      text-align: center;
+      vertical-align: middle;
+      border: none;
+      border-bottom: 1px solid ${defaultTheme.colors.fourth};
+      color: ${defaultTheme.colors.primaryText};
+      background-color: white;
+      cursor: pointer;
+     }
 }`;
 
 export default function ScrollCommand({ scrollTo }) {

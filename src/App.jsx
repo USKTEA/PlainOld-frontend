@@ -23,6 +23,7 @@ import BrandPage from './pages/BrandPage';
 import AccountPage from './pages/AccountPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
+import OAuthRedirectPage from './pages/OAuthRedirectPage';
 import ErrorPage from './pages/ErrorPage';
 
 const Main = styled.main`
@@ -77,6 +78,7 @@ export default function App() {
           <Route path="/mypage/order/:orderNumber" element={<AccountPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/oauth/kakao" element={<OAuthRedirectPage />} />
           <Route path="/error" element={<ErrorPage />} />
         </Routes>
       </Main>

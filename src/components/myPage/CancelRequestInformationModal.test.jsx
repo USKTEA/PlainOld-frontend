@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import CancelRequestInformationModal from './CancelRequestInformationModal';
 
 const clear = jest.fn();
@@ -16,8 +17,15 @@ jest.mock('../../hooks/useGetCancelRequestStore', () => () => ({
 const context = describe;
 
 describe('CancelRequestInformationModal', () => {
+  const renderCancelRequestInformationModal = () => {
+    render((
+      <MemoryRouter>
+        <CancelRequestInformationModal />
+      </MemoryRouter>));
+  };
+
   it('취소 상세정보를 보여준다', () => {
-    render(<CancelRequestInformationModal />);
+    renderCancelRequestInformationModal();
 
     screen.getByText('취소 상세정보');
     screen.getByText('취소사유');
@@ -26,7 +34,7 @@ describe('CancelRequestInformationModal', () => {
 
   context('확인 버튼을 클릭했을 경우', () => {
     it('clear 메서드가 호출된다', () => {
-      render(<CancelRequestInformationModal />);
+      renderCancelRequestInformationModal();
 
       fireEvent.click(screen.getByRole('button', { name: '확인' }));
 
