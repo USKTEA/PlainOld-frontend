@@ -777,6 +777,27 @@ const server = setupServer(
       content: '이래서 취소했습니다',
     }),
   )),
+  rest.get(`${baseUrl}/oauth/kakao`, async (req, res, ctx) => res(
+    ctx.json({
+      redirectUrl: '1',
+    }),
+  )),
+  rest.get(`${baseUrl}/oauth/INVALID`, async (req, res, ctx) => res(
+    ctx.status(400),
+  )),
+  rest.post(`${baseUrl}/oauth/session`, async (req, res, ctx) => {
+    const { code } = await req.json();
+
+    if (code === 'INVALIDCODE') {
+      return res(ctx.status(400));
+    }
+
+    return res(
+      ctx.json({
+        accessToken: 'ACCESSTOKEN',
+      }),
+    );
+  }),
 );
 
 export default server;

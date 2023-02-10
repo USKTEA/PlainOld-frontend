@@ -138,11 +138,11 @@ export default function Histories({ orders }) {
 
   const handleClickOrder = async (orderNumber) => {
     await getOrderStore.fetchOrder({ orderNumber });
-    setCurrentOrder(orderNumber);
 
     const { order } = getOrderStore;
 
     if (order) {
+      setCurrentOrder(order.orderNumber);
       navigate(`order/${orderNumber}`);
     }
   };

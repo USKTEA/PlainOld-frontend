@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useLocalStorage } from 'usehooks-ts';
+
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 
 import defaultTheme from '../../styles/defaultTheme';
@@ -61,6 +64,9 @@ const OrderSummary = styled.div`
 `;
 
 export default function OrderDetail() {
+  const [, setCurrentOrder] = useLocalStorage('currentOrder', '');
+  const [accessToken] = useLocalStorage('accessToken', '');
+
   const { order } = useGetOrderStore();
   const navigate = useNavigate();
 
@@ -69,6 +75,8 @@ export default function OrderDetail() {
   const handleClickGoBack = () => {
     navigate('/mypage');
   };
+
+  useEffect(() => () => setCurrentOrder(''), [accessToken]);
 
   if (!order) {
     return <p>now loading...</p>;

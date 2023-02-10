@@ -1,11 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import styled from 'styled-components';
+
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
-import styled from 'styled-components';
 import defaultTheme from '../../styles/defaultTheme';
+
 import useUserStore from '../../hooks/useUserStore';
+import useOAuthStore from '../../hooks/useOAuthStore';
 
 const Container = styled.div`
   width: 30%;
@@ -114,15 +117,28 @@ const Error = styled.p`
   color: ${defaultTheme.colors.red};
 `;
 
+const SocialLoginButtonContainer = styled.div`
+  margin-bottom: .5em;
+`;
+
+const Kakao = styled.button`
+  height: 30px;
+  width: 60px;
+  border: none;
+  background: url(/assets/images/kakao.png) no-repeat 100% 100%;
+`;
+
 export default function LoginForm() {
-  // 기능 추가해야함
   const navigate = useNavigate();
+
   const {
     register, handleSubmit, formState: { errors },
   } = useForm();
+
   const [, setAccessToken] = useLocalStorage('accessToken', '');
 
   const userStore = useUserStore();
+  const oAuthStore = useOAuthStore();
 
   const onSubmit = async (data) => {
     const { username, password } = data;
@@ -134,6 +150,12 @@ export default function LoginForm() {
 
       navigate('/');
     }
+  };
+
+  const handleOAuthLogin = async (provider) => {
+    const redirectUrl = await oAuthStore.getRedirectUrl({ provider });
+
+    window.location.href = redirectUrl;
   };
 
   return (
@@ -182,6 +204,12 @@ export default function LoginForm() {
         <span>또는</span>
         <div />
       </Divider>
+      <SocialLoginButtonContainer>
+        <Kakao
+          type="button"
+          onClick={() => handleOAuthLogin('kakao')}
+        />
+      </SocialLoginButtonContainer>
       <SearchGuestOrder>비회원 주문배송 조회</SearchGuestOrder>
     </Container>
   );

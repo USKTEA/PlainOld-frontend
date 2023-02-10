@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import Header from './Header';
 
 const pathName = jest.fn();
+const navigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   Link({ children, to }) {
@@ -11,6 +12,9 @@ jest.mock('react-router-dom', () => ({
         {children}
       </a>
     );
+  },
+  useNavigate() {
+    return navigate;
   },
   useLocation() {
     return {
@@ -75,6 +79,17 @@ describe('Header', () => {
       renderHeader();
 
       expect(screen.getByRole('link', { name: 'Account' }).getAttribute('href')).toBe('/mypage');
+    });
+  });
+  context('로그아웃 버튼을 클릭했을 경우', () => {
+    it('메인페이지로 이동한다', () => {
+      localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+      renderHeader();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Logout' }));
+
+      expect(navigate).toBeCalledWith('/');
     });
   });
 });

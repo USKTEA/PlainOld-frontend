@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import useGetCancelRequestStore from '../../hooks/useGetCancelRequestStore';
 import defaultTheme from '../../styles/defaultTheme';
@@ -77,6 +78,7 @@ const Button = styled.button`
 
 export default function CancelRequestInformationModal() {
   const modalRef = useRef();
+  const location = useLocation();
 
   const getCancelRequestStore = useGetCancelRequestStore();
   const { cancelRequest } = getCancelRequestStore;
@@ -94,7 +96,7 @@ export default function CancelRequestInformationModal() {
       getCancelRequestStore.clear();
       document.removeEventListener('mousedown', handler);
     };
-  }, []);
+  }, [location]);
 
   return (
     <Container>
