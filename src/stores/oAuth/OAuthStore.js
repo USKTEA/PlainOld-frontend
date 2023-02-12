@@ -19,7 +19,7 @@ export default class OAuthStore extends Store {
 
   async getRedirectUrl({ provider }) {
     try {
-      const { redirectUrl } = await apiService.getRedirectUrl({ provider });
+      const { redirectUrl } = await apiService.getOAuthRedirectUrl({ provider });
 
       return redirectUrl;
     } catch (error) {

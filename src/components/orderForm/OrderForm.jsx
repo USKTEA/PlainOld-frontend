@@ -8,11 +8,13 @@ import PaymentMethod from './PaymentMethod';
 import Agreements from './Agreements';
 
 import OrderItemInformation from './OrderItemInformation';
+import useOrderFromStore from '../../hooks/useOrderFomStore';
 
 const Container = styled.div`
   padding: 0 5em;
-  height: 150vh;
+  height: 150%;
   width: 100%;
+  min-width: 1300px;
   max-width: 1400px;
   background: ${defaultTheme.colors.background};
 `;
@@ -38,7 +40,31 @@ const RightSection = styled.div`
   width: 30%;
 `;
 
+const Auto = styled.button`
+  margin-left: 1em;
+  height: 3em;
+  border:none;
+  background-color: tomato;
+  color: white;
+  cursor: pointer;
+`;
+
 export default function OrderForm() {
+  const orderFormStore = useOrderFromStore();
+
+  const handleAutoFill = () => {
+    orderFormStore.changeField({ ordererName: '김뚜루' });
+    orderFormStore.changeField({ ordererPhoneNumber: '010-5237-2189' });
+    orderFormStore.changeField({ ordererEmail: 'tjrxo1234@gmail.com' });
+    orderFormStore.changeField({ receiverName: '김뚜루' });
+    orderFormStore.changeField({ receiverPhoneNumber: '010-5237-2189' });
+    orderFormStore.changeField({ zipCode: '623814' });
+    orderFormStore.changeField({ address1: '서울시 성동구 상원12길 34' });
+    orderFormStore.changeField({ address2: '에이원지식산업센터 612호' });
+    orderFormStore.changeField({ paymentMethod: 'CASH' });
+    orderFormStore.agreeAllAgreements();
+  };
+
   return (
     <Container>
       <Title>결제하기</Title>
@@ -52,8 +78,16 @@ export default function OrderForm() {
           <OrderSummary />
           <PaymentMethod />
           <Agreements />
+          <Auto
+            type="button"
+            onClick={handleAutoFill}
+          >
+            자동완성
+          </Auto>
         </RightSection>
+
       </Wrapper>
+
     </Container>
   );
 }

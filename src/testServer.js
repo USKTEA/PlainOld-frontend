@@ -798,6 +798,31 @@ const server = setupServer(
       }),
     );
   }),
+  rest.post(`${baseUrl}/payment`, async (req, res, ctx) => {
+    const { provider } = await req.json();
+
+    if (provider === 'INVALID') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      paymentProvider: 'KAKAOPAY',
+      tidId: 1,
+      parterOrderId: '1',
+      redirectUrl: '1',
+    }));
+  }),
+  rest.get(`${baseUrl}/payment`, async (req, res, ctx) => {
+    const tidId = req.url.searchParams.get('tidId');
+
+    if (tidId === 'INVALID') {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      approveCode: '1',
+    }));
+  }),
 );
 
 export default server;

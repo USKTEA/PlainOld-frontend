@@ -15,6 +15,12 @@ jest.mock('react-router-dom', () => ({
   },
 }));
 
+const getReadyPayment = jest.fn();
+
+jest.mock('../../hooks/usePaymentStore', () => () => ({
+  getReadyPayment,
+}));
+
 const context = describe;
 
 describe('Agreements', () => {
@@ -90,48 +96,100 @@ describe('Agreements', () => {
   });
 
   describe('결제하기', () => {
-    context('모든 form이 정확한 내용으로 채워졌을 경우', () => {
-      it('결제하기를 클릭하면 주문완료 결과가 보인다', async () => {
-        const product = {
-          id: 1,
-          name: 'T-Shirt',
-          price: 10000,
-          description: {
-            productDetail: 'Very Good', productSummary: 'Good',
-          },
-          image: {
-            thumbnailUrl: 'http://url.com',
-            productImageUrls: ['http://url.com'],
-          },
-          shipping: {
-            shippingMethod: '택배',
-            shippingFee: 2500,
-            freeShippingAmount: 50000,
-          },
-          status: 'ON_SALE',
-          categoryId: 1,
-        };
+    describe('무통장 입금', () => {
+      context('모든 form이 정확한 내용으로 채워졌을 경우', () => {
+        it('결제하기를 클릭하면 주문완료 결과가 보인다', async () => {
+          const paymentMethod = 'CASH';
 
-        orderItemStore.addOrderItem({ product });
+          const product = {
+            id: 1,
+            name: 'T-Shirt',
+            price: 10000,
+            description: {
+              productDetail: 'Very Good', productSummary: 'Good',
+            },
+            image: {
+              thumbnailUrl: 'http://url.com',
+              productImageUrls: ['http://url.com'],
+            },
+            shipping: {
+              shippingMethod: '택배',
+              shippingFee: 2500,
+              freeShippingAmount: 50000,
+            },
+            status: 'ON_SALE',
+            categoryId: 1,
+          };
 
-        orderFormStore.changeField({ ordererName: '김뚜루' });
-        orderFormStore.changeField({ ordererPhoneNumber: '010-5237-2189' });
-        orderFormStore.changeField({ ordererEmail: 'tjrxo1234@gmail.com' });
-        orderFormStore.changeField({ receiverName: '김뚜루' });
-        orderFormStore.changeField({ receiverPhoneNumber: '010-5237-2189' });
-        orderFormStore.changeField({ zipCode: '623814' });
-        orderFormStore.changeField({ address1: '서울시 성동구 상원12길 34' });
-        orderFormStore.changeField({ address2: '에이원지식산업센터 612호' });
-        orderFormStore.changeField({ paymentMethod: 'CASH' });
+          orderItemStore.addOrderItem({ product });
 
-        renderAgreements();
+          orderFormStore.changeField({ ordererName: '김뚜루' });
+          orderFormStore.changeField({ ordererPhoneNumber: '010-5237-2189' });
+          orderFormStore.changeField({ ordererEmail: 'tjrxo1234@gmail.com' });
+          orderFormStore.changeField({ receiverName: '김뚜루' });
+          orderFormStore.changeField({ receiverPhoneNumber: '010-5237-2189' });
+          orderFormStore.changeField({ zipCode: '623814' });
+          orderFormStore.changeField({ address1: '서울시 성동구 상원12길 34' });
+          orderFormStore.changeField({ address2: '에이원지식산업센터 612호' });
+          orderFormStore.changeField({ paymentMethod });
 
-        fireEvent.click(screen.getByLabelText('전체 동의'));
+          renderAgreements();
 
-        fireEvent.click(screen.getByRole('button', { name: '결제하기' }));
+          fireEvent.click(screen.getByLabelText('전체 동의'));
 
-        await waitFor(() => {
-          expect(navigate).toBeCalledWith('/order-success');
+          fireEvent.click(screen.getByRole('button', { name: '결제하기' }));
+
+          await waitFor(() => {
+            expect(navigate).toBeCalledWith('/order-success');
+          });
+        });
+      });
+    });
+
+    describe('카카오페이', () => {
+      context('모든 form이 정확한 내용으로 채워졌을 경우', () => {
+        it('결제하기를 클릭하면 카카오페이 결제 API가 호출된다', async () => {
+          const paymentMethod = 'KAKAOPAY';
+
+          const product = {
+            id: 1,
+            name: 'T-Shirt',
+            price: 10000,
+            description: {
+              productDetail: 'Very Good', productSummary: 'Good',
+            },
+            image: {
+              thumbnailUrl: 'http://url.com',
+              productImageUrls: ['http://url.com'],
+            },
+            shipping: {
+              shippingMethod: '택배',
+              shippingFee: 2500,
+              freeShippingAmount: 50000,
+            },
+            status: 'ON_SALE',
+            categoryId: 1,
+          };
+
+          orderItemStore.addOrderItem({ product });
+
+          orderFormStore.changeField({ ordererName: '김뚜루' });
+          orderFormStore.changeField({ ordererPhoneNumber: '010-5237-2189' });
+          orderFormStore.changeField({ ordererEmail: 'tjrxo1234@gmail.com' });
+          orderFormStore.changeField({ receiverName: '김뚜루' });
+          orderFormStore.changeField({ receiverPhoneNumber: '010-5237-2189' });
+          orderFormStore.changeField({ zipCode: '623814' });
+          orderFormStore.changeField({ address1: '서울시 성동구 상원12길 34' });
+          orderFormStore.changeField({ address2: '에이원지식산업센터 612호' });
+          orderFormStore.changeField({ paymentMethod });
+
+          renderAgreements();
+
+          fireEvent.click(screen.getByLabelText('전체 동의'));
+
+          fireEvent.click(screen.getByRole('button', { name: '결제하기' }));
+
+          expect(getReadyPayment).toBeCalled();
         });
       });
     });

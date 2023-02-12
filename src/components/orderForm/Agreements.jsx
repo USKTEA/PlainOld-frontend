@@ -12,6 +12,7 @@ import defaultTheme from '../../styles/defaultTheme';
 import InputLabel from '../ui/InputLabel';
 import SubSection from '../ui/Subsection';
 import useCartStore from '../../hooks/useCartStore';
+import usePaymentStore from '../../hooks/usePaymentStore';
 
 const Checkbox = styled.div`
   li {
@@ -52,19 +53,20 @@ const OrderButton = styled.button`
 export default function Agreements() {
   const navigate = useNavigate();
   const [, setCartItems] = useLocalStorage('cartItems', '');
+  const [, setOrderInformation] = useLocalStorage('orderInformation', '');
 
   const orderFormStore = useOrderFromStore();
   const orderItemStore = useOrderItemStore();
   const createOrderStore = useCreateOrderStore();
   const cartStore = useCartStore();
+  const paymentStore = usePaymentStore();
 
-  const { agreements } = orderFormStore;
+  const { agreements, fields: { paymentMethod } } = orderFormStore;
+  const { orderer, shippingInformation, payment } = orderFormStore.form();
   const { orderItems } = orderItemStore;
 
-  const handleClickOrder = async () => {
+  const handleCashOrder = async () => {
     if (orderFormStore.isComplete()) {
-      const { orderer, shippingInformation, payment } = orderFormStore.form();
-
       await createOrderStore.createOrder({
         orderItems: orderItems.getItems(),
         orderer,
@@ -88,6 +90,33 @@ export default function Agreements() {
 
       navigate('/order-success');
     }
+  };
+
+  const handleKakaoOrder = async () => {
+    if (orderFormStore.isComplete()) {
+      const redirectUrl = await paymentStore.getReadyPayment(
+        { provider: paymentMethod, orderItems: orderItems.getItems() },
+      );
+
+      if (redirectUrl) {
+        setOrderInformation({
+          paymentProvider: paymentStore.paymentProvider,
+          tidId: paymentStore.tidId,
+          partnerOrderId: paymentStore.partnerOrderId,
+          orderItems: orderItems.getItems(),
+          orderer,
+          shippingInformation,
+          payment,
+        });
+
+        window.location.href = redirectUrl;
+      }
+    }
+  };
+
+  const orderOptions = {
+    CASH: handleCashOrder,
+    KAKAOPAY: handleKakaoOrder,
   };
 
   return (
@@ -143,7 +172,7 @@ export default function Agreements() {
       </Checkbox>
       <OrderButton
         disabled={!orderFormStore.isComplete()}
-        onClick={handleClickOrder}
+        onClick={orderOptions[`${paymentMethod}`]}
       >
         결제하기
       </OrderButton>

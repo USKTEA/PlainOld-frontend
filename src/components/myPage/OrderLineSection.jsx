@@ -224,7 +224,7 @@ export default function OrderLineSection({
                 취소상세
               </button>
             ) : null}
-            {status === '입금대기' ? (
+            {status === '입금대기' || status === '배송준비중' ? (
               <button
                 type="button"
                 onClick={handleOpenOrderCancelModal}

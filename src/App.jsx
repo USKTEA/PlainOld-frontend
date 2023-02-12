@@ -25,6 +25,8 @@ import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import OAuthRedirectPage from './pages/OAuthRedirectPage';
 import ErrorPage from './pages/ErrorPage';
+import OrderCancelPage from './pages/OrderCancelPage';
+import PaymentConfirmationPage from './pages/PaymentConfirmationPage';
 
 const Main = styled.main`
   display: flex;
@@ -72,7 +74,9 @@ export default function App() {
           <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
+          <Route path="/order-cancel" element={<OrderCancelPage />} />
           <Route path="/order-failure" element={<OrderFailurePage />} />
+          <Route path="/payment-confirmation" element={<PaymentConfirmationPage />} />
           <Route path="/brand" element={<BrandPage />} />
           <Route path="/mypage" element={<AccountPage />} />
           <Route path="/mypage/order/:orderNumber" element={<AccountPage />} />

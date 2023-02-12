@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import OrderResult from './OrderResult';
 
-jest.mock('../hooks/useCreateOrderStore', () => () => ({
+jest.mock('../../hooks/useCreateOrderStore', () => () => ({
   result: {
     cost: 3500,
     orderNumber: 'tjrxo1234-202301011551',

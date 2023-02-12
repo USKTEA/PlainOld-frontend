@@ -221,7 +221,7 @@ export default function Histories({ orders }) {
                   취소상세
                 </button>
               ) : null}
-              {order.status === '입금대기' ? (
+              {order.status === '입금대기' || order.status === '배송준비중' ? (
                 <button
                   type="button"
                   onClick={() => handleOpenOrderCancelModal(order.orderNumber)}

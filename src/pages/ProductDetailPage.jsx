@@ -50,9 +50,12 @@ export default function ProductDetailPage() {
     await getReviewStore.fetchReviews({ productId: id, pageNumber: 1 });
 
     const { reviews } = getReviewStore;
-    const reviewIds = reviews.reduce((acc, review) => [...acc, review.id], []);
 
-    await fetchReplies({ reviewIds });
+    if (reviews.length) {
+      const reviewIds = reviews.reduce((acc, review) => [...acc, review.id], []);
+
+      await fetchReplies({ reviewIds });
+    }
   };
 
   const fetchInquiriesAndAnswers = async () => {

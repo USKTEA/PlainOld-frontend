@@ -25,7 +25,7 @@ describe('PaymentMethod', () => {
   it('결제수단으로 무통장입금이 초기값으로 체크되어 있다', () => {
     renderPaymentMethod();
 
-    expect(screen.getByLabelText('무통장입금').defaultChecked).toBe(true);
+    expect(screen.getByLabelText('무통장입금').checked).toBe(true);
   });
 
   describe('무통장입금', () => {
@@ -40,6 +40,18 @@ describe('PaymentMethod', () => {
         });
 
         screen.getByDisplayValue('김뚜루');
+      });
+    });
+  });
+
+  describe('카카오페이', () => {
+    context('카카오페이를 클릭했을 경우', () => {
+      it('결제방식이 카카오페이로 변경된다', () => {
+        renderPaymentMethod();
+
+        fireEvent.click(screen.getByLabelText('카카오페이'));
+
+        expect(screen.getByLabelText('카카오페이')).toBeChecked();
       });
     });
   });
