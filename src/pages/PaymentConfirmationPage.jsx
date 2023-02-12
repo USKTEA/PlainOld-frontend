@@ -50,11 +50,18 @@ export default function PaymentConfirmationPage() {
   const navigate = useNavigate();
   const [orderInformation] = useLocalStorage('orderInformation', '');
   const [, setCartItems] = useLocalStorage('cartItems', '');
+  const [itemInPurchase, setItemInPurchase] = useLocalStorage('itemInPurchase', '');
   const [searchParams] = useSearchParams();
 
   const createOrderStore = useCreateOrderStore();
   const paymentStore = usePaymentStore();
   const cartStore = useCartStore();
+
+  const loadCartData = async () => {
+    await cartStore.load();
+
+    cartStore.setItemInPurchase(itemInPurchase);
+  };
 
   const approveOrder = async () => {
     const pgToken = searchParams.get('pg_token');
@@ -97,7 +104,12 @@ export default function PaymentConfirmationPage() {
   };
 
   useEffect(() => {
+    loadCartData();
     approveOrder();
+
+    return () => {
+      setItemInPurchase('');
+    };
   }, []);
 
   return (

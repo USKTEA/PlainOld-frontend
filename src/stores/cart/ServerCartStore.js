@@ -134,6 +134,10 @@ export default class ServerCartStore extends CartStore {
     this.publish();
   }
 
+  setItemInPurchase(itemInPurchase) {
+    this.itemInPurchase = itemInPurchase;
+  }
+
   getToDelete(names) {
     return names.reduce(
       (acc, name) => [...acc, ...this.cart.items.get(name)],

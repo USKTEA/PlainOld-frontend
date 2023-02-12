@@ -185,7 +185,11 @@ export default class OrderFormStore extends Store {
   }
 
   isComplete() {
-    if (!Object.values(this.agreements).filter((agreement) => agreement).length) {
+    const agreementCounts = Object.keys(this.agreements).length;
+    const agreed = Object.values(this.agreements)
+      .filter((agreement) => agreement).length;
+
+    if (agreed !== agreementCounts) {
       return false;
     }
 
@@ -198,7 +202,7 @@ export default class OrderFormStore extends Store {
 
     const filled = fields.filter((field) => this.fields[field]);
 
-    if (!fields.length === filled.length) {
+    if (!(fields.length === filled.length)) {
       return false;
     }
 
