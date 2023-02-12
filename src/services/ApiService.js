@@ -326,14 +326,34 @@ export default class ApiService {
     return data;
   }
 
-  async getRedirectUrl({ provider }) {
+  async getOAuthRedirectUrl({ provider }) {
     const { data } = await this.instance.get(`/oauth/${provider}`);
 
     return data;
   }
 
   async postOAuthSession({ provider, code }) {
-    const { data } = await this.instance.post('/oauth/session', { provider, code });
+    const { data } = await this.instance.post(
+      '/oauth/session',
+      { provider, code },
+      { withCredentials: true },
+    );
+
+    return data;
+  }
+
+  async getReadyPayment({ provider, orderItems }) {
+    const { data } = await this.instance.post('/payment', { provider, orderItems });
+
+    return data;
+  }
+
+  async getApproveCode({
+    provider, pgToken, tidId, partnerOrderId,
+  }) {
+    const { data } = await this.instance.get(
+      `/payment?provider=${provider}&pgToken=${pgToken}&tidId=${tidId}&partnerOrderId=${partnerOrderId}`,
+    );
 
     return data;
   }

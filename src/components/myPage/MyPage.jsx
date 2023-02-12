@@ -14,7 +14,7 @@ import UserInformation from './UserInformation';
 const Container = styled.div`
   min-height: 100vh;
   width: 100%;
-  min-width: 70em;
+  min-width: 1300px;
   margin-top: 4em;
   display: flex;
 `;
