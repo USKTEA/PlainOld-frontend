@@ -18,6 +18,7 @@ describe('PaymentConfirmationPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.removeItem('orderInformation');
+    localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
   });
 
   context('주문을 성공했을 경우', () => {

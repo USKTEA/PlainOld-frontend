@@ -71,6 +71,7 @@ const Command = styled.div`
 export default function Cart() {
   const [, setOrderItems] = useLocalStorage('orderItems', '');
   const [, setCartItems] = useLocalStorage('cartItems', '');
+  const [, setItemInPurchase] = useLocalStorage('itemInPurchase', '');
 
   const navigate = useNavigate();
   const cartStore = useCartStore();
@@ -83,6 +84,8 @@ export default function Cart() {
       cartStore.selectedToItemInPurchase();
 
       orderItemStore.loadItems({ items: cartStore.getSelectedItems() });
+
+      setItemInPurchase(cartStore.itemInPurchase);
       setOrderItems(orderItemStore.orderItems);
 
       navigate('/order');

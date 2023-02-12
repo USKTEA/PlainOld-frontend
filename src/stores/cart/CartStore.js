@@ -162,6 +162,8 @@ export default class CartStore extends Store {
 
   selectItemToPurchase({ name }) {
     this.itemInPurchase = [name];
+
+    this.publish();
   }
 
   completePurchase() {
@@ -190,7 +192,6 @@ export default class CartStore extends Store {
 
   selectAll() {
     this.selected = [...this.cart.items.keys()];
-
     this.publish();
   }
 

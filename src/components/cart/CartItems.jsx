@@ -223,7 +223,7 @@ export default function CartItems() {
   const cartStore = useCartStore();
   const orderItemStore = useOrderItemStore();
 
-  const { cart, selected, itemInPurchase } = cartStore;
+  const { cart, selected } = cartStore;
   const { items } = cart;
 
   const handleOpenModal = ({ name }) => {
@@ -257,7 +257,7 @@ export default function CartItems() {
     orderItemStore.loadItems({ items: items.get(name) });
 
     setOrderItems(orderItemStore.orderItems);
-    setItemInPurchase(itemInPurchase);
+    setItemInPurchase(cartStore.itemInPurchase);
 
     navigate('/order');
   };

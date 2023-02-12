@@ -131,7 +131,12 @@ export default function OrderAmountSection({ cost, shippingFee, payment }) {
                   <span>예금주 김뚜루</span>
                 </Cash>
               )
-              : <span>카카오페이</span> }
+              : null}
+            {payment === 'KAKAOPAY'
+              ? (
+                <span>카카오페이</span>
+              )
+              : null}
           </Payment>
         </PaymentWrapper>
       </Wrapper>
