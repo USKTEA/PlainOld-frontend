@@ -21,6 +21,7 @@ import ReviewSection from './ReviewSection';
 import QnASection from './QnASection';
 
 import numberFormat from '../../utils/numberFormat';
+import Detail from './Detail';
 
 const ProductSection = styled.div`
   width: 50%;
@@ -108,11 +109,6 @@ const MessageWrapper = styled.div`
   font-size: 1.2em;
 `;
 
-const Detail = styled.section`
-  margin-top: 2em;
-  height: 30em;
-`;
-
 export default function ProductDetail() {
   const navigate = useNavigate();
   const focusTarget = useRef([]);
@@ -165,6 +161,10 @@ export default function ProductDetail() {
 
   const handleSetRef = (element) => (name) => {
     switch (name) {
+    case 'Detail':
+      focusTarget.current[0] = element;
+      break;
+
     case 'Review':
       focusTarget.current[1] = element;
       break;
@@ -191,13 +191,13 @@ export default function ProductDetail() {
     return <Message>{errors.loading}</Message>;
   }
 
-  const { name, image, description } = product;
+  const { name, image } = product;
 
   return (
     <div>
       <ProductSection>
         <Image
-          src={`/assets/images/${image.productImageUrls[0]}.png`}
+          src={image.thumbnailUrl}
           alt={name}
           height={450}
           width={450}
@@ -247,10 +247,8 @@ export default function ProductDetail() {
       <div>
         <ScrollCommand scrollTo={handleScrollTo} />
         <Detail
-          ref={(element) => { focusTarget.current[0] = element; }}
-        >
-          {description.productDetail}
-        </Detail>
+          setRef={handleSetRef}
+        />
         <ReviewSection
           setRef={handleSetRef}
         />

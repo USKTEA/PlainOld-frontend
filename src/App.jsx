@@ -19,7 +19,6 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import OrderPage from './pages/OrderPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import OrderFailurePage from './pages/OrderFailurePage';
-import BrandPage from './pages/BrandPage';
 import AccountPage from './pages/AccountPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
@@ -27,17 +26,26 @@ import OAuthRedirectPage from './pages/OAuthRedirectPage';
 import ErrorPage from './pages/ErrorPage';
 import OrderCancelPage from './pages/OrderCancelPage';
 import PaymentConfirmationPage from './pages/PaymentConfirmationPage';
+import Footer from './components/footer/Footer';
 
 const Main = styled.main`
+  font-size: 1.1em;
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 100%;
   max-width: 1600px;
   min-width: 1024px;
-  height: calc(100vh - 4em);
   min-height: 500px;
   margin: 0 auto;
   padding: 1em;
+  margin-bottom: 5em;
+`;
+
+const SubWrapper = styled.div`
+  height: calc(100% - 4em);
+  display: flex;
+  flex-direction: column;
 `;
 
 export default function App() {
@@ -67,25 +75,27 @@ export default function App() {
       <Reset />
       <GlobalStyle />
       <Header />
-      <Main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<CatalogPage />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/order" element={<OrderPage />} />
-          <Route path="/order-success" element={<OrderSuccessPage />} />
-          <Route path="/order-cancel" element={<OrderCancelPage />} />
-          <Route path="/order-failure" element={<OrderFailurePage />} />
-          <Route path="/payment-confirmation" element={<PaymentConfirmationPage />} />
-          <Route path="/brand" element={<BrandPage />} />
-          <Route path="/mypage" element={<AccountPage />} />
-          <Route path="/mypage/order/:orderNumber" element={<AccountPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/oauth/kakao" element={<OAuthRedirectPage />} />
-          <Route path="/error" element={<ErrorPage />} />
-        </Routes>
-      </Main>
+      <SubWrapper>
+        <Main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/products" element={<CatalogPage />} />
+            <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route path="/order" element={<OrderPage />} />
+            <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Route path="/order-cancel" element={<OrderCancelPage />} />
+            <Route path="/order-failure" element={<OrderFailurePage />} />
+            <Route path="/payment-confirmation" element={<PaymentConfirmationPage />} />
+            <Route path="/mypage" element={<AccountPage />} />
+            <Route path="/mypage/order/:orderNumber" element={<AccountPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/oauth/kakao" element={<OAuthRedirectPage />} />
+            <Route path="/error" element={<ErrorPage />} />
+          </Routes>
+        </Main>
+        <Footer />
+      </SubWrapper>
     </ThemeProvider>
   );
 }

@@ -255,7 +255,7 @@ export default function ChangeQuantityModal({ setModalOpen }) {
         <Item>
           <ImageContainer>
             <img
-              src={`/assets/images/${items[0].thumbnailUrl}.png`}
+              src={items[0].thumbnailUrl}
               alt={name}
               height={50}
               width={50}

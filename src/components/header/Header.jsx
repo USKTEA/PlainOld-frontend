@@ -23,8 +23,8 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Title = styled.h2`
-  font-size: 30px;
+const Title = styled.h1`
+  font-size: 1.6em;
   font-weight: 900;
   color: ${defaultTheme.colors.primaryText};
 `;
@@ -42,11 +42,13 @@ const Navigation = styled.nav`
 `;
 
 const List = styled.ul`
+  font-size: 1.3em;
   display: flex;
   align-items: center;
   gap: 3em;
 
   button {
+    font-size: .75em;
     padding-bottom: .5em;
   }
 `;
@@ -84,7 +86,7 @@ export default function Header() {
                 to="/"
                 selected={location.pathname === '/'}
               >
-                <Title>Plain-O</Title>
+                <Title>Plain Old</Title>
               </Link>
             </li>
             <li>
@@ -94,14 +96,6 @@ export default function Header() {
                 || location.pathname === '/order'}
               >
                 SHOP
-              </StyledLink>
-            </li>
-            <li>
-              <StyledLink
-                to="/brand"
-                selected={location.pathname === ('/brand')}
-              >
-                ABOUT
               </StyledLink>
             </li>
           </List>

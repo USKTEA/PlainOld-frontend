@@ -12,7 +12,6 @@ import useOrderFromStore from '../../hooks/useOrderFomStore';
 
 const Container = styled.div`
   padding: 0 5em;
-  height: 150%;
   width: 100%;
   min-width: 1300px;
   max-width: 1400px;

@@ -104,6 +104,8 @@ export default function OrderResult() {
 
   const { result, processing } = createOrderStore;
 
+  const { paymentMethod } = result;
+
   useEffect(() => {
     if (!result) {
       navigate('/error');
@@ -122,32 +124,59 @@ export default function OrderResult() {
     <Container>
       <Wrapper>
         <Title>주문완료</Title>
-        <Message>
-          <p>아래 계좌정보로 입금해 주시면</p>
-          <p>
-            결제 완료처리가 됩니다
-          </p>
-        </Message>
+        {paymentMethod === 'CASH' ? (
+          <Message>
+            <p>아래 계좌정보로 입금해 주시면</p>
+            <p>
+              결제 완료처리가 됩니다
+            </p>
+          </Message>
+        ) : null}
+        {paymentMethod === 'KAKAOPAY'
+          ? (
+            <Message>
+              <p>주문확인 후 상품 배송이 시작됩니다.</p>
+            </Message>
+          ) : null}
         <Table>
           <tbody>
-            <tr>
-              <th>입금계좌 안내</th>
-              <td>
-                <span>
-                  우리은행
-                </span>
-                <span>
-                  1005-003-623814
-                </span>
-                <span>
-                  김뚜루
-                </span>
-                <strong>
-                  {`${numberFormat(result.cost)}원`}
-                </strong>
-                <br />
-              </td>
-            </tr>
+            {paymentMethod === 'CASH' ? (
+              <tr>
+                <th>입금계좌 안내</th>
+                <td>
+                  <span>
+                    우리은행
+                  </span>
+                  <span>
+                    1005-003-623814
+                  </span>
+                  <span>
+                    김뚜루
+                  </span>
+                  <strong>
+                    {`${numberFormat(result.cost)}원`}
+                  </strong>
+                  <br />
+                </td>
+              </tr>
+            ) : null}
+            {paymentMethod === 'KAKAOPAY' ? (
+              <tr>
+                <th>결제방식</th>
+                <td>
+                  <span>
+                    카카오페이
+                  </span>
+                  <span>-</span>
+                  <strong>
+                    결제 금액
+                    {' '}
+                    {`${numberFormat(result.cost)}원`}
+                  </strong>
+                  <br />
+                </td>
+              </tr>
+            ) : null}
             <tr>
               <th>주문번호</th>
               <td>

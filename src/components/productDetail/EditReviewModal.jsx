@@ -14,7 +14,7 @@ import useReviewImageFileStore from '../../hooks/useReviewImageFileStore';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 250em;
+  height: 450em;
   top: -10em;
   left: -10em;
   display: flex;
@@ -277,7 +277,7 @@ export default function EditReviewModal({ setModalOpen }) {
           <Item>
             <ImageContainer>
               <img
-                src={`/assets/images/${product.image.thumbnailUrl}.png`}
+                src={product.image.thumbnailUrl}
                 alt={product.name}
                 height={45}
                 width={45}

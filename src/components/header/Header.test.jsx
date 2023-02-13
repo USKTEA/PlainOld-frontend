@@ -42,9 +42,8 @@ describe('Header', () => {
 
       renderHeader();
 
-      screen.getByRole('link', { name: 'Plain-O' });
+      screen.getByRole('link', { name: 'Plain Old' });
       screen.getByRole('link', { name: 'SHOP' });
-      screen.getByRole('link', { name: 'ABOUT' });
       screen.getByRole('link', { name: 'Account' });
       screen.getByRole('link', { name: 'Cart' });
       screen.getByRole('button', { name: 'Logout' });
@@ -55,9 +54,8 @@ describe('Header', () => {
     it('로그아웃은 보이지 않고 로그인 링크가 보인다', () => {
       renderHeader();
 
-      screen.getByRole('link', { name: 'Plain-O' });
+      screen.getByRole('link', { name: 'Plain Old' });
       screen.getByRole('link', { name: 'SHOP' });
-      screen.getByRole('link', { name: 'ABOUT' });
       screen.getByRole('link', { name: 'Account' });
       screen.getByRole('link', { name: 'Cart' });
       screen.getByRole('link', { name: 'Login' });

@@ -32,7 +32,7 @@ export default class OrderItems {
   }
 
   findIndex(item) {
-    if (!item.option) {
+    if (!item.option || (item.option.size === 'FREE' && item.option.color === '')) {
       return this.items.findIndex((i) => i.productId === item.productId);
     }
 

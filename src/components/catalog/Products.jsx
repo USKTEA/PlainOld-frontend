@@ -9,11 +9,12 @@ import defaultTheme from '../../styles/defaultTheme';
 import numberFormat from '../../utils/numberFormat';
 
 const Container = styled.div`
+  height: ca100%;
   display: flex;
   flex-direction: column;
   position: relative;
   top: 3em;
-  padding-block: 3em;
+  margin-bottom: 10em;
 `;
 
 const List = styled.ul`
@@ -58,6 +59,8 @@ const Message = styled.p`
 `;
 
 const Pagination = styled.nav`
+  font-size: 1.2em;
+  margin-top: 2em;
   display: flex;
   justify-content: center;
 
@@ -86,7 +89,7 @@ export default function Products() {
           <Item key={product.id}>
             <Link to={`/products/${product.id}`}>
               <Image
-                src={`/assets/images/${product.thumbnailUrl}.png`}
+                src={product.thumbnailUrl}
                 alt={product.name}
                 width={250}
                 height={250}
@@ -104,12 +107,16 @@ export default function Products() {
           <li key={index}>
             {category
               ? (
-                <Link to={`/products?category=${category}&page=${index + 1}`}>
+                <Link
+                  to={`/products?category=${category}&page=${index + 1}`}
+                >
                   {index + 1}
                 </Link>
               )
               : (
-                <Link to={`/products?page=${index + 1}`}>
+                <Link
+                  to={`/products?page=${index + 1}`}
+                >
                   {index + 1}
                 </Link>
               )}

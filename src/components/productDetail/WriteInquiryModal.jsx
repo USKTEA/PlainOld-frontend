@@ -11,7 +11,7 @@ import defaultTheme from '../../styles/defaultTheme';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 150em;
+  height: 300em;
   top: -10em;
   left: -10em;
   display: flex;
@@ -193,7 +193,7 @@ export default function WriteInquiryModal({ setModalOpen }) {
           <Item>
             <ImageContainer>
               <img
-                src={`/assets/images/${product.image.thumbnailUrl}.png`}
+                src={product.image.thumbnailUrl}
                 alt={product.name}
                 height={40}
                 width={40}

@@ -175,7 +175,7 @@ export default function OrderLineSection({
             >
               <ImageWrapper>
                 <img
-                  src={`/assets/images/${orderLine.thumbnailUrl}.png`}
+                  src={orderLine.thumbnailUrl}
                   alt="상품사진"
                   height={60}
                   width={60}
