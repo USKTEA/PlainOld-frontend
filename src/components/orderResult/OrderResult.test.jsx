@@ -7,6 +7,7 @@ jest.mock('../../hooks/useCreateOrderStore', () => () => ({
   result: {
     cost: 3500,
     orderNumber: 'tjrxo1234-202301011551',
+    paymentMethod: 'CASH',
     receiver: {
       name: '김뚜루',
       phoneNumber: '010-1111-1111',
@@ -32,7 +33,6 @@ describe('OrderResult', () => {
     renderOrderResult();
 
     screen.getByText('주문완료');
-    screen.getByText('입금계좌 안내');
     screen.getByText('주문번호');
   });
 

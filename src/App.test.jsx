@@ -10,6 +10,6 @@ describe('App', () => {
       </MemoryRouter>,
     );
 
-    screen.getByText('Plain-O');
+    screen.getByRole('heading', { level: 1 });
   });
 });

@@ -9,6 +9,14 @@ import defaultTheme from '../../styles/defaultTheme';
 const Navigation = styled.nav`
   font-size: 25px;
   font-weight: 300;
+
+  a {
+    display: inline-block;
+    margin-bottom: .2em;
+    :hover {
+      color: ${defaultTheme.colors.secondaryText};
+    }
+  }
 `;
 
 const StyledLink = styled(Link)`

@@ -307,7 +307,7 @@ export default function CartItems() {
                     <Item to={`/products/${items.get(name)[0].productId}`}>
                       <ImageContainer>
                         <img
-                          src={`/assets/images/${items.get(name)[0].thumbnailUrl}.png`}
+                          src={items.get(name)[0].thumbnailUrl}
                           alt={name}
                           height={60}
                           width={60}

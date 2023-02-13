@@ -177,7 +177,7 @@ export default function Histories({ orders }) {
               <OrderItem>
                 <ImageWrapper>
                   <img
-                    src={`/assets/images/${order.orderLines[0].thumbnailUrl}.png`}
+                    src={order.orderLines[0].thumbnailUrl}
                     alt="상품사진"
                     height={60}
                     width={60}

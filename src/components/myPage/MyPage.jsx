@@ -12,10 +12,11 @@ import OrderHistory from './OrderHistory';
 import UserInformation from './UserInformation';
 
 const Container = styled.div`
-  min-height: 100vh;
+  height: 100%;
   width: 100%;
   min-width: 1300px;
   margin-top: 4em;
+  margin-bottom: 5em;
   display: flex;
 `;
 

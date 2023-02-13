@@ -311,6 +311,7 @@ const server = setupServer(
       ctx.json({
         orderNumber: 'tjrxo1234-2022122993760',
         cost: 50_000,
+        paymentMethod: 'CASH',
         receiver: {
           name: '김뚜루',
           phoneNumber: '010-1111-1111',

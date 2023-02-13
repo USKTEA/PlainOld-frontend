@@ -14,8 +14,9 @@ import EmptyCart from './EmptyCart';
 import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.div`
-  padding: 1em;
+  height: calc(120% - 1em);
   width: 100%;
+  padding: 1em;
   max-width: 1400px;
 `;
 
@@ -86,6 +87,7 @@ export default function Cart() {
       orderItemStore.loadItems({ items: cartStore.getSelectedItems() });
 
       setItemInPurchase(cartStore.itemInPurchase);
+
       setOrderItems(orderItemStore.orderItems);
 
       navigate('/order');

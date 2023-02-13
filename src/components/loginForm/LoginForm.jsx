@@ -13,6 +13,8 @@ import useOAuthStore from '../../hooks/useOAuthStore';
 const Container = styled.div`
   width: 30%;
 
+
+  height: calc(100vh - 13em);
   button {
     cursor: pointer;
   }

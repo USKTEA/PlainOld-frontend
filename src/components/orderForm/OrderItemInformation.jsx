@@ -102,7 +102,7 @@ export default function OrderItemInformation() {
             <Link to={`/products/${item.productId}`}>
               <OrderItem>
                 <Image
-                  src={`/assets/images/${item.thumbnailUrl}.png`}
+                  src={item.thumbnailUrl}
                   alt={item.name}
                   height={70}
                   width={70}
