@@ -87,9 +87,11 @@ export default class ApiService {
     return { orderNumber: data.orderNumber };
   }
 
-  async fetchUserOrders() {
+  async fetchUserOrders(orderStatus) {
     try {
-      const { data, status } = await this.instance.get('/orders/me');
+      const url = `/orders/me${orderStatus ? `?status=${orderStatus}` : ''}`;
+
+      const { data, status } = await this.instance.get(url);
 
       if (status === 204) {
         return { orders: [] };
