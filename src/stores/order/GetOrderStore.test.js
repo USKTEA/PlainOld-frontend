@@ -37,7 +37,7 @@ describe('GetOrderStore', () => {
     });
   });
 
-  describe('GetUserOrder', () => {
+  describe('FetchUserOrder', () => {
     context('사용자 주문내역이 없을 경우', () => {
       it('빈 배열을 반환한다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('NOTHAVEORDER'));
@@ -59,6 +59,20 @@ describe('GetOrderStore', () => {
         const { orders } = getOrderStore;
 
         expect(orders).toHaveLength(1);
+      });
+    });
+
+    context('파라미터로 orderStatus를 전달 받았을 경우', () => {
+      it('status에 해당하는 주문내역을 반환한다', async () => {
+        localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+        const status = 'CANCELED';
+
+        await getOrderStore.fetchUserOrders(status);
+
+        const { orders } = getOrderStore;
+
+        expect(orders).toHaveLength(1);
+        expect(orders[0].status).toBe('취소완료');
       });
     });
   });

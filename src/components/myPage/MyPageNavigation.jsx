@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useGetOrderStore from '../../hooks/useGetOrderStore';
 import defaultTheme from '../../styles/defaultTheme';
 
 const Container = styled.div`
@@ -17,11 +19,27 @@ const Container = styled.div`
 `;
 
 export default function MyPageNavigation() {
+  const navigate = useNavigate();
+  const getOrderStore = useGetOrderStore();
+
+  const handleGetOrders = async () => {
+    await getOrderStore.fetchUserOrders();
+
+    navigate('/mypage');
+  };
+
+  const handleGetCanceledOrders = async () => {
+    await getOrderStore.fetchUserOrders('CANCELED');
+
+    navigate('/mypage');
+  };
+
   return (
     <Container>
       <li>
         <button
           type="button"
+          onClick={handleGetOrders}
         >
           주문 조회
         </button>
@@ -29,6 +47,7 @@ export default function MyPageNavigation() {
       <li>
         <button
           type="button"
+          onClick={handleGetCanceledOrders}
         >
           주문취소 조회
         </button>

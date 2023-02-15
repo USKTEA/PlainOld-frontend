@@ -121,13 +121,15 @@ const Error = styled.p`
 
 const SocialLoginButtonContainer = styled.div`
   margin-bottom: .5em;
+  display: flex;
+  justify-content: center;
 `;
 
 const Kakao = styled.button`
-  height: 30px;
-  width: 60px;
+  height: 50px;
+  width: 300px;
   border: none;
-  background: url(/assets/images/kakao.png) no-repeat 100% 100%;
+  background: url(/assets/images/kakao.png) no-repeat 0% 0%;
 `;
 
 export default function LoginForm() {
@@ -212,7 +214,6 @@ export default function LoginForm() {
           onClick={() => handleOAuthLogin('kakao')}
         />
       </SocialLoginButtonContainer>
-      <SearchGuestOrder>비회원 주문배송 조회</SearchGuestOrder>
     </Container>
   );
 }

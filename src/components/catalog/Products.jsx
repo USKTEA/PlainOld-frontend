@@ -9,7 +9,7 @@ import defaultTheme from '../../styles/defaultTheme';
 import numberFormat from '../../utils/numberFormat';
 
 const Container = styled.div`
-  height: ca100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;

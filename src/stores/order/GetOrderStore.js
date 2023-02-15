@@ -13,13 +13,13 @@ export default class GetOrderStore extends Store {
 
     this.errors = {
       cantWriteReview: '',
-      fetchUserOrders: '',
+      fetchOrders: '',
       orderDetail: '',
     };
 
     this.errorMessage = {
       cantWriteReview: '해당 상품을 구매하신 분들만 리뷰 작성 가능합니다',
-      fetchUserOrders: '잠시 후 다시 시도해주세요',
+      fetchOrders: '잠시 후 다시 시도해주세요',
       orderDetail: '잠시 후 다시 시도해주세요',
     };
   }
@@ -36,13 +36,13 @@ export default class GetOrderStore extends Store {
     }
   }
 
-  async fetchUserOrders() {
+  async fetchUserOrders(orderStatus) {
     try {
-      const { orders } = await apiService.fetchUserOrders();
+      const { orders } = await apiService.fetchUserOrders(orderStatus);
 
       this.orders = orders;
     } catch (error) {
-      this.errors.fetchUserOrders = this.errorMessage.fetchUserOrders;
+      this.errors.fetchOrders = this.errorMessage.fetchOrders;
     } finally {
       this.publish();
     }

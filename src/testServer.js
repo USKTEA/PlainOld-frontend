@@ -207,12 +207,37 @@ const server = setupServer(
   }),
   rest.get(`${baseUrl}/orders/me`, async (req, res, ctx) => {
     const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+    const status = req.url.searchParams.get('status');
 
     if (accessToken === 'NOTHAVEORDER') {
       return res(ctx.status(204));
     }
 
     if (accessToken === 'HAVEONECANCELED') {
+      return res(ctx.json({
+        orders: [
+          {
+            orderNumber: '1',
+            orderLines: [
+              {
+                productName: 'T-shirt',
+                thumbnailUrl: '1',
+                option: {
+                  color: 'Black',
+                  size: 'XL',
+                },
+                quantity: 1,
+                totalPrice: 10_000,
+              },
+            ],
+            status: '취소완료',
+            createdAt: '2022-01-15 12:45',
+          },
+        ],
+      }));
+    }
+
+    if (status === 'CANCELED') {
       return res(ctx.json({
         orders: [
           {
