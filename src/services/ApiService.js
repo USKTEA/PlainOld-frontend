@@ -155,6 +155,14 @@ export default class ApiService {
     };
   }
 
+  async editUserInformation({ username, nickname }) {
+    const { data } = await this.instance.patch('/users', {
+      username, nickname,
+    });
+
+    return data;
+  }
+
   async fetchCartItem() {
     const { data } = await this.instance.get('/carts');
 

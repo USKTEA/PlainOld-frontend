@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { editReplyStore } from '../../stores/reply/EditReplyStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import Reply from './Reply';
 
@@ -79,7 +79,7 @@ describe('Reply', () => {
 
   beforeEach(() => {
     localStorage.removeItem('accessToken');
-    userStore.clear();
+    getUserStore.clear();
     editReplyStore.clear();
   });
 
@@ -121,7 +121,7 @@ describe('Reply', () => {
       it('댓글 버튼만 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderFirstReply();
 
@@ -135,7 +135,7 @@ describe('Reply', () => {
       it('댓글 수정 삭제 버튼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderMyReply();
 
@@ -151,7 +151,7 @@ describe('Reply', () => {
       it('댓글을 입력할 수 있는 폼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderFirstReply();
 
@@ -167,7 +167,7 @@ describe('Reply', () => {
       it('댓글 수정 폼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderMyReply();
 
@@ -184,7 +184,7 @@ describe('Reply', () => {
     it('댓글 수정 폼이 닫힌 것을 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderMyReply();
 
@@ -206,7 +206,7 @@ describe('Reply', () => {
     it('수정될 내용을 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderMyReply();
 
@@ -227,7 +227,7 @@ describe('Reply', () => {
     it('수정된 댓글은 제출되지 않는 것을 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderMyReply();
 
@@ -259,7 +259,7 @@ describe('Reply', () => {
       it('해당 댓글을 삭제한다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderMyReply();
 

@@ -8,7 +8,7 @@ import useEditReviewStore from '../../hooks/useEditReviewStore';
 import useGetOrderStore from '../../hooks/useGetOrderStore';
 import useGetReviewStore from '../../hooks/useGetReviewStore';
 import useProductStore from '../../hooks/useProductStore';
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 
 import EditReviewModal from './EditReviewModal';
 import ReviewRate from './ReviewRate';

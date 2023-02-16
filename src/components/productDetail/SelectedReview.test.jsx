@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { createReplyStore } from '../../stores/reply/CreateReplyStore';
 import { productStore } from '../../stores/product/ProductStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import SelectedReview from './SelectedReview';
 
@@ -85,7 +85,7 @@ describe('SelectedReview', () => {
   beforeEach(() => {
     localStorage.removeItem('accessToken');
     createReplyStore.clear();
-    userStore.clear();
+    getUserStore.clear();
   });
 
   context('포토 구매평인 경우', () => {
@@ -108,7 +108,7 @@ describe('SelectedReview', () => {
     it('수정 및 삭제를 할 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderSelectedReview();
 
@@ -137,7 +137,7 @@ describe('SelectedReview', () => {
     context('구매평 수정 버튼을 클릭했을 경우', () => {
       it('기존 구매평을 수정할 수 있다', async () => {
         await productStore.fetchProduct({ id: 1 });
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderSelectedReview();
 
@@ -162,7 +162,7 @@ describe('SelectedReview', () => {
     context('구매평 삭제 버튼을 클릭했을 경우', () => {
       it('구매평이 삭제된다', async () => {
         await productStore.fetchProduct({ id: 1 });
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderSelectedReview();
 
@@ -207,7 +207,7 @@ describe('SelectedReview', () => {
       it('댓글은 제출되지 않는다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderSelectedReviewWithReply();
 
@@ -225,7 +225,7 @@ describe('SelectedReview', () => {
       it('댓글은 제출된다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderSelectedReviewWithReply();
 

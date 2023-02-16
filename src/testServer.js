@@ -65,6 +65,19 @@ const server = setupServer(
       }),
     );
   }),
+  rest.patch(`${baseUrl}/users`, async (req, res, ctx) => {
+    const { username } = await req.json();
+
+    if (username === 'INVALID') {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(ctx.json(
+      username,
+    ));
+  }),
   rest.get(`${baseUrl}/categories`, async (req, res, ctx) => res(ctx.json({
     categories: [
       {

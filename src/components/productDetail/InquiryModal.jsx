@@ -8,7 +8,7 @@ import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 import useCreateAnswerStore from '../../hooks/useCreateAnswerStore';
 import useGetAnswerStore from '../../hooks/useGetAnswerStore';
 import useEditAnswerStore from '../../hooks/useEditAnswerStore';
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 
 import defaultTheme from '../../styles/defaultTheme';
 import Answers from './Answers';

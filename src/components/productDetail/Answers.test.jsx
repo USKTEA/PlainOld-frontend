@@ -2,7 +2,7 @@ import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 import { editAnswerStore } from '../../stores/answer/EditAnswerStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import Answers from './Answers';
 
@@ -52,7 +52,7 @@ describe('Answers', () => {
     it('수정 및 삭제 버튼을 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderAnswers();
 
@@ -65,7 +65,7 @@ describe('Answers', () => {
     it('수정 및 삭제 버튼을 볼 수 없다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderAnswers();
 
@@ -79,7 +79,7 @@ describe('Answers', () => {
       it('답변수정 폼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderAnswers();
 
@@ -93,7 +93,7 @@ describe('Answers', () => {
       it('답변수정 폼은 닫힌다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderAnswers();
 
@@ -111,7 +111,7 @@ describe('Answers', () => {
       it('답변을 입력해주세요 메시지를 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderAnswers();
 
@@ -133,7 +133,7 @@ describe('Answers', () => {
       it('답변수정 폼은 닫힌다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderAnswers();
 
@@ -159,7 +159,7 @@ describe('Answers', () => {
       it('해당 답변은 삭제된다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         renderAnswers();
 

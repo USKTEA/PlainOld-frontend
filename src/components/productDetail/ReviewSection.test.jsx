@@ -2,7 +2,7 @@ import {
   cleanup, fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 import { productStore } from '../../stores/product/ProductStore';
 import { getOrderStore } from '../../stores/order/GetOrderStore';
 import { getReviewStore } from '../../stores/review/GetReviewStore';
@@ -177,7 +177,7 @@ describe('ReviewSection', () => {
       it('수정과 삭제 버튼을 그리고 댓글을 남기는 폼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         const productId = 1;
 
         await productStore.fetchProduct({ id: productId });
