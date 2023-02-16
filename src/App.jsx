@@ -6,7 +6,7 @@ import { Reset } from 'styled-reset';
 
 import styled, { ThemeProvider } from 'styled-components';
 
-import useUserStore from './hooks/useUserStore';
+import useGetUserStore from './hooks/useGetUserStore';
 
 import GlobalStyle from './styles/GlobalStyle';
 
@@ -52,10 +52,10 @@ export default function App() {
   const [accessToken] = useLocalStorage('accessToken', '');
   const [, setUsername] = useLocalStorage('username', '');
 
-  const userStore = useUserStore();
+  const getUserStore = useGetUserStore();
 
   const fetchUserInformation = async () => {
-    await userStore.fetchUserInformation();
+    await getUserStore.fetchUserInformation();
   };
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function App() {
     }
 
     if (!accessToken) {
-      userStore.clear();
+      getUserStore.clear();
     }
 
     return () => setUsername('');

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 import useEditAnswerStore from '../../hooks/useEditAnswerStore';
 import useGetInquiryStore from '../../hooks/useGetInquiryStore';
 import useGetAnswerStore from '../../hooks/useGetAnswerStore';

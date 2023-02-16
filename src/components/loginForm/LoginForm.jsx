@@ -7,7 +7,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import defaultTheme from '../../styles/defaultTheme';
 
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 import useOAuthStore from '../../hooks/useOAuthStore';
 
 const Container = styled.div`

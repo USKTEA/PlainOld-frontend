@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 import numberFormat from '../../utils/numberFormat';
 
 const Container = styled.div`

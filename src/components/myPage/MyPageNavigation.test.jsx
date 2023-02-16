@@ -1,7 +1,7 @@
 import {
   fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 import MyPageNavigation from './MyPageNavigation';
 
 const context = describe;
@@ -66,11 +66,11 @@ describe('MyPageNavigation', () => {
   context('정보 수정을 클릭했을 경우', () => {
     it('정보 수정 모달을 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       render(<MyPageNavigation />);
 
-      fireEvent(screen.getByRole('button', { name: '정보 수정' }));
+      fireEvent.click(screen.getByRole('button', { name: '정보 수정' }));
 
       screen.getByRole('heading', { name: '정보 수정' });
     });

@@ -4,7 +4,7 @@ import {
 
 import { getAnswerStore } from '../../stores/answer/GetAnswerStore';
 import { editInquiryStore } from '../../stores/inquiry/EditInquiryStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import InquiryModal from './InquiryModal';
 
@@ -72,7 +72,7 @@ describe('InquiryModal', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.removeItem('accessToken');
-    userStore.clear();
+    getUserStore.clear();
     editInquiryStore.clear();
     getAnswerStore.clear();
   });
@@ -94,7 +94,7 @@ describe('InquiryModal', () => {
       it('상품문의 수정 및 삭제버튼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={myInquiry}
@@ -110,7 +110,7 @@ describe('InquiryModal', () => {
       it('상품문의 수정 및 삭제버튼을 볼 수 없다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -126,7 +126,7 @@ describe('InquiryModal', () => {
       it('상품문의 수정 및 삭제버튼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -142,7 +142,7 @@ describe('InquiryModal', () => {
       it('수정 버튼을 볼 수 없다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={finishedInquiry}
@@ -159,7 +159,7 @@ describe('InquiryModal', () => {
     it('모달창을 닫는다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       render(<InquiryModal
         inquiry={othersInquiry}
@@ -177,7 +177,7 @@ describe('InquiryModal', () => {
       it('상품문의 수정 폼을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -197,7 +197,7 @@ describe('InquiryModal', () => {
       it('상품문의 수정 폼은 볼 수 없다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -220,7 +220,7 @@ describe('InquiryModal', () => {
       it('문의내용이 정확하지 않습니다 메시지를 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -245,7 +245,7 @@ describe('InquiryModal', () => {
       it('문의내용이 정확하지 않습니다 메시지를 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -270,7 +270,7 @@ describe('InquiryModal', () => {
       it('상품문의가 수정되고 모달창은 닫힌다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ADMIN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={othersInquiry}
@@ -299,7 +299,7 @@ describe('InquiryModal', () => {
       it('상품문의는 삭제된다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={myInquiry}
@@ -323,7 +323,7 @@ describe('InquiryModal', () => {
         const inquiryIds = [answeredInquiry.id];
 
         await getAnswerStore.fetchAnswers({ inquiryIds });
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={answeredInquiry}
@@ -344,7 +344,7 @@ describe('InquiryModal', () => {
         const inquiryIds = [answeredInquiry.id];
 
         await getAnswerStore.fetchAnswers({ inquiryIds });
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
 
         render(<InquiryModal
           inquiry={answeredInquiry}

@@ -7,7 +7,7 @@ import useDeleteReplyStore from '../../hooks/useDeleteReplyStore';
 import useEditReplyStore from '../../hooks/useEditReplyStore';
 import useGetReplyStore from '../../hooks/useGetReplyStore';
 import useGetReviewStore from '../../hooks/useGetReviewStore';
-import useUserStore from '../../hooks/useUserStore';
+import useUserStore from '../../hooks/useGetUserStore';
 
 import defaultTheme from '../../styles/defaultTheme';
 import EditForm from './EditForm';

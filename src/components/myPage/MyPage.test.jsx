@@ -3,7 +3,7 @@ import {
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { getOrderStore } from '../../stores/order/GetOrderStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 import MyPage from './MyPage';
 
 const context = describe;
@@ -19,13 +19,13 @@ describe('MyPage', () => {
 
   beforeEach(() => {
     localStorage.removeItem('accessToken');
-    userStore.clear();
+    getUserStore.clear();
     getOrderStore.clear();
   });
 
   describe('네비게이션바', () => {
     it('네비게시션바를 볼 수 있다', async () => {
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderMyPage();
 
@@ -39,7 +39,7 @@ describe('MyPage', () => {
     it('사용자 정보를 볼 수 있다', async () => {
       localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
 
       renderMyPage();
 
@@ -53,7 +53,7 @@ describe('MyPage', () => {
       it('주문 취소 모달을 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await getOrderStore.fetchUserOrders();
 
         renderMyPage();
@@ -70,7 +70,7 @@ describe('MyPage', () => {
       it('취소 상세 정보를 볼 수 있다', async () => {
         localStorage.setItem('accessToken', JSON.stringify('HAVEONECANCELED'));
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await getOrderStore.fetchUserOrders();
 
         renderMyPage();

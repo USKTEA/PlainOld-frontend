@@ -4,7 +4,7 @@ import {
 
 import { createInquiryStore } from '../../stores/inquiry/CreateInquiryStore';
 import { productStore } from '../../stores/product/ProductStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import WriteInquiryModal from './WriteInquiryModal';
 
@@ -22,7 +22,7 @@ describe('WriteInquiryModal', () => {
   beforeEach(() => {
     localStorage.removeItem('accessToken');
     productStore.clear();
-    userStore.clear();
+    getUserStore.clear();
     createInquiryStore.clear();
   });
 
@@ -31,7 +31,7 @@ describe('WriteInquiryModal', () => {
 
     const productId = 1;
 
-    await userStore.fetchUserInformation();
+    await getUserStore.fetchUserInformation();
     await productStore.fetchProduct({ id: productId });
 
     renderWriteInquiryModal();
@@ -49,7 +49,7 @@ describe('WriteInquiryModal', () => {
 
       const productId = 1;
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
       await productStore.fetchProduct({ id: productId });
 
       renderWriteInquiryModal();
@@ -67,7 +67,7 @@ describe('WriteInquiryModal', () => {
 
       const productId = 1;
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
       await productStore.fetchProduct({ id: productId });
 
       renderWriteInquiryModal();
@@ -92,7 +92,7 @@ describe('WriteInquiryModal', () => {
 
       const productId = 1;
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
       await productStore.fetchProduct({ id: productId });
 
       const { container } = renderWriteInquiryModal();
@@ -113,7 +113,7 @@ describe('WriteInquiryModal', () => {
 
       const productId = 1;
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
       await productStore.fetchProduct({ id: productId });
 
       renderWriteInquiryModal();

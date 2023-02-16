@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { getInquiryStore } from '../../stores/inquiry/GetInquiryStore';
 import { productStore } from '../../stores/product/ProductStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import QnASection from './QnASection';
 
@@ -24,7 +24,7 @@ describe('QnASection', () => {
   beforeEach(() => {
     localStorage.removeItem('accessToken');
     getInquiryStore.clear();
-    userStore.clear();
+    getUserStore.clear();
     productStore.clear();
   });
 
@@ -95,7 +95,7 @@ describe('QnASection', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 
@@ -114,7 +114,7 @@ describe('QnASection', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 
@@ -133,7 +133,7 @@ describe('QnASection', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 

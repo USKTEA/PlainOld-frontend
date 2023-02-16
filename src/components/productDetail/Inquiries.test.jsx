@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getAnswerStore } from '../../stores/answer/GetAnswerStore';
 import { getInquiryStore } from '../../stores/inquiry/GetInquiryStore';
 import { productStore } from '../../stores/product/ProductStore';
-import { userStore } from '../../stores/user/UserStore';
+import { getUserStore } from '../../stores/user/GetUserStore';
 
 import Inquiries from './Inquiries';
 
@@ -14,7 +14,7 @@ describe('Inquiries', () => {
     getAnswerStore.clear();
     getInquiryStore.clear();
     productStore.clear();
-    userStore.clear();
+    getUserStore.clear();
   });
 
   it('상품문의를 보여준다', async () => {
@@ -50,7 +50,7 @@ describe('Inquiries', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 
@@ -69,7 +69,7 @@ describe('Inquiries', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 
@@ -88,7 +88,7 @@ describe('Inquiries', () => {
         localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
         const productId = 1;
 
-        await userStore.fetchUserInformation();
+        await getUserStore.fetchUserInformation();
         await productStore.fetchProduct({ id: productId });
         await getInquiryStore.fetchInquiries({ productId });
 
@@ -108,7 +108,7 @@ describe('Inquiries', () => {
       const productId = 3;
       const inquiryIds = [4];
 
-      await userStore.fetchUserInformation();
+      await getUserStore.fetchUserInformation();
       await productStore.fetchProduct({ id: productId });
       await getInquiryStore.fetchInquiries({ productId });
       await getAnswerStore.fetchAnswers({ inquiryIds });

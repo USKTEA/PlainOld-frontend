@@ -1,7 +1,7 @@
 import { apiService } from '../../services/ApiService';
 import Store from '../Store';
 
-export default class UserStore extends Store {
+export default class GetUserStore extends Store {
   constructor(props) {
     super(props);
 
@@ -64,4 +64,4 @@ export default class UserStore extends Store {
   }
 }
 
-export const userStore = new UserStore();
+export const getUserStore = new GetUserStore();
