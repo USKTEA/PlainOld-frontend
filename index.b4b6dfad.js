@@ -35505,7 +35505,7 @@ function Home() {
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(CapWrapper, {
                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                            src: "/plainold-frontend/assets/images/cap.png",
+                            src: "/assets/images/cap.png",
                             alt: "cap"
                         }, void 0, false, {
                             fileName: "src/components/home/Home.jsx",
@@ -35528,7 +35528,7 @@ function Home() {
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(ClothWrapper, {
                                 children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                                    src: "/plainold-frontend/assets/images/cloth.png",
+                                    src: "/assets/images/cloth.png",
                                     alt: "cloth"
                                 }, void 0, false, {
                                     fileName: "src/components/home/Home.jsx",
@@ -35584,7 +35584,7 @@ function Home() {
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(Dots, {
                 children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                    src: "/plainold-frontend/assets/images/cloth.png",
+                    src: "/assets/images/cloth.png",
                     alt: "dots"
                 }, void 0, false, {
                     fileName: "src/components/home/Home.jsx",
@@ -58005,7 +58005,7 @@ const Kakao = (0, _styledComponentsDefault.default).button`
   height: 50px;
   width: 300px;
   border: none;
-  background: url(/plainold-frontend/assets/images/kakao.png) no-repeat 0% 0%;
+  background: url(/assets/images/kakao.png) no-repeat 0% 0%;
 `;
 _c10 = Kakao;
 function LoginForm() {
