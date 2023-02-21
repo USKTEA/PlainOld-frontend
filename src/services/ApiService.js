@@ -144,6 +144,21 @@ export default class ApiService {
     return { accessToken: data.accessToken };
   }
 
+  async countUser(username) {
+    const { data } = await this.instance.get(`/users?username=${username}`);
+
+    return data;
+  }
+
+  async createUser({ nickname, username, password }) {
+    const { data } = await this.instance.post(
+      '/users',
+      { nickname, username, password },
+    );
+
+    return data;
+  }
+
   async fetchUserInformation() {
     const { data } = await this.instance.get('/users/me');
 

@@ -1,6 +1,5 @@
 import {
-  cleanup,
-  fireEvent, render, screen, waitFor,
+  cleanup, fireEvent, render, screen, waitFor,
 } from '@testing-library/react';
 import LoginForm from './LoginForm';
 
@@ -11,6 +10,13 @@ const navigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate() {
     return navigate;
+  },
+  Link({ children, to }) {
+    return (
+      <a href={to}>
+        {children}
+      </a>
+    );
   },
 }));
 
@@ -126,6 +132,16 @@ describe('LoginForm', () => {
       await waitFor(() => {
         expect(navigate).toBeCalled();
       });
+    });
+  });
+
+  context('회원가입 버튼을 클릭했을 경우', () => {
+    it('회원가입 페이지로 이동한다', () => {
+      render(<LoginForm />);
+
+      fireEvent.click(screen.getByRole('link', { name: '회원가입' }));
+
+      expect(screen.getByText('회원가입'));
     });
   });
 });
