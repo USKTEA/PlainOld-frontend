@@ -31,8 +31,8 @@ describe('MyPageNavigation', () => {
     render(<MyPageNavigation />);
 
     screen.getByRole('button', { name: '주문 조회' });
+    screen.getByRole('button', { name: '주문취소 조회' });
     screen.getByRole('button', { name: '정보 수정' });
-    screen.getByRole('button', { name: '회원탈퇴' });
   });
 
   context('주문 조회 버튼을 클릭했을 경우', () => {

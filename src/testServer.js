@@ -25,6 +25,19 @@ const server = setupServer(
       }),
     );
   }),
+  rest.get(`${baseUrl}/users`, async (req, res, ctx) => {
+    const username = req.url.searchParams.get('username');
+
+    if (username === 'rlatjrxo1234@gmail.com') {
+      return res(ctx.json({
+        count: 1,
+      }));
+    }
+
+    return res(ctx.json({
+      count: 0,
+    }));
+  }),
   rest.get(`${baseUrl}/users/me`, async (req, res, ctx) => {
     const accessToken = req.headers.get('authorization').split(' ')[1];
 
@@ -62,6 +75,21 @@ const server = setupServer(
         nickname: '김뚜루',
         purchaseAmount: 10_000,
         role: 'MEMBER',
+      }),
+    );
+  }),
+  rest.post(`${baseUrl}/users`, async (req, res, ctx) => {
+    const { username } = await req.json();
+
+    if (username === 'invalid@gmail.com') {
+      return res(
+        ctx.status(400),
+      );
+    }
+
+    return res(
+      ctx.json({
+        username,
       }),
     );
   }),

@@ -27,6 +27,7 @@ import ErrorPage from './pages/ErrorPage';
 import OrderCancelPage from './pages/OrderCancelPage';
 import PaymentConfirmationPage from './pages/PaymentConfirmationPage';
 import Footer from './components/footer/Footer';
+import RegisterPage from './pages/RegisterPage';
 
 const Main = styled.main`
   font-size: 1.1em;
@@ -91,6 +92,7 @@ export default function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/oauth/kakao" element={<OAuthRedirectPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </Main>

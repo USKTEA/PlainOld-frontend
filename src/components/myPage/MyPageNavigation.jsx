@@ -69,13 +69,6 @@ export default function MyPageNavigation() {
             정보 수정
           </button>
         </li>
-        <li>
-          <button
-            type="button"
-          >
-            회원탈퇴
-          </button>
-        </li>
       </Container>
       {editInformationModalOpen
     && (

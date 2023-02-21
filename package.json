@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/USKTEA/PlainOld-frontend.git"
+    "url": "git+https://github.com/USKTEA/plainold-frontend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/USKTEA/PlainOld-frontend/issues"
+    "url": "https://github.com/USKTEA/plainold-frontend/issues"
   },
-  "homepage": "https://github.com/USKTEA/PlainOld-frontend#readme",
+  "homepage": "https://github.com/USKTEA/plainold-frontend#readme",
   "devDependencies": {
     "@codeceptjs/configure": "^0.10.0",
     "@codeceptjs/ui": "^0.4.7",

@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
 import defaultTheme from '../../styles/defaultTheme';
@@ -13,7 +13,6 @@ import useOAuthStore from '../../hooks/useOAuthStore';
 const Container = styled.div`
   width: 30%;
 
-
   height: calc(100vh - 13em);
   button {
     cursor: pointer;
@@ -22,14 +21,24 @@ const Container = styled.div`
 
 const FormWrapper = styled.div`
   margin-bottom: 1em;
+  display: flex;
 `;
 
 const Form = styled.form`
+  width: 100%;
   margin-top: 3em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+
+  a {
+    font-weight: 400;
+    font-size: .8em;
+    border: none;
+    background-color: white;
+    color: ${defaultTheme.colors.sixth};
+  }
 `;
 
 const Input = styled.input`
@@ -43,20 +52,6 @@ const Input = styled.input`
 
   :focus {
     outline: none;
-  }
-`;
-
-const ButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-
-  button {
-    font-weight: 400;
-    font-size: .8em;
-    border: none;
-    background-color: white;
-    color: ${defaultTheme.colors.sixth};
   }
 `;
 
@@ -95,17 +90,6 @@ const Divider = styled.div`
     width: 40%;
     border-bottom: 1px solid ${defaultTheme.colors.fourth};
   }
-`;
-
-const SearchGuestOrder = styled.button`
-  font-size: .5em;
-  font-weight: 300;
-  padding: 1em;
-  width: 100%;
-  height: 4em;
-  border: none;
-  background-color: ${defaultTheme.colors.seventh};
-  color: white;
 `;
 
 const HiddenError = styled.p`
@@ -197,10 +181,11 @@ export default function LoginForm() {
           >
             로그인
           </LoginButton>
-          <ButtonContainer>
-            <button type="button">회원가입</button>
-            <button type="button">아이디 · 비밀번호 찾기</button>
-          </ButtonContainer>
+          <Link
+            to="/register"
+          >
+            회원가입
+          </Link>
         </Form>
       </FormWrapper>
       <Divider>

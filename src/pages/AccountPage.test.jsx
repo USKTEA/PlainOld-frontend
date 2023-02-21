@@ -14,8 +14,8 @@ describe('AccountPage', () => {
     await waitFor(() => {
       screen.getByRole('heading', { name: '주문 조회' });
       screen.getByRole('button', { name: '주문 조회' });
+      screen.getByRole('button', { name: '주문취소 조회' });
       screen.getByRole('button', { name: '정보 수정' });
-      screen.getByRole('button', { name: '회원탈퇴' });
       screen.getByText(/누적 구매금액:/);
     });
   });
