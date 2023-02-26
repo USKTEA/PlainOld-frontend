@@ -11,7 +11,7 @@ import defaultTheme from '../../styles/defaultTheme';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 300em;
+  height: 350em;
   top: -10em;
   left: -10em;
   display: flex;

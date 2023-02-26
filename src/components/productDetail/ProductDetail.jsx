@@ -22,6 +22,10 @@ import QnASection from './QnASection';
 
 import numberFormat from '../../utils/numberFormat';
 import Detail from './Detail';
+import useCountProductLikeStore from '../../hooks/useCountProductLikeStore';
+import useGetLikeByUserStore from '../../hooks/useGetLikeByUserStore';
+import useCreateLikeStore from '../../hooks/useCreateLikeStore';
+import useDeleteLikeStore from '../../hooks/useDeleteLikeStore';
 
 const ProductSection = styled.div`
   width: 50%;
@@ -112,18 +116,23 @@ const MessageWrapper = styled.div`
 export default function ProductDetail() {
   const navigate = useNavigate();
   const focusTarget = useRef([]);
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [accessToken] = useLocalStorage('accessToken', '');
   const [, setOrderItems] = useLocalStorage('orderItems', '');
   const [, setCartItems] = useLocalStorage('cartItems', '');
 
   const productStore = useProductStore();
   const orderItemStore = useOrderItemStore();
   const cartStore = useCartStore();
+  const countProductLikeStore = useCountProductLikeStore();
+  const getLikeByUserStore = useGetLikeByUserStore();
+  const createLikeStore = useCreateLikeStore();
+  const deleteLikeStore = useDeleteLikeStore();
 
   const { product, loading, errors } = productStore;
   const { orderItems, sizes, colors } = orderItemStore;
-
+  const { counts } = countProductLikeStore;
+  const { likes } = getLikeByUserStore;
   const { items } = orderItems;
 
   const handleAddCart = () => {
@@ -139,6 +148,34 @@ export default function ProductDetail() {
 
     setCartItems(cartItems);
     setModalOpen(true);
+  };
+
+  const handleCreateLike = async () => {
+    if (!accessToken) {
+      navigate('/login');
+
+      return;
+    }
+
+    const id = await createLikeStore.create({ productId: product.id });
+
+    if (id) {
+      await getLikeByUserStore.fetchLikes(product.id);
+      await countProductLikeStore.countProductLikes({ productId: product.id });
+    }
+  };
+
+  const handleDeleteLike = async () => {
+    if (!accessToken) {
+      navigate('/login');
+    }
+
+    const id = await deleteLikeStore.delete(likes[0].id);
+
+    if (id) {
+      await getLikeByUserStore.fetchLikes(product.id);
+      await countProductLikeStore.countProductLikes({ productId: product.id });
+    }
   };
 
   const handleOrderItems = () => {
@@ -232,14 +269,26 @@ export default function ProductDetail() {
             >
               장바구니
             </Button>
-            <Button>♡</Button>
+            <Button
+              type="button"
+              onClick={likes ? handleDeleteLike : handleCreateLike}
+            >
+              {likes ? `♥︎ ${counts}` : `♡ ${counts}`}
+            </Button>
           </ButtonWrapper>
+
           <MessageWrapper>
             {orderItemStore.errors.notSelected
               ? <ErrorMessage>{orderItemStore.errors.notSelected}</ErrorMessage>
               : null}
             {cartStore.errors.addItemFailed
               ? <ErrorMessage>{cartStore.errors.addItemFailed}</ErrorMessage>
+              : null}
+            {createLikeStore.errors
+              ? <ErrorMessage>{createLikeStore.errors}</ErrorMessage>
+              : null}
+            {deleteLikeStore.errors
+              ? <ErrorMessage>{deleteLikeStore.errors}</ErrorMessage>
               : null}
           </MessageWrapper>
         </Wrapper>

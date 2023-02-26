@@ -83,7 +83,7 @@ export default function Footer() {
         <Wrapper>
           <strong>Developer</strong>
           <span>Back End / WEB / JAVA / JS</span>
-          <span>Republic of Korea</span>
+          <span>Seoul, Republic of Korea</span>
           <span>010-5237-2189 (Mon-Fri 08:00-22:00)</span>
           <span>contact: tjrxo1234@gmail.com</span>
         </Wrapper>

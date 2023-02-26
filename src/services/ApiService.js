@@ -382,6 +382,36 @@ export default class ApiService {
 
     return data;
   }
+
+  async countProductLikes({ productId }) {
+    const { data } = await this.instance.get(`/likes?productId=${productId}`);
+
+    return data;
+  }
+
+  async fetchLikes(productId) {
+    const url = `/likes/me${productId ? `?productId=${productId}` : ''}`;
+
+    const { data, status } = await this.instance.get(url);
+
+    if (status === 204) {
+      return { likes: null };
+    }
+
+    return data;
+  }
+
+  async createLike({ productId }) {
+    const { data } = await this.instance.post('/likes', { productId });
+
+    return data;
+  }
+
+  async deleteLike(id) {
+    const { data } = await this.instance.delete(`/likes/${id}`);
+
+    return data;
+  }
 }
 
 export const apiService = new ApiService();

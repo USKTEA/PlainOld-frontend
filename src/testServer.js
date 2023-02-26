@@ -890,6 +890,63 @@ const server = setupServer(
       approveCode: '1',
     }));
   }),
+  rest.get(`${baseUrl}/likes`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '3') {
+      return res(
+        ctx.status(400),
+      );
+    }
+    if (productId === '2') {
+      return res(
+        ctx.json({
+          counts: 0,
+        }),
+      );
+    }
+
+    return res(ctx.json({
+      counts: 1,
+    }));
+  }),
+  rest.get(`${baseUrl}/likes/me`, async (req, res, ctx) => {
+    const productId = req.url.searchParams.get('productId');
+
+    if (productId === '3') {
+      return res(ctx.status(400));
+    }
+
+    if (productId === '2') {
+      return res(ctx.status(204));
+    }
+
+    return res(ctx.json({
+      likes: [
+        {
+          id: 1,
+          username: 'tjrxo1234@gmail.com',
+          productId,
+          createdAt: '2023-01-30 12:22',
+        },
+      ],
+    }));
+  }),
+  rest.post(`${baseUrl}/likes`, async (req, res, ctx) => {
+    const { productId } = await req.json();
+
+    if (productId === 1) {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.json({
+      id: 1,
+    }));
+  }),
+  rest.delete(`${baseUrl}/likes/1`, async (req, res, ctx) => res(ctx.json({
+    id: 1,
+  }))),
+  rest.delete(`${baseUrl}/likes/2`, async (req, res, ctx) => res(ctx.status(400))),
 );
 
 export default server;

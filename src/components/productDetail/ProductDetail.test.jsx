@@ -6,10 +6,12 @@ import { ThemeProvider } from 'styled-components';
 import { orderItemStore } from '../../stores/order/OrderItemStore';
 import { productStore } from '../../stores/product/ProductStore';
 import { cartStore } from '../../stores/cart/CartStore';
+import { countProductLikeStore } from '../../stores/like/CountProductLikeStore';
 
 import ProductDetail from './ProductDetail';
 
 import defaultTheme from '../../styles/defaultTheme';
+import { getLikeByUserStore } from '../../stores/like/GetLikeByUserStore';
 
 const navigate = jest.fn();
 
@@ -26,6 +28,18 @@ jest.mock('react-router-dom', () => ({
   },
 }));
 
+const create = jest.fn();
+
+jest.mock('../../hooks/useCreateLikeStore', () => () => ({
+  create,
+}));
+
+const mockDelete = jest.fn();
+
+jest.mock('../../hooks/useDeleteLikeStore', () => () => ({
+  delete: mockDelete,
+}));
+
 const context = describe;
 
 describe('ProductDetail', () => {
@@ -38,9 +52,13 @@ describe('ProductDetail', () => {
   };
 
   beforeEach(() => {
+    localStorage.removeItem('accessToken');
+    jest.clearAllMocks();
     productStore.clear();
     orderItemStore.reset();
     cartStore.reset();
+    countProductLikeStore.clear();
+    getLikeByUserStore.clear();
   });
 
   describe('ProductSection', () => {
@@ -339,6 +357,87 @@ describe('ProductDetail', () => {
               screen.getByText('사이즈 옵션을 선택해주세요.');
             });
           });
+        });
+      });
+    });
+
+    describe('Likes', () => {
+      context('로그인을 하지 않고 Like 버튼을 클릭했을 경우', () => {
+        it('로그인 페이지로 이동한다', async () => {
+          const id = 2;
+
+          await productStore.fetchProduct({ id });
+          await countProductLikeStore.countProductLikes({ productId: id });
+
+          renderProductDetail();
+
+          fireEvent.click(screen.getByRole('button', { name: '♡ 0' }));
+
+          expect(navigate).toBeCalledWith('/login');
+        });
+      });
+
+      context('사용자가 Like를 하지 않은 상품의 Like버튼을 클릭했을 경우', () => {
+        it('사용자와 해당 상품에 대한 Like를 생성한다', async () => {
+          localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+          const id = 2;
+
+          await productStore.fetchProduct({ id });
+          await countProductLikeStore.countProductLikes({ productId: id });
+
+          renderProductDetail();
+
+          fireEvent.click(screen.getByRole('button', { name: '♡ 0' }));
+
+          expect(create).toBeCalledWith({ productId: id });
+        });
+      });
+
+      context('사용자가 Like를 했던 상품의 Like버튼을 클릭했을 경우', () => {
+        it('사용자와 해당 상품에 대한 Like를 삭제한다', async () => {
+          localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+          const id = 1;
+
+          await productStore.fetchProduct({ id });
+          await getLikeByUserStore.fetchLikes(id);
+          await countProductLikeStore.countProductLikes({ productId: id });
+
+          renderProductDetail();
+
+          fireEvent.click(screen.getByRole('button', { name: '♥︎ 1' }));
+
+          const { likes } = getLikeByUserStore;
+
+          expect(mockDelete).toBeCalledWith(likes[0].id);
+        });
+      });
+
+      it('상품에 해당하는 Like 숫자를 보여준다', async () => {
+        const id = 2;
+
+        await productStore.fetchProduct({ id });
+        await countProductLikeStore.countProductLikes({ productId: id });
+
+        renderProductDetail();
+
+        screen.getByRole('button', { name: '♡ 0' });
+      });
+
+      context('사용자가 Like를 표시한 상품의 경우', () => {
+        it('사용자가 좋아요를 표시했다는 것을 볼 수 있다', async () => {
+          localStorage.setItem('accessToken', JSON.stringify('ACCESSTOKEN'));
+
+          const id = 1;
+
+          await productStore.fetchProduct({ id });
+          await getLikeByUserStore.fetchLikes(id);
+          await countProductLikeStore.countProductLikes({ productId: id });
+
+          renderProductDetail();
+
+          screen.getByRole('button', { name: '♥︎ 1' });
         });
       });
     });
