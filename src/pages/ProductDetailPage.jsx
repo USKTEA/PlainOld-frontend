@@ -9,10 +9,14 @@ import useGetReviewStore from '../hooks/useGetReviewStore';
 import useGetOrderStore from '../hooks/useGetOrderStore';
 import useGetReplyStore from '../hooks/useGetReplyStore';
 import useGetInquiryStore from '../hooks/useGetInquiryStore';
-
-import ProductDetail from '../components/productDetail/ProductDetail';
 import useGetAnswerStore from '../hooks/useGetAnswerStore';
 import useCreateReviewStore from '../hooks/useCreateReviewStore';
+import useCountProductLikeStore from '../hooks/useCountProductLikeStore';
+import useGetLikeByUserStore from '../hooks/useGetLikeByUserStore';
+import useCreateLikeStore from '../hooks/useCreateLikeStore';
+import useDeleteLikeStore from '../hooks/useDeleteLikeStore';
+
+import ProductDetail from '../components/productDetail/ProductDetail';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -27,6 +31,10 @@ export default function ProductDetailPage() {
   const getReplyStore = useGetReplyStore();
   const getInquiryStore = useGetInquiryStore();
   const getAnswerStore = useGetAnswerStore();
+  const getLikeByUserStore = useGetLikeByUserStore();
+  const countProductLikeStore = useCountProductLikeStore();
+  const createLikeStore = useCreateLikeStore();
+  const deleteLikeStore = useDeleteLikeStore();
 
   const fetchProduct = async () => {
     await productStore.fetchProduct({ id });
@@ -71,10 +79,23 @@ export default function ProductDetailPage() {
     }
   };
 
+  const fetchLikeByUser = async () => {
+    await getLikeByUserStore.fetchLikes(id);
+  };
+
+  const countProductLikes = async () => {
+    await countProductLikeStore.countProductLikes({ productId: id });
+  };
+
   useEffect(() => {
     fetchProduct();
     fetchReviewsAndReplies();
     fetchInquiriesAndAnswers();
+    countProductLikes();
+
+    if (accessToken) {
+      fetchLikeByUser();
+    }
 
     return () => {
       createReviewStore.clear();
@@ -82,6 +103,9 @@ export default function ProductDetailPage() {
       getOrderStore.clear();
       orderItemStore.reset();
       cartStore.clearError();
+      getLikeByUserStore.clear();
+      createLikeStore.clear();
+      deleteLikeStore.clear();
     };
   }, [accessToken]);
 

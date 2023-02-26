@@ -59,20 +59,6 @@ const ProductInquiryButton = styled.button`
   cursor: pointer;
 `;
 
-// const PersonalInquiryButton = styled.button`
-//   font-weight: 300;
-//   height: 3em;
-//   width: 8em;
-//   padding: 1em;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   border: 1px solid ${defaultTheme.colors.fourth};
-//   background-color: white;
-//   color: ${defaultTheme.colors.primaryText};
-//   cursor: pointer;
-// `;
-
 export default function QnASection({ setRef }) {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
@@ -107,11 +93,6 @@ export default function QnASection({ setRef }) {
           >
             상품문의
           </ProductInquiryButton>
-          {/* <PersonalInquiryButton
-            type="button"
-          >
-            1:1 문의
-          </PersonalInquiryButton> */}
         </ButtonWrapper>
         {inquiries.length
           ? (

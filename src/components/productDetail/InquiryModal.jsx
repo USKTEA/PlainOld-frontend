@@ -16,7 +16,7 @@ import Answers from './Answers';
 const Container = styled.div`
   position: absolute;
   width: 120%;
-  height: 170em;
+  height: 350em;
   top: -10em;
   left: -10em;
   display: flex;
