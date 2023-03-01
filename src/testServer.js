@@ -812,7 +812,7 @@ const server = setupServer(
   rest.delete(`${baseUrl}/answers/9999999`, async (req, res, ctx) => res(
     ctx.status(400),
   )),
-  rest.post(`${baseUrl}/cancelRequest`, async (req, res, ctx) => {
+  rest.post(`${baseUrl}/cancelRequests`, async (req, res, ctx) => {
     const { orderNumber } = await req.json();
 
     if (orderNumber === 'INVALID') {
@@ -825,7 +825,7 @@ const server = setupServer(
       ctx.json({ id: 1 }),
     );
   }),
-  rest.get(`${baseUrl}/cancelRequest/tjrxo1234-11111111`, async (req, res, ctx) => res(
+  rest.get(`${baseUrl}/cancelRequests/tjrxo1234-11111111`, async (req, res, ctx) => res(
     ctx.json({
       id: 1,
       orderNumber: 'tjrxo1234-11111111',
@@ -833,10 +833,10 @@ const server = setupServer(
       content: '이래서 취소했습니다',
     }),
   )),
-  rest.get(`${baseUrl}/cancelRequest/INVALID`, async (req, res, ctx) => res(
+  rest.get(`${baseUrl}/cancelRequests/INVALID`, async (req, res, ctx) => res(
     ctx.status(400),
   )),
-  rest.get(`${baseUrl}/cancelRequest/1`, async (req, res, ctx) => res(
+  rest.get(`${baseUrl}/cancelRequests/1`, async (req, res, ctx) => res(
     ctx.json({
       id: 1,
       orderNumber: '1',
@@ -865,7 +865,7 @@ const server = setupServer(
       }),
     );
   }),
-  rest.post(`${baseUrl}/payment`, async (req, res, ctx) => {
+  rest.post(`${baseUrl}/payments`, async (req, res, ctx) => {
     const { provider } = await req.json();
 
     if (provider === 'INVALID') {
@@ -879,7 +879,7 @@ const server = setupServer(
       redirectUrl: '1',
     }));
   }),
-  rest.get(`${baseUrl}/payment`, async (req, res, ctx) => {
+  rest.get(`${baseUrl}/payments`, async (req, res, ctx) => {
     const tidId = req.url.searchParams.get('tidId');
 
     if (tidId === 'INVALID') {
