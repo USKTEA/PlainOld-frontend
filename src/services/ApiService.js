@@ -161,7 +161,6 @@ export default class ApiService {
 
   async fetchUserInformation() {
     const { data } = await this.instance.get('/users/me');
-
     return {
       username: data.username,
       nickname: data.nickname,
@@ -340,13 +339,13 @@ export default class ApiService {
   }
 
   async createCancelRequest({ request }) {
-    const { data } = await this.instance.post('/cancelRequest', request);
+    const { data } = await this.instance.post('/cancelRequests', request);
 
     return data;
   }
 
   async fetchCancelRequest(orderNumber) {
-    const { data } = await this.instance.get(`/cancelRequest/${orderNumber}`);
+    const { data } = await this.instance.get(`/cancelRequests/${orderNumber}`);
 
     return data;
   }
@@ -368,7 +367,7 @@ export default class ApiService {
   }
 
   async getReadyPayment({ provider, orderItems }) {
-    const { data } = await this.instance.post('/payment', { provider, orderItems });
+    const { data } = await this.instance.post('/payments', { provider, orderItems });
 
     return data;
   }
@@ -377,7 +376,7 @@ export default class ApiService {
     provider, pgToken, tidId, partnerOrderId,
   }) {
     const { data } = await this.instance.get(
-      `/payment?provider=${provider}&pgToken=${pgToken}&tidId=${tidId}&partnerOrderId=${partnerOrderId}`,
+      `/payments?provider=${provider}&pgToken=${pgToken}&tidId=${tidId}&partnerOrderId=${partnerOrderId}`,
     );
 
     return data;
