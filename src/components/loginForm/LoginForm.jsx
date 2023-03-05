@@ -12,8 +12,9 @@ import useOAuthStore from '../../hooks/useOAuthStore';
 
 const Container = styled.div`
   width: 30%;
-
+  min-width: 20em;
   height: calc(100vh - 13em);
+
   button {
     cursor: pointer;
   }
@@ -106,14 +107,26 @@ const Error = styled.p`
 const SocialLoginButtonContainer = styled.div`
   margin-bottom: .5em;
   display: flex;
+  align-items: center;
   justify-content: center;
+
 `;
 
 const Kakao = styled.button`
   height: 50px;
-  width: 300px;
+  width: 12em;
   border: none;
   background: url(/assets/images/kakao.png) no-repeat 0% 0%;
+  background-size: 12em;
+  margin-right: 2em;
+`;
+
+const Naver = styled.button`
+  height: 50px;
+  width: 12em;
+  border: none;
+  background: url(/assets/images/naver.png) no-repeat 0% 0%;
+  background-size: 11em;
 `;
 
 export default function LoginForm() {
@@ -197,6 +210,10 @@ export default function LoginForm() {
         <Kakao
           type="button"
           onClick={() => handleOAuthLogin('kakao')}
+        />
+        <Naver
+          type="button"
+          onClick={() => handleOAuthLogin('naver')}
         />
       </SocialLoginButtonContainer>
     </Container>

@@ -92,6 +92,7 @@ export default function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/oauth/kakao" element={<OAuthRedirectPage />} />
+            <Route path="/oauth/naver" element={<OAuthRedirectPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
