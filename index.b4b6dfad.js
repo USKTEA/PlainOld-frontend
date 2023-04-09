@@ -39545,7 +39545,7 @@ exports.default = isAxiosError;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const config = {
-    apiBaseUrl: "https://plaindold-spring.fly.dev/"
+    apiBaseUrl: "http://15.164.48.109:8000/"
 };
 exports.default = config;
 
