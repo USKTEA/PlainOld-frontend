@@ -70,7 +70,7 @@ export default function PaymentConfirmationPage() {
       {
         provider: orderInformation.paymentProvider,
         pgToken,
-        tidId: orderInformation.tidId,
+        prePaymentId: orderInformation.prePaymentId,
         partnerOrderId: orderInformation.partnerOrderId,
       },
     );

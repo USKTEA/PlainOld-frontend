@@ -16,7 +16,7 @@ export default class ApiService {
         return config;
       }
 
-      if (config.url === '/token') {
+      if (config.url === '/tokens') {
         config.withCredentials = true;
 
         return config;
@@ -36,7 +36,7 @@ export default class ApiService {
       async (error) => {
         const { config, response: { status } } = error;
 
-        if (status !== 401 || config.url === '/token') {
+        if (status !== 401 || config.url === '/tokens') {
           return Promise.reject(error);
         }
 
@@ -120,7 +120,7 @@ export default class ApiService {
   async reissueToken() {
     try {
       const { data: { accessToken } } = await this.instance.post(
-        '/token',
+        '/tokens',
         { withCredentials: true },
       );
 
@@ -373,10 +373,10 @@ export default class ApiService {
   }
 
   async getApproveCode({
-    provider, pgToken, tidId, partnerOrderId,
+    provider, pgToken, prePaymentId, partnerOrderId,
   }) {
     const { data } = await this.instance.get(
-      `/payments?provider=${provider}&pgToken=${pgToken}&tidId=${tidId}&partnerOrderId=${partnerOrderId}`,
+      `/payments?provider=${provider}&pgToken=${pgToken}&prePaymentId=${prePaymentId}&partnerOrderId=${partnerOrderId}`,
     );
 
     return data;

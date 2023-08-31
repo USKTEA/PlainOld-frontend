@@ -9,20 +9,20 @@ export default class PaymentStore extends Store {
     super();
 
     this.paymentProvider = null;
-    this.tidId = null;
+    this.prePaymentId = null;
     this.partnerOrderId = null;
   }
 
   async getReadyPayment({ provider, orderItems }) {
     try {
       const {
-        paymentProvider, tidId, partnerOrderId, redirectUrl,
+        paymentProvider, prePaymentId, partnerOrderId, redirectUrl,
       } = await apiService.getReadyPayment(
         { provider, orderItems },
       );
 
       this.paymentProvider = paymentProvider;
-      this.tidId = tidId;
+      this.prePaymentId = prePaymentId;
       this.partnerOrderId = partnerOrderId;
 
       return redirectUrl;
@@ -32,12 +32,12 @@ export default class PaymentStore extends Store {
   }
 
   async approve({
-    provider, pgToken, tidId, partnerOrderId,
+    provider, pgToken, prePaymentId, partnerOrderId,
   }) {
     try {
       const { approveCode } = await apiService.getApproveCode(
         {
-          provider, pgToken, tidId, partnerOrderId,
+          provider, pgToken, prePaymentId, partnerOrderId,
         },
       );
 

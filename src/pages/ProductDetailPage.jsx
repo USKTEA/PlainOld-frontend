@@ -41,12 +41,14 @@ export default function ProductDetailPage() {
 
     const { product } = productStore;
 
-    if (!product.optionData) {
-      orderItemStore.addOrderItem({ product });
-    }
+    if (product) {
+      if (!product.optionData) {
+        orderItemStore.addOrderItem({ product });
+      }
 
-    if (product.optionData) {
-      orderItemStore.setProductToChoiceOption({ product });
+      if (product.optionData) {
+        orderItemStore.setProductToChoiceOption({ product });
+      }
     }
   };
 

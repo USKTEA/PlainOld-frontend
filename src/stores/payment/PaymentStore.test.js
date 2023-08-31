@@ -72,12 +72,12 @@ describe('PaymentStore', () => {
       it('approveCode를 반환한다', async () => {
         const provider = 'KAKAOPAY';
         const pgToken = '1';
-        const tidId = 1;
+        const prePaymentId = 1;
         const partnerOrderId = '1';
 
         const approveCode = await paymentStore.approve(
           {
-            provider, pgToken, tidId, partnerOrderId,
+            provider, pgToken, prePaymentId, partnerOrderId,
           },
         );
 
@@ -89,12 +89,12 @@ describe('PaymentStore', () => {
       it('approveCode를 반환하지 않는다', async () => {
         const provider = 'KAKAOPAY';
         const pgToken = '1';
-        const tidId = 'INVALID';
+        const prePaymentId = 'INVALID';
         const partnerOrderId = '1';
 
         const approveCode = await paymentStore.approve(
           {
-            provider, pgToken, tidId, partnerOrderId,
+            provider, pgToken, prePaymentId, partnerOrderId,
           },
         );
 

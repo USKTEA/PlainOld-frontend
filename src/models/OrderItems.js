@@ -40,6 +40,10 @@ export default class OrderItems {
       const option1 = i.option;
       const option2 = item.option;
 
+      if (!option1) {
+        return false;
+      }
+
       return option1.size === option2.size && option1.color === option2.color;
     });
 
