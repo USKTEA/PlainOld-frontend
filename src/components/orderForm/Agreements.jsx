@@ -101,7 +101,7 @@ export default function Agreements() {
       if (redirectUrl) {
         setOrderInformation({
           paymentProvider: paymentStore.paymentProvider,
-          tidId: paymentStore.tidId,
+          prePaymentId: paymentStore.prePaymentId,
           partnerOrderId: paymentStore.partnerOrderId,
           orderItems: orderItems.getItems(),
           orderer,

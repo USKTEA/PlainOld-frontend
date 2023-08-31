@@ -25,7 +25,7 @@ describe('PaymentConfirmationPage', () => {
     it('주문 결과 페이지로 이동한다', async () => {
       const ordererInformation = {
         paymentProvider: 'KAKAOPAY',
-        tidId: '1',
+        prePaymentId: '1',
         partnerOrderId: '1',
         orderItems: [
           {
@@ -81,7 +81,7 @@ describe('PaymentConfirmationPage', () => {
     it('주문 실패 페이지로 이동한다', async () => {
       const ordererInformation = {
         paymentProvider: 'KAKAOPAY',
-        tidId: 'INVALID',
+        prePaymentId: 'INVALID',
         partnerOrderId: '1',
         orderItems: [
           {

@@ -219,7 +219,6 @@ export default function WriteReviewModal({ setModalOpen }) {
 
   const handleAddImage = (event) => {
     const image = event.target.files[0];
-
     const currentImageURL = URL.createObjectURL(image);
 
     reviewImageFileStore.addFile(image);

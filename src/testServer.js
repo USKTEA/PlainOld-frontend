@@ -880,9 +880,9 @@ const server = setupServer(
     }));
   }),
   rest.get(`${baseUrl}/payments`, async (req, res, ctx) => {
-    const tidId = req.url.searchParams.get('tidId');
+    const prePaymentId = req.url.searchParams.get('prePaymentId');
 
-    if (tidId === 'INVALID') {
+    if (prePaymentId === 'INVALID') {
       return res(ctx.status(400));
     }
 
